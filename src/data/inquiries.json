@@ -1,0 +1,22 @@
+[
+  {
+    "id": "lead_1790458677122",
+    "name": "Tarun Sharma",
+    "email": "tarun.lead@example.com",
+    "phone": "+91 98765 43210",
+    "service": "01 Content Creation & Strategic Scripting",
+    "message": "We are looking to scale our brand with high-retention video content.",
+    "submittedAt": "2026-09-26T21:37:57.118Z",
+    "targetEmail": "info@famgrowthmedia.com"
+  },
+  {
+    "id": "lead_1790458863850",
+    "name": "ajeet",
+    "email": "ajeet_test@gmail.com",
+    "phone": "7807798332",
+    "service": "Full-Funnel Growth",
+    "message": "Just testing mail feature ",
+    "submittedAt": "2026-09-26T21:41:03.848Z",
+    "targetEmail": "info@famgrowthmedia.com"
+  }
+]
