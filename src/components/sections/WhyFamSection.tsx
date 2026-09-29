@@ -191,7 +191,7 @@ const steps = [
 export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps) {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const activeStepIndexRef = useRef(0);
-  const [scrollPercent, setScrollPercent] = useState(0);
+  const timelineProgressRef = useRef<HTMLDivElement>(null);
   const [isCelebrating, setIsCelebrating] = useState(false);
   const celebrationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { scrollTo } = useSmoothScroll();
@@ -301,7 +301,9 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
-            setScrollPercent(p * 100);
+            if (timelineProgressRef.current) {
+              timelineProgressRef.current.style.height = `${Math.min(Math.max(p * 100, 0), 100)}%`;
+            }
 
             // Compute current active step (0, 1, 2, 3, 4, 5)
             let currentIdx = 0;
@@ -466,8 +468,9 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
 
                   {/* Dynamic Active Progress Fill Line */}
                   <div
+                    ref={timelineProgressRef}
                     className="absolute left-[11px] top-3 w-0.5 bg-gradient-to-b from-purple-600 via-indigo-600 to-cyan-500 transition-all duration-300"
-                    style={{ height: `${Math.min(Math.max(scrollPercent, 0), 100)}%` }}
+                    style={{ height: "0%" }}
                   />
 
                   {/* 6 Step Nodes */}
@@ -597,7 +600,7 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
                       {step.isDashboardVisual ? (
                         /* Step 05: Dark Dashboard Visual with Celebratory Party Shockwave */
                         <div
-                          className={`relative w-full max-w-[320px] aspect-[4/5] rounded-[36px] overflow-hidden p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border transition-all duration-500 flex flex-col justify-between group ${isCelebrating
+                          className={`relative w-full max-w-[260px] sm:max-w-[320px] aspect-[4/5] rounded-[36px] overflow-hidden p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border transition-all duration-500 flex flex-col justify-between group ${isCelebrating
                             ? "border-purple-400 ring-4 ring-purple-500/40 shadow-[0_0_60px_rgba(124,58,237,0.7)] scale-105"
                             : "border-slate-800 shadow-[0_25px_60px_rgba(0,0,0,0.2)]"
                             }`}
@@ -663,7 +666,7 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
                         </div>
                       ) : (
                         /* Standard Photo Visual */
-                        <div className="relative w-full max-w-[320px] aspect-[4/5] rounded-[36px] overflow-hidden border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-slate-100 group">
+                        <div className="relative w-full max-w-[260px] sm:max-w-[320px] aspect-[4/5] rounded-[36px] overflow-hidden border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-slate-100 group">
                           {step.mainImage && (
                             <ResponsiveImage
                               src={step.mainImage}

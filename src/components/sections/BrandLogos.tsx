@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import ResponsiveImage from "@/components/ui/ResponsiveImage";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 
 interface TransformationItem {
   client: string;
@@ -69,7 +69,7 @@ function TransformationCard({ item }: TransformationCardProps) {
       <div className="absolute -inset-2.5 sm:-inset-3 rounded-3xl bg-gradient-to-r from-purple-600/30 via-indigo-600/20 to-cyan-500/30 opacity-0 blur-xl group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none -z-10" />
 
       {/* Glassmorphic card frame with smooth scale and border lighting */}
-      <div className="relative w-[336px] sm:w-[384px] md:w-[420px] lg:w-[432px] h-[432px] sm:h-[468px] md:h-[504px] rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-white/80 group-hover/card:bg-white/95 backdrop-blur-xl border border-slate-200/80 group-hover/card:border-purple-300/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] group-hover/card:shadow-[0_20px_40px_-8px_rgba(124,58,237,0.22)] transition-all duration-300 overflow-hidden flex flex-col">
+      <div className="relative w-[336px] sm:w-[384px] md:w-[420px] lg:w-[432px] h-[432px] sm:h-[468px] md:h-[504px] rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-white/95 sm:bg-white/80 group-hover/card:bg-white/95 backdrop-blur-sm sm:backdrop-blur-xl border border-slate-200/80 group-hover/card:border-purple-300/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] group-hover/card:shadow-[0_20px_40px_-8px_rgba(124,58,237,0.22)] transition-all duration-300 overflow-hidden flex flex-col">
         {/* Inner Screenshot Container */}
         <div className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-950">
           <ResponsiveImage
@@ -87,7 +87,7 @@ function TransformationCard({ item }: TransformationCardProps) {
           {/* Center Highlight Badge */}
           {item.highlightText && (
             <div className="absolute inset-x-0 top-[47%] -translate-y-1/2 flex items-center justify-center px-4 pointer-events-none z-10">
-              <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-300 text-slate-950 font-black text-xs sm:text-sm md:text-[15px] tracking-tight shadow-[0_10px_25px_-3px_rgba(245,158,11,0.55),0_4px_12px_rgba(0,0,0,0.3)] border-2 border-yellow-100/95 -rotate-1 select-none backdrop-blur-md group-hover/card:scale-105 group-hover/card:rotate-0 transition-all duration-300">
+              <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-300 text-slate-950 font-black text-xs sm:text-sm md:text-[15px] tracking-tight shadow-[0_10px_25px_-3px_rgba(245,158,11,0.55),0_4px_12px_rgba(0,0,0,0.3)] border-2 border-yellow-100/95 -rotate-1 select-none group-hover/card:scale-105 group-hover/card:rotate-0 transition-all duration-300">
                 {item.highlightEmoji && (
                   <span className="text-base sm:text-lg leading-none" role="img" aria-label="party">
                     {item.highlightEmoji}
@@ -109,8 +109,12 @@ function TransformationCard({ item }: TransformationCardProps) {
 }
 
 export default function BrandLogos() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { amount: 0.05 });
+
   return (
     <section
+      ref={sectionRef}
       id="clients"
       className="relative py-14 sm:py-20 border-b border-slate-200/70 bg-gradient-to-b from-white via-slate-50/50 to-white overflow-hidden"
     >
@@ -178,7 +182,10 @@ export default function BrandLogos() {
 
       {/* Transformation Marquee Slider (Single Row) */}
       <div className="relative w-full overflow-hidden py-2 sm:py-4">
-        <div className="flex w-max animate-marquee-left hover:[animation-play-state:paused]">
+        <div
+          className="flex w-max animate-marquee-left hover:[animation-play-state:paused]"
+          style={{ animationPlayState: isInView ? "running" : "paused" }}
+        >
           {/* First identical half */}
           <div className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8">
             {row1Base.map((item, idx) => (

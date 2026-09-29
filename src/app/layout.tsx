@@ -53,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${jakartaSans.variable} ${caveat.variable} scroll-smooth`}>
+    <html lang="en" className={`${jakartaSans.variable} ${caveat.variable}`}>
       <body className="min-h-screen bg-[#FAFAFE] text-slate-900 font-sans antialiased overflow-x-hidden selection:bg-purple-500/20 selection:text-purple-900">
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>

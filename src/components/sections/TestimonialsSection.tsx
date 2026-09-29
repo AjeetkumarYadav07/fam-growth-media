@@ -203,7 +203,7 @@ export default function TestimonialsSection() {
             <div className="lg:col-span-7 relative flex items-center justify-center">
 
               {/* Client Founder Portrait (Fixed Aspect Square + Object Top Framing, No Cropping) */}
-              <div className="relative w-full max-w-[420px] sm:max-w-[460px] aspect-square rounded-3xl overflow-hidden border border-slate-100 shadow-[0_15px_35px_rgba(0,0,0,0.06)] bg-slate-100">
+              <div className="relative w-full max-w-[270px] sm:max-w-[460px] aspect-square rounded-3xl overflow-hidden border border-slate-100 shadow-[0_15px_35px_rgba(0,0,0,0.06)] bg-slate-100 mx-auto">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={current.id}
@@ -217,7 +217,7 @@ export default function TestimonialsSection() {
                       src={current.image}
                       alt={current.author}
                       fill
-                      sizes="(max-width: 768px) 100vw, 460px"
+                      sizes="(max-width: 768px) 270px, 460px"
                       className="object-cover object-top filter brightness-102"
                       priority={false}
                     />
@@ -227,20 +227,20 @@ export default function TestimonialsSection() {
               </div>
 
               {/* Floating Quote Card with Purple Quote Mark */}
-              <div className="absolute -bottom-6 -right-2 sm:-right-6 z-20 max-w-[260px] sm:max-w-[290px] rounded-2xl border border-slate-200/90 bg-white/95 p-4 sm:p-5 shadow-[0_12px_35px_rgba(124,58,237,0.12)] backdrop-blur-xl">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-600 shadow-sm">
-                    <Quote className="h-4 w-4 fill-purple-600" />
+              <div className="absolute -bottom-6 -right-1 sm:-right-6 z-20 max-w-[210px] sm:max-w-[290px] rounded-2xl border border-slate-200/90 bg-white/95 p-3 sm:p-5 shadow-[0_12px_35px_rgba(124,58,237,0.12)] backdrop-blur-xl">
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-600 shadow-sm">
+                    <Quote className="h-3.5 w-3.5 sm:h-4 sm:w-4 fill-purple-600" />
                   </div>
                   <div>
-                    <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                    <p className="text-[11px] sm:text-sm font-semibold text-slate-800 leading-snug">
                       {current.highlightQuote}
                     </p>
                   </div>
                 </div>
 
                 {/* Hand-drawn Accent Doodle */}
-                <div className="mt-2 text-right font-handwriting text-base text-purple-500/80 select-none">
+                <div className="mt-1.5 sm:mt-2 text-right font-handwriting text-sm sm:text-base text-purple-500/80 select-none">
                   ~ Team
                 </div>
               </div>

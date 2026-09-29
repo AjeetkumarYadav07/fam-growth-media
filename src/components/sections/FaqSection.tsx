@@ -438,8 +438,12 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
     }
   };
 
-  // Track mouse coordinates across the section
+  // Track mouse coordinates across the section (Desktop only, spotlight is hidden on mobile)
   useEffect(() => {
+    if (typeof window !== "undefined" && (window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches)) {
+      return;
+    }
+
     const section = sectionRef.current;
     if (!section) return;
 
@@ -692,12 +696,12 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
               <div className="absolute -inset-4 bg-gradient-to-tr from-purple-200/40 via-cyan-100/30 to-transparent rounded-full blur-2xl -z-10" />
 
               {/* Portrait Image */}
-              <div className="relative w-full aspect-square max-w-[380px] rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/10 border border-white/80">
+              <div className="relative w-full aspect-square max-w-[270px] sm:max-w-[380px] rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/10 border border-white/80 mx-auto">
                 <ResponsiveImage
                   src="/client_face/faq.JPG"
                   alt="Client inquiring about FAM Growth Media"
                   fill
-                  sizes="(max-width: 660px) 340px, 390px"
+                  sizes="(max-width: 660px) 270px, 390px"
                   className="object-cover object-[center_15%]"
                   priority={false}
                 />

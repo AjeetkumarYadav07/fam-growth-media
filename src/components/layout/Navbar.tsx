@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,47 +12,74 @@ interface NavbarProps {
   onOpenContactModal: () => void;
 }
 
+const navLinks = [
+  { label: "Home", target: "#home", id: "home" },
+  { label: "Services", target: "#services", id: "services" },
+  { label: "About Us", target: "#about", id: "about" },
+  { label: "Clients", target: "#clients", id: "clients" },
+  { label: "Why FAM?", target: "#why-fam", id: "why-fam" },
+  { label: "FAQ", target: "#faq", id: "faq" },
+  { label: "Contact Us", target: "#contact", id: "contact" },
+];
+
 export default function Navbar({ onOpenContactModal }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
+  const scrolledRef = useRef(false);
   const [activeSection, setActiveSection] = useState("Home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { scrollTo } = useSmoothScroll();
 
-  const navLinks = [
-    { label: "Home", target: "#home", id: "home" },
-    { label: "Services", target: "#services", id: "services" },
-    { label: "About Us", target: "#about", id: "about" },
-    { label: "Clients", target: "#clients", id: "clients" },
-    { label: "Why FAM?", target: "#why-fam", id: "why-fam" },
-    { label: "FAQ", target: "#faq", id: "faq" },
-    { label: "Contact Us", target: "#contact", id: "contact" },
-  ];
-
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    let ticking = false;
 
-      // Section tracking for active link indicator
-      const scrollPos = window.scrollY + 120;
-      for (let i = navLinks.length - 1; i >= 0; i--) {
-        const section = document.getElementById(navLinks[i].id);
-        if (section) {
-          const top = section.offsetTop;
-          const height = section.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(navLinks[i].label);
-            break;
+    // Passive, RAF-throttled scroll handler for navbar background style
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const isScrolled = window.scrollY > 20;
+          if (isScrolled !== scrolledRef.current) {
+            scrolledRef.current = isScrolled;
+            setScrolled(isScrolled);
           }
-        }
-      }
-      if (window.scrollY < 200) {
-        setActiveSection("Home");
+          if (window.scrollY < 180) {
+            setActiveSection("Home");
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [navLinks]);
+
+    // Native IntersectionObserver for active section spy (Zero layout reflows/thrashing)
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const match = navLinks.find((l) => l.id === entry.target.id);
+            if (match) {
+              setActiveSection(match.label);
+            }
+          }
+        });
+      },
+      {
+        rootMargin: "-15% 0px -65% 0px",
+        threshold: 0,
+      }
+    );
+
+    navLinks.forEach((link) => {
+      const el = document.getElementById(link.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
+  }, []);
 
   const handleNavClick = (target: string, label: string) => {
     setActiveSection(label);

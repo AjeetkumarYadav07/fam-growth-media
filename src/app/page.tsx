@@ -13,8 +13,12 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import AiVideoSection from "@/components/sections/AiVideoSection";
 import FaqSection from "@/components/sections/FaqSection";
 import CtaBanner from "@/components/sections/CtaBanner";
+import dynamic from "next/dynamic";
 import Footer from "@/components/layout/Footer";
-import WorkTogetherModal from "@/components/ui/WorkTogetherModal";
+
+const WorkTogetherModal = dynamic(() => import("@/components/ui/WorkTogetherModal"), {
+  ssr: false,
+});
 
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);

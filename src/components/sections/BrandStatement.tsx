@@ -169,14 +169,14 @@ export default function BrandStatement({ onLearnMore }: BrandStatementProps) {
             <motion.div
               whileHover={{ y: -4, scale: 1.01 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-[560px] aspect-[525/350] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(124,58,237,0.12)] border border-purple-100/70 bg-white"
+              className="relative w-full max-w-[340px] sm:max-w-[560px] aspect-[525/350] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(124,58,237,0.12)] border border-purple-100/70 bg-white mx-auto"
             >
               <ResponsiveImage
                 src="/founders_img/fgm_about.JPG"
                 alt="FAM Growth Media Team - Ideas, Strategy, Production, Growth"
                 fill
                 priority={false}
-                sizes="(max-width: 768px) 100vw, 560px"
+                sizes="(max-width: 768px) 340px, 560px"
                 className="object-cover"
               />
             </motion.div>
@@ -210,7 +210,7 @@ export default function BrandStatement({ onLearnMore }: BrandStatementProps) {
               </div>
 
               {/* Main Proper Frame Container: Increased height by 40% (h-[500px] sm:h-[550px]) */}
-              <div className="relative w-full max-w-[460px] lg:max-w-[480px] h-[490px] sm:h-[540px] rounded-[32px] overflow-hidden border border-purple-100/90 shadow-[0_25px_60px_-15px_rgba(124,58,237,0.18)] bg-slate-900 group">
+              <div className="relative w-full max-w-[300px] sm:max-w-[460px] lg:max-w-[480px] h-[380px] sm:h-[540px] rounded-[32px] overflow-hidden border border-purple-100/90 shadow-[0_25px_60px_-15px_rgba(124,58,237,0.18)] bg-slate-900 group">
 
                 {/* 5-Second Timer Pill Switcher in Top Right */}
                 <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-black/45 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">

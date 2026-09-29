@@ -223,7 +223,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
             </div>
 
             {/* Fanned Out Perspective 3 Cards Showcase (Increased Height by 40% More) */}
-            <div className="relative w-full max-w-[700px] h-[480px] sm:h-[600px] lg:h-[660px] flex items-center justify-center">
+            <div className="relative w-full max-w-[700px] h-[390px] sm:h-[600px] lg:h-[660px] flex items-center justify-center">
 
               {/* Left Card: Tilted -10deg with "Original" Badge */}
               <motion.div
@@ -232,13 +232,13 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
                 viewport={{ once: true }}
                 transition={{ duration: 0.7 }}
                 onClick={() => setActiveVideo(aiVideosData[0])}
-                className="group/card absolute -left-1 sm:left-2 md:left-4 w-48 sm:w-60 md:w-68 aspect-[3/4] rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-slate-900 cursor-pointer -z-1 opacity-85 hover:opacity-100 transition-all hover:scale-105"
+                className="group/card absolute -left-1 sm:left-2 md:left-4 w-36 sm:w-60 md:w-68 aspect-[3/4] rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-slate-900 cursor-pointer -z-1 opacity-85 hover:opacity-100 transition-all hover:scale-105"
               >
                 <ResponsiveImage
                   src="/images/hero-videographer.jpg"
                   alt="Original Video"
                   fill
-                  sizes="(max-width: 768px) 240px, 270px"
+                  sizes="(max-width: 768px) 150px, 270px"
                   className="object-cover object-top filter brightness-90 group-hover/card:scale-105 transition-transform"
                 />
                 <div className="absolute top-3 left-3 z-10">
@@ -248,8 +248,8 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
                 </div>
                 <div className="absolute inset-0 bg-slate-950/20" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-11 w-11 rounded-full bg-white/70 text-slate-900 flex items-center justify-center shadow-sm">
-                    <Play className="h-5 w-5 fill-slate-900 translate-x-0.5" />
+                  <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-white/70 text-slate-900 flex items-center justify-center shadow-sm">
+                    <Play className="h-4 w-4 sm:h-5 sm:w-5 fill-slate-900 translate-x-0.5" />
                   </div>
                 </div>
               </motion.div>
@@ -261,7 +261,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.15 }}
                 onClick={() => setActiveVideo(aiVideosData[1])}
-                className="group/center relative z-10 w-[280px] sm:w-[400px] md:w-[460px] lg:w-[490px] aspect-[3/4] rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-purple-200/90 shadow-[0_30px_70px_rgba(124,58,237,0.25)] bg-slate-950 cursor-pointer hover:scale-105 transition-all duration-300"
+                className="group/center relative z-10 w-[240px] sm:w-[400px] md:w-[460px] lg:w-[490px] aspect-[3/4] rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-purple-200/90 shadow-[0_30px_70px_rgba(124,58,237,0.25)] bg-slate-950 cursor-pointer hover:scale-105 transition-all duration-300"
               >
                 <Image
                   src="/ai_videos/ai1_thumb.jpg"
@@ -312,7 +312,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.1 }}
                 onClick={() => setActiveVideo(aiVideosData[3])}
-                className="group/card absolute -right-1 sm:right-2 md:right-4 w-48 sm:w-60 md:w-68 aspect-[3/4] rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-slate-900 cursor-pointer -z-1 opacity-85 hover:opacity-100 transition-all hover:scale-105"
+                className="group/card absolute -right-1 sm:right-2 md:right-4 w-36 sm:w-60 md:w-68 aspect-[3/4] rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-slate-900 cursor-pointer -z-1 opacity-85 hover:opacity-100 transition-all hover:scale-105"
               >
                 <Image
                   src="/ai_videos/ai2_thumb.jpg"
@@ -327,8 +327,8 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
                 </div>
                 <div className="absolute inset-0 bg-slate-950/20" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-11 w-11 rounded-full bg-white/70 text-slate-900 flex items-center justify-center shadow-sm">
-                    <Play className="h-5 w-5 fill-slate-900 translate-x-0.5" />
+                  <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-white/70 text-slate-900 flex items-center justify-center shadow-sm">
+                    <Play className="h-4 w-4 sm:h-5 sm:w-5 fill-slate-900 translate-x-0.5" />
                   </div>
                 </div>
               </motion.div>

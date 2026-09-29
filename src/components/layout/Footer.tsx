@@ -15,10 +15,10 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Top Footer Row */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-200/80 items-start">
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-x-6 gap-y-10 md:gap-10 pb-12 border-b border-slate-200/80 items-start">
 
-          {/* Logo, Tagline & Socials (4 cols) */}
-          <div className="md:col-span-4 space-y-4">
+          {/* Logo, Tagline & Socials (full width on mobile, 4 cols on desktop) */}
+          <div className="col-span-2 md:col-span-4 space-y-4">
             <button
               onClick={() => scrollTo(0)}
               className="flex items-center gap-2 cursor-pointer group text-left transition-transform duration-300 hover:scale-105"
@@ -37,7 +37,7 @@ export default function Footer() {
             </p>
 
             {/* Social Icons */}
-            <div className="pt-2 flex items-center gap-2.5 text-slate-600">
+            <div className="pt-2 flex items-center gap-2 sm:gap-2.5 text-slate-600">
               {/* LinkedIn */}
               <a
                 href="#"
@@ -83,8 +83,8 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links (2.5 cols) */}
-          <div className="md:col-span-2 space-y-3">
+          {/* Quick Links (left column on mobile, 2 cols on desktop) */}
+          <div className="col-span-1 md:col-span-2 space-y-3">
             <div className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
               Quick Links
             </div>
@@ -127,8 +127,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Our Services (3 cols) */}
-          <div className="md:col-span-3 space-y-3">
+          {/* Our Services (right column on mobile, 3 cols on desktop) */}
+          <div className="col-span-1 md:col-span-3 space-y-3">
             <div className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
               Our Services
             </div>
@@ -161,8 +161,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Get in Touch (2.5 cols) */}
-          <div className="md:col-span-3 space-y-3">
+          {/* Get in Touch (full width on mobile, 3 cols on desktop) */}
+          <div className="col-span-2 md:col-span-3 space-y-3 pt-4 md:pt-0 border-t border-slate-100 md:border-t-0">
             <div className="text-xs font-extrabold uppercase tracking-wider text-slate-900">
               Get in Touch
             </div>
@@ -205,11 +205,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 text-center sm:text-left">
           <div>
             © 2026 FAM Growth Media. All rights reserved.
           </div>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             <span className="hover:text-purple-600 transition cursor-pointer">Privacy Policy</span>
             <span className="hover:text-purple-600 transition cursor-pointer">Terms of Service</span>
             <span className="hover:text-purple-600 transition cursor-pointer">Cookie Preferences</span>
