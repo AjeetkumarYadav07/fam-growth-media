@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import {
   ChevronDown,
@@ -635,7 +636,7 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
                         key={idx}
                         className="inline-block h-9 w-9 rounded-full ring-2 ring-white shadow-sm overflow-hidden relative"
                       >
-                        <Image
+                        <ResponsiveImage
                           src={av.src}
                           alt={av.alt}
                           fill
@@ -692,7 +693,7 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
 
               {/* Portrait Image */}
               <div className="relative w-full aspect-square max-w-[380px] rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/10 border border-white/80">
-                <Image
+                <ResponsiveImage
                   src="/client_face/faq.JPG"
                   alt="Client inquiring about FAM Growth Media"
                   fill

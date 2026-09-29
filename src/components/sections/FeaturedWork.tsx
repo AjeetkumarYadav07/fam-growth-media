@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -146,10 +147,11 @@ export default function FeaturedWork({ onSelectProject }: FeaturedWorkProps) {
             >
               {/* Image Preview Container */}
               <div className="relative h-64 sm:h-72 w-full rounded-2xl overflow-hidden bg-slate-100">
-                <Image
+                <ResponsiveImage
                   src={project.image}
                   alt={project.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />

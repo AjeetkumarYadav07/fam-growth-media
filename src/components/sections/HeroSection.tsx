@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Play, ArrowUpRight, ArrowDown, Eye, Users, Heart, Share2 } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
@@ -272,7 +273,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
             >
               <div className="flex -space-x-2 overflow-hidden">
                 <div className="inline-block h-9 w-9 rounded-full ring-2 ring-white overflow-hidden shadow-sm">
-                  <Image
+                  <ResponsiveImage
                     src="/client_face/priyank_astro.jpeg"
                     alt="Brand Partner"
                     width={36}
@@ -281,7 +282,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                   />
                 </div>
                 <div className="inline-block h-9 w-9 rounded-full ring-2 ring-white overflow-hidden shadow-sm">
-                  <Image
+                  <ResponsiveImage
                     src="/client_face/ritika.jpeg"
                     alt="Brand Partner"
                     width={36}
@@ -290,7 +291,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                   />
                 </div>
                 <div className="inline-block h-9 w-9 rounded-full ring-2 ring-white overflow-hidden shadow-sm">
-                  <Image
+                  <ResponsiveImage
                     src="/client_face/ritu.jpeg"
                     alt="Brand Partner"
                     width={36}
@@ -299,7 +300,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                   />
                 </div>
                 <div className="inline-block h-9 w-9 rounded-full ring-2 ring-white overflow-hidden shadow-sm">
-                  <Image
+                  <ResponsiveImage
                     src="/client_face/anurag.jpeg"
                     alt="Brand Partner"
                     width={36}
@@ -345,7 +346,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute inset-0"
                 >
-                  <Image
+                  <ResponsiveImage
                     src={currentFounder.image}
                     alt={`${currentFounder.fullName} - ${currentFounder.title}, FAM Growth Media`}
                     fill

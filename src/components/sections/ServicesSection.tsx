@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, ArrowLeft } from "lucide-react";
@@ -319,7 +320,13 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
               <div className="flex items-center gap-2.5 h-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
                 {filmstripImages.map((img, i) => (
                   <div key={i} className="relative h-full flex-1 min-w-[90px] rounded-2xl overflow-hidden bg-slate-100">
-                    <Image src={img} alt="Creative Moments" fill className="object-cover" />
+                    <ResponsiveImage
+                      src={img}
+                      alt="Creative Moments"
+                      fill
+                      sizes="(max-width: 768px) 120px, 150px"
+                      className="object-cover"
+                    />
                     <div className="absolute inset-0 bg-slate-900/15" />
                   </div>
                 ))}
@@ -375,10 +382,11 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
                     }`}
                 >
                   {/* Background Image with subtle zoom on hover */}
-                  <Image
+                  <ResponsiveImage
                     src={service.image}
                     alt={service.title}
                     fill
+                    sizes="(max-width: 768px) 320px, 365px"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Play,
@@ -233,10 +234,11 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
                 onClick={() => setActiveVideo(aiVideosData[0])}
                 className="group/card absolute -left-1 sm:left-2 md:left-4 w-48 sm:w-60 md:w-68 aspect-[3/4] rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-slate-900 cursor-pointer -z-1 opacity-85 hover:opacity-100 transition-all hover:scale-105"
               >
-                <Image
+                <ResponsiveImage
                   src="/images/hero-videographer.jpg"
                   alt="Original Video"
                   fill
+                  sizes="(max-width: 768px) 240px, 270px"
                   className="object-cover object-top filter brightness-90 group-hover/card:scale-105 transition-transform"
                 />
                 <div className="absolute top-3 left-3 z-10">

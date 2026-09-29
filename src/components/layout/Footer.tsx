@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { ArrowUp, Mail, Phone, MapPin } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { WHATSAPP_LINK, WHATSAPP_PHONE_DISPLAY } from "@/lib/constants";
@@ -22,7 +23,7 @@ export default function Footer() {
               onClick={() => scrollTo(0)}
               className="flex items-center gap-2 cursor-pointer group text-left transition-transform duration-300 hover:scale-105"
             >
-              <Image
+              <ResponsiveImage
                 src="/images/logo.png"
                 alt="FAM Growth Media"
                 width={180}

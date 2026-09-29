@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -142,10 +143,11 @@ export default function TestimonialsSection() {
 
                   <div className="flex items-center gap-3.5 pt-2">
                     <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-purple-200 shadow-sm shrink-0">
-                      <Image
+                      <ResponsiveImage
                         src={current.image}
                         alt={current.author}
                         fill
+                        sizes="48px"
                         className="object-cover object-top"
                       />
                     </div>
@@ -211,12 +213,13 @@ export default function TestimonialsSection() {
                     transition={{ duration: 0.4 }}
                     className="relative w-full h-full"
                   >
-                    <Image
+                    <ResponsiveImage
                       src={current.image}
                       alt={current.author}
                       fill
+                      sizes="(max-width: 768px) 100vw, 460px"
                       className="object-cover object-top filter brightness-102"
-                      priority
+                      priority={false}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent opacity-40" />
                   </motion.div>

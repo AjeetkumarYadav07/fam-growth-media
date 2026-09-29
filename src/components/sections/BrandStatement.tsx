@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Users, Video, BarChart2, Clapperboard } from "lucide-react";
 
@@ -170,11 +171,12 @@ export default function BrandStatement({ onLearnMore }: BrandStatementProps) {
               transition={{ duration: 0.3 }}
               className="relative w-full max-w-[560px] aspect-[525/350] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(124,58,237,0.12)] border border-purple-100/70 bg-white"
             >
-              <Image
+              <ResponsiveImage
                 src="/founders_img/fgm_about.JPG"
                 alt="FAM Growth Media Team - Ideas, Strategy, Production, Growth"
                 fill
-                priority
+                priority={false}
+                sizes="(max-width: 768px) 100vw, 560px"
                 className="object-cover"
               />
             </motion.div>
@@ -238,11 +240,12 @@ export default function BrandStatement({ onLearnMore }: BrandStatementProps) {
                     transition={{ duration: 0.65, ease: "easeInOut" }}
                     className="absolute inset-0"
                   >
-                    <Image
+                    <ResponsiveImage
                       src={storySlides[storyIndex].image}
                       alt={storySlides[storyIndex].alt}
                       fill
-                      priority
+                      priority={false}
+                      sizes="(max-width: 768px) 100vw, 480px"
                       className="object-cover"
                     />
                     {/* Subtle bottom gradient to ensure text readability */}

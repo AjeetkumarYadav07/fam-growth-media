@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
@@ -78,7 +79,7 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
           onClick={() => handleNavClick("#home", "Home")}
           className="group flex items-center text-left cursor-pointer transition-transform duration-300 hover:scale-105"
         >
-          <Image
+          <ResponsiveImage
             src="/images/logo.png"
             alt="FAM Growth Media"
             width={160}

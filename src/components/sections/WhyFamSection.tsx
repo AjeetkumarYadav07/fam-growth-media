@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -664,10 +665,11 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
                         /* Standard Photo Visual */
                         <div className="relative w-full max-w-[320px] aspect-[4/5] rounded-[36px] overflow-hidden border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.08)] bg-slate-100 group">
                           {step.mainImage && (
-                            <Image
+                            <ResponsiveImage
                               src={step.mainImage}
                               alt={step.title}
                               fill
+                              sizes="(max-width: 768px) 320px, 320px"
                               className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                           )}
@@ -728,10 +730,11 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
                             </div>
 
                             <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-100 mb-2">
-                              <Image
+                              <ResponsiveImage
                                 src={step.nextStep.image}
                                 alt={step.nextStep.stepTitle}
                                 fill
+                                sizes="(max-width: 768px) 210px, 210px"
                                 className="object-cover transition-transform duration-500 group-hover/card:scale-105"
                               />
                             </div>

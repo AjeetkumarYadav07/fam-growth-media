@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion } from "framer-motion";
 
 interface TransformationItem {
@@ -71,7 +72,7 @@ function TransformationCard({ item }: TransformationCardProps) {
       <div className="relative w-[336px] sm:w-[384px] md:w-[420px] lg:w-[432px] h-[432px] sm:h-[468px] md:h-[504px] rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-white/80 group-hover/card:bg-white/95 backdrop-blur-xl border border-slate-200/80 group-hover/card:border-purple-300/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] group-hover/card:shadow-[0_20px_40px_-8px_rgba(124,58,237,0.22)] transition-all duration-300 overflow-hidden flex flex-col">
         {/* Inner Screenshot Container */}
         <div className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-950">
-          <Image
+          <ResponsiveImage
             src={item.transformationImage}
             alt={`Instagram growth transformation for ${item.client}`}
             fill
