@@ -262,7 +262,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         className="min-h-[75vh] sm:min-h-[85vh] flex items-center justify-center pt-24 pb-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
-          
+
           {/* Left Column: Eyebrow, Main Title, Paragraph, Button & Handwriting */}
           <div className="lg:col-span-7 space-y-4 will-change-transform">
             <div
@@ -369,11 +369,10 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
                     if (el) cardsRef.current[index] = el;
                   }}
                   onClick={() => scrollToCard(index)}
-                  className={`group relative shrink-0 w-[285px] sm:w-[325px] lg:w-[365px] h-[410px] sm:h-[450px] lg:h-[485px] rounded-[32px] overflow-hidden border transition-all duration-300 cursor-pointer will-change-transform ${
-                    isActive
+                  className={`group relative shrink-0 w-[285px] sm:w-[325px] lg:w-[365px] h-[410px] sm:h-[450px] lg:h-[485px] rounded-[32px] overflow-hidden border transition-all duration-300 cursor-pointer will-change-transform ${isActive
                       ? "border-purple-300 shadow-[0_25px_60px_rgba(124,58,237,0.25)] ring-2 ring-purple-500/25"
                       : "border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)]"
-                  }`}
+                    }`}
                 >
                   {/* Background Image with subtle zoom on hover */}
                   <Image
@@ -423,11 +422,10 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
                           e.stopPropagation();
                           onSelectService(service.title);
                         }}
-                        className={`h-11 w-11 rounded-full flex items-center justify-center transition-all duration-300 shadow-md ${
-                          isActive
+                        className={`h-11 w-11 rounded-full flex items-center justify-center transition-all duration-300 shadow-md ${isActive
                             ? "bg-gradient-to-r from-purple-600 to-cyan-500 text-white shadow-[0_0_20px_rgba(124,58,237,0.5)] scale-110"
                             : "bg-white/20 text-white hover:bg-white hover:text-purple-600 backdrop-blur-md border border-white/30"
-                        }`}
+                          }`}
                       >
                         <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
                       </button>
@@ -446,7 +444,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         {/* 3. Bottom Interactive Timeline & Progress Bar (Pinned with cards) */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full pt-3 pb-2 border-t border-slate-200/80">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6">
-            
+
             {/* Left: Scroll to explore with mouse icon */}
             <div className="flex items-center gap-3 select-none">
               <div className="h-7 w-4 rounded-full border-2 border-slate-400 flex justify-center p-0.5">
@@ -490,20 +488,18 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
                     >
                       {/* Node Bullet */}
                       <div
-                        className={`rounded-full transition-all duration-300 flex items-center justify-center ${
-                          isActive
+                        className={`rounded-full transition-all duration-300 flex items-center justify-center ${isActive
                             ? "h-5 w-5 bg-white ring-4 ring-purple-600 shadow-md scale-125"
                             : "h-3 w-3 bg-slate-300 group-hover/node:bg-purple-400 group-hover/node:scale-125"
-                        }`}
+                          }`}
                       >
                         {isActive && <div className="h-2 w-2 rounded-full bg-cyan-500" />}
                       </div>
 
                       {/* Node Label (Visible on sm/md/lg screens) */}
                       <span
-                        className={`hidden sm:block absolute top-6 text-[10px] font-bold tracking-tight whitespace-nowrap transition-colors ${
-                          isActive ? "text-purple-700 font-extrabold" : "text-slate-400 hover:text-slate-700"
-                        }`}
+                        className={`hidden sm:block absolute top-6 text-[10px] font-bold tracking-tight whitespace-nowrap transition-colors ${isActive ? "text-purple-700 font-extrabold" : "text-slate-400 hover:text-slate-700"
+                          }`}
                       >
                         {service.number} {service.shortTitle}
                       </span>

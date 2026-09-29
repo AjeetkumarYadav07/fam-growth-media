@@ -3,10 +3,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Play, ArrowUpRight, X, ArrowDown } from "lucide-react";
+import { ArrowRight, Play, ArrowUpRight, ArrowDown, Eye, Users, Heart, Share2 } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 
-// Founders Data for Hero Section with founder-specific badges
+// Founders Data for Hero Section with founder-specific badges & metric icons
+type MetricIconType = "views" | "followers" | "like" | "share";
+
+interface BadgeMetric {
+  icon: MetricIconType;
+  label: string;
+}
+
 const founders = [
   {
     id: "atiksha",
@@ -14,19 +21,27 @@ const founders = [
     fullName: "Atiksha Rathi",
     title: "Founder",
     role: "Founder, FAM Growth Media",
-    image: "/founders_img/atiksha.jpeg",
+    image: "/founders_img/our_storyf.jpeg",
     // Founder Instagram Profile URL
-    instagramUrl: "https://www.instagram.com/atiksha_rathi_/",
-    instagramHandle: "@atiksha_rathi_",
+    instagramUrl: "https://www.instagram.com/fin_saheli/",
+    instagramHandle: "@fin_saheli",
     // Badges: 1 = Viral Influencer, 2 = Expert In Brand Management, 3 = Fashion Creator
     handwrittenTag: ["Viral", "Influencer"],
     badgeCardLeft: {
       tag: "Expert In",
       title: "Brand Management",
+      metrics: [
+        // { icon: "like" as const, label: "Likes" },
+        // { icon: "share" as const, label: "Shares" },
+      ],
     },
     badgeCardRight: {
-      title: "Fashion Creator",
-      subtitle: "Style & Media",
+      title: "Generated 100+ Million views Monthly",
+      subtitle: "1.2m+ Followers",
+      metrics: [
+        { icon: "views" as const, label: "Views" },
+        { icon: "followers" as const, label: "Followers" },
+      ],
     },
   },
   {
@@ -35,22 +50,56 @@ const founders = [
     fullName: "Tarun Malhotra",
     title: "Founder",
     role: "Founder, FAM Growth Media",
-    image: "/founders_img/tarun.jpeg",
+    image: "/founders_img/our_story.jpg",
     // Founder Instagram Profile URL
     instagramUrl: "https://www.instagram.com/tarunmalhotraaa/",
     instagramHandle: "@tarunmalhotraaa",
     // Badges: 1 = More Than Marketing, 2 = Creative Strategy, 3 = +200% Avg. Growth
     handwrittenTag: ["More", "Than", "Marketing"],
     badgeCardLeft: {
-      tag: "Creative",
-      title: "Strategy",
+      tag: "Generated Millions of views",
+      title: "660k+ followers",
+      metrics: [
+        { icon: "views" as const, label: "Views" },
+        { icon: "followers" as const, label: "Followers" },
+      ],
     },
     badgeCardRight: {
-      title: "Viral",
-      subtitle: "Podcaster",
+      title: "Fastest-growing social media agency",
+      subtitle: "Specializing in AI-powered video content",
+      metrics: [
+        { icon: "like" as const, label: "Likes" },
+        { icon: "share" as const, label: "Shares" },
+      ],
     },
   },
 ];
+
+const renderMetricIcon = (icon: MetricIconType) => {
+  switch (icon) {
+    case "views":
+      return <Eye className="h-3 w-3 text-cyan-600" />;
+    case "followers":
+      return <Users className="h-3 w-3 text-purple-600" />;
+    case "like":
+      return <Heart className="h-3 w-3 text-rose-500 fill-rose-500" />;
+    case "share":
+      return <Share2 className="h-3 w-3 text-blue-600" />;
+  }
+};
+
+const getMetricBadgeStyle = (icon: MetricIconType) => {
+  switch (icon) {
+    case "views":
+      return "bg-cyan-50/90 border-cyan-200/80 text-cyan-700 hover:bg-cyan-100/90";
+    case "followers":
+      return "bg-purple-50/90 border-purple-200/80 text-purple-700 hover:bg-purple-100/90";
+    case "like":
+      return "bg-rose-50/90 border-rose-200/80 text-rose-700 hover:bg-rose-100/90";
+    case "share":
+      return "bg-blue-50/90 border-blue-200/80 text-blue-700 hover:bg-blue-100/90";
+  }
+};
 
 interface HeroSectionProps {
   onOpenContactModal: () => void;
@@ -58,7 +107,6 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
   const { scrollTo } = useSmoothScroll();
-  const [showreelOpen, setShowreelOpen] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [currentFounderIndex, setCurrentFounderIndex] = useState(0);
 
@@ -350,15 +398,31 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 </div>
               </div>
 
-              {/* Colorful Mini Bar Chart (Pink, Purple, Cyan) */}
-              <div className="flex items-end gap-1.5 h-7 pt-1">
-                <div className="w-1.5 h-3 bg-pink-400 rounded-full" />
-                <div className="w-1.5 h-5 bg-purple-400 rounded-full" />
-                <div className="w-1.5 h-4 bg-indigo-400 rounded-full" />
-                <div className="w-1.5 h-7 bg-cyan-400 rounded-full" />
-                <div className="w-1.5 h-5 bg-purple-500 rounded-full" />
-                <div className="w-1.5 h-6 bg-pink-500 rounded-full" />
-              </div>
+              {/* Social Metric Badges according to title */}
+              {currentFounder.badgeCardLeft.metrics.length > 0 && (
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentFounder.id}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex items-center gap-1.5 pt-2 border-t border-slate-100/90 mt-1.5"
+                  >
+                    {currentFounder.badgeCardLeft.metrics.map((metric, idx) => (
+                      <div
+                        key={idx}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[11px] font-bold shadow-2xs transition-all duration-200 hover:scale-105 cursor-default ${getMetricBadgeStyle(
+                          metric.icon
+                        )}`}
+                      >
+                        {renderMetricIcon(metric.icon)}
+                        <span>{metric.label}</span>
+                      </div>
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
+              )}
             </motion.div>
 
             {/* Handwritten Accent 1: "Viral Influencer" (Atiksha) vs "More Than Marketing" (Tarun) */}
@@ -396,7 +460,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
               </div>
             </motion.div>
 
-            {/* Floating Card 2 (3 in user markup): Fashion Creator (Atiksha) vs +200% Avg. Growth (Tarun) */}
+            {/* Floating Card 2: Generated 100M+ Views (Atiksha) vs Fastest-growing social media agency (Tarun) */}
             <motion.div
               style={{
                 x: mousePos.x * 12,
@@ -411,7 +475,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 opacity: { duration: 0.6, delay: 0.5 },
                 y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
               }}
-              className="absolute top-8 sm:top-14 -right-2 sm:-right-8 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-3.5 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-xl"
+              className="absolute top-8 sm:top-14 -right-4 sm:-right-16 md:-right-24 lg:-right-28 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-3.5 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-xl"
             >
               <div className="flex items-start justify-between gap-3 mb-1 min-w-[125px] sm:min-w-[145px]">
                 <AnimatePresence mode="wait">
@@ -435,21 +499,31 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 </div>
               </div>
 
-              {/* Mini Area Curve (Purple/Cyan gradient) */}
-              <svg className="w-24 h-8 text-purple-500" viewBox="0 0 80 28" fill="none">
-                <path
-                  d="M2 24 C 20 20, 40 12, 55 16 C 65 19, 72 6, 78 4"
-                  stroke="url(#growth-area-stroke)"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                />
-                <defs>
-                  <linearGradient id="growth-area-stroke" x1="2" y1="24" x2="78" y2="4" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#A855F7" />
-                    <stop offset="1" stopColor="#06B6D4" />
-                  </linearGradient>
-                </defs>
-              </svg>
+              {/* Social Metric Badges according to title */}
+              {currentFounder.badgeCardRight.metrics.length > 0 && (
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentFounder.id}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.25 }}
+                    className="flex items-center gap-1.5 pt-2 border-t border-slate-100/90 mt-1.5"
+                  >
+                    {currentFounder.badgeCardRight.metrics.map((metric, idx) => (
+                      <div
+                        key={idx}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[11px] font-bold shadow-2xs transition-all duration-200 hover:scale-105 cursor-default ${getMetricBadgeStyle(
+                          metric.icon
+                        )}`}
+                      >
+                        {renderMetricIcon(metric.icon)}
+                        <span>{metric.label}</span>
+                      </div>
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
+              )}
             </motion.div>
 
             {/* Handwritten Accent (Top-Right): "IDEAS PEOPLE BRANDS GROW" with burst lines */}
@@ -471,42 +545,6 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
               </svg>
             </motion.div>
 
-            {/* Video Thumbnail (Bottom-Left): Scale on hover, Play icon animation, Shadow on hover */}
-            <motion.div
-              style={{
-                x: mousePos.x * -8,
-                y: mousePos.y * 10,
-              }}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{
-                opacity: 1,
-                y: [-3, 3, -3],
-              }}
-              transition={{
-                opacity: { duration: 0.6, delay: 0.65 },
-                y: { duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 1 },
-              }}
-              onClick={() => setShowreelOpen(true)}
-              className="group/video absolute -bottom-6 sm:bottom-4 -left-2 sm:-left-10 z-20 rounded-2xl border border-slate-200/90 bg-white p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.08)] cursor-pointer hover:shadow-[0_20px_50px_rgba(124,58,237,0.2)] hover:scale-105 transition-all duration-300"
-            >
-              <div className="relative h-20 sm:h-24 w-32 sm:w-40 rounded-xl overflow-hidden">
-                <Image
-                  src="/images/hero-videographer.jpg"
-                  alt="Creative Video Production"
-                  fill
-                  className="object-cover filter brightness-95 group-hover/video:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-slate-900/30 flex items-center justify-center">
-                  <div className="relative flex items-center justify-center">
-                    {/* Pulsing ring animation */}
-                    <span className="absolute inline-flex h-11 w-11 rounded-full bg-white/40 animate-ping" />
-                    <div className="relative h-8 w-8 rounded-full bg-white/95 text-blue-600 flex items-center justify-center shadow-md group-hover/video:scale-110 transition-transform">
-                      <Play className="h-3.5 w-3.5 fill-blue-600 translate-x-0.5" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
 
             {/* Floating Card 3: Founder Profile & Instagram Link (Bottom-Right) */}
             <motion.div
@@ -577,8 +615,8 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                       type="button"
                       onClick={() => setCurrentFounderIndex(idx)}
                       className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentFounderIndex
-                          ? "w-6 bg-gradient-to-r from-purple-600 to-indigo-600"
-                          : "w-1.5 bg-slate-300 hover:bg-slate-400"
+                        ? "w-6 bg-gradient-to-r from-purple-600 to-indigo-600"
+                        : "w-1.5 bg-slate-300 hover:bg-slate-400"
                         }`}
                       aria-label={`Switch to founder ${f.name}`}
                     />
@@ -616,51 +654,6 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
       </div>
 
-      {/* Showreel Lightbox Modal */}
-      <AnimatePresence>
-        {showreelOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowreelOpen(false)}
-              className="fixed inset-0 bg-slate-900/60 backdrop-blur-md"
-            />
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative z-10 w-full max-w-4xl aspect-video rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-2xl"
-            >
-              <button
-                onClick={() => setShowreelOpen(false)}
-                className="absolute top-4 right-4 z-20 rounded-full bg-slate-100 p-2 text-slate-700 hover:bg-slate-200 transition"
-              >
-                <X className="h-5 w-5" />
-              </button>
-
-              <div className="relative w-full h-full">
-                <Image
-                  src="/images/hero-videographer.jpg"
-                  alt="Showreel Preview"
-                  fill
-                  className="object-cover filter brightness-75"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent flex flex-col items-center justify-end p-8 text-center">
-                  <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center mb-3 text-white shadow-xl">
-                    <Play className="h-7 w-7 fill-white translate-x-0.5" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white">FAM Showreel 2026</h3>
-                  <p className="text-sm text-slate-200 mt-1 max-w-md">
-                    Stories, commercial films, and viral campaigns crafted for the world&apos;s most ambitious brands.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

@@ -12,7 +12,7 @@ const testimonials = [
       "I really liked how easy it was to work with Fam Growth Media and the quality of the videos. It helped me with a big boost in shares and comments, which was a nice surprise!",
     highlightQuote: "From a small idea to a global brand — thank you FAM!",
     author: "Prateek",
-    role: "Founder",
+    role: "Content Creator",
     image: "/client_face/priyank_astro.jpeg",
   },
   {
@@ -30,8 +30,53 @@ const testimonials = [
       "The edits looked amazing, and the whole process was super smooth. I enjoyed how easy it was to work with the team, and my Instagram followers increased flawlessly",
     highlightQuote: "Unmatched aesthetic taste paired with data-backed execution.",
     author: "Ritu",
-    role: "Brand Strategist",
+    role: "Content Creator",
     image: "/client_face/ritu.jpeg",
+  },
+  {
+    id: "Anurag",
+    quote:
+      "As a creator, consistency and reach are everything to me and working with Fam Growth Media completely changed how my content performs on social media. Their team understood my niche and helped me connect with the right audience organically. My engagement has skyrocketed, and I finally have time to focus purely on creating.",
+    highlightQuote: "Unmatched aesthetic taste paired with data-backed execution.",
+    author: "Anurag Rathi ",
+    role: "Digital Creator",
+    image: "/client_face/anurag.jpeg",
+  },
+  {
+    id: "Dipinti Gupta",
+    quote:
+      "Building a personal brand as a coach is hard, people need to trust you before they even talk to you. This team understood that from day one. They helped me show up online the way I show up in real life. My client inquiries have honestly doubled.",
+    highlightQuote: "Unmatched aesthetic taste paired with data-backed execution.",
+    author: "Dipinti Gupta",
+    role: "Life Coach",
+    image: "/client_face/dipintigupta.jpg",
+  },
+  {
+    id: "Priyank",
+    quote:
+      "As a career coach, my goal is to guide professionals toward success, but I needed guidance for my own digital growth! Fam Growth stepped in and streamlined everything seamlessly. Their team is proactive, sharp, and genuinely invested in your success.",
+    highlightQuote: "Unmatched aesthetic taste paired with data-backed execution.",
+    author: "Priyank Ahuja",
+    role: "Career Coach",
+    image: "/client_face/random.jpeg",
+  },
+  {
+    id: "Priyanka Bhattnagar",
+    quote:
+      "This team just gets how to present astrology content in a way that feels modern and credible at the same time. My reels and posts finally have a proper rhythm instead of random uploads whenever I found time. The whole process has been smooth, and my page genuinely looks so much more put-together now. Really happy with the transformation. ",
+    highlightQuote: "Unmatched aesthetic taste paired with data-backed execution.",
+    author: "Priyanka Bhattnagar",
+    role: "Astrologer",
+    image: "/client_face/random.jpeg",
+  },
+  {
+    id: "Dr. Amit Joshi",
+    quote:
+      "In the medical field, building credibility and reaching patients online requires utmost care and professionalism. Fam Growth handled my digital presence with great responsibility and expertise. They helped me educate more people about health and wellness while growing my digital reach. A trustworthy and dedicated team that delivers on their promises! .",
+    highlightQuote: "Unmatched aesthetic taste paired with data-backed execution.",
+    author: "Dr. Amit Joshi",
+    role: "Doctor",
+    image: "/client_face/random.jpeg",
   },
 ];
 
@@ -144,9 +189,8 @@ export default function TestimonialsSection() {
                       key={idx}
                       onClick={() => setCurrentIndex(idx)}
                       aria-label={`Go to story ${idx + 1}`}
-                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                        currentIndex === idx ? "w-6 bg-purple-600" : "w-2 bg-slate-300 hover:bg-slate-400"
-                      }`}
+                      className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${currentIndex === idx ? "w-6 bg-purple-600" : "w-2 bg-slate-300 hover:bg-slate-400"
+                        }`}
                     />
                   ))}
                 </div>

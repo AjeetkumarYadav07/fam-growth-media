@@ -12,37 +12,49 @@ interface TransformationItem {
 }
 
 const transformationImages1: TransformationItem[] = [
-  { client: "anurag", transformationImage: "/clients_insta/anurag.jpeg" },
-  { client: "dipniti", transformationImage: "/clients_insta/dipniti.jpeg" },
+  {
+    client: "anurag",
+    highlightText: "50k in just 16 days",
+    highlightEmoji: "🎉",
+    transformationImage: "/clients_instagram/anurag.jpeg"
+  },
+  {
+    client: "ritu",
+    highlightText: "250K in just 8 months",
+    highlightEmoji: "🎉",
+    transformationImage: "/clients_instagram/ritu.jpeg"
+  },
   {
     client: "prateek",
-    transformationImage: "/clients_insta/prateek.jpeg",
+    transformationImage: "/clients_instagram/prateek.jpeg",
     highlightText: "200K in just 6 months",
+    highlightEmoji: "🎉",
+  },
+  {
+    client: "astro",
+    transformationImage: "/clients_instagram/astro.jpeg",
+    highlightText: "Fastest 100k",
+    highlightEmoji: "🎉",
+  },
+  {
+    client: "ritika",
+    transformationImage: "/clients_instagram/ritika.jpeg",
+    highlightText: "Fastest 150k in just 5 months",
+    highlightEmoji: "🎉",
+  },
+  {
+    client: "priyank",
+    transformationImage: "/clients_instagram/priyank.jpeg",
+    highlightText: "Ongoing",
     highlightEmoji: "🎉",
   },
 ];
 
-const transformationImages2: TransformationItem[] = [
-  { client: "ritu", transformationImage: "/clients_insta/ritu.jpeg" },
-  {
-    client: "astro",
-    transformationImage: "/clients_insta/astro.jpeg",
-    highlightText: "Fastest 100k",
-  },
-  { client: "ritika", transformationImage: "/clients_insta/ritika.jpeg" },
-];
-
-// Repeat base arrays 3 times so each half of the marquee is sufficiently wide (9 cards)
+// Repeat base array 3 times so each half of the marquee is sufficiently wide (18 cards)
 const row1Base = [
   ...transformationImages1,
   ...transformationImages1,
   ...transformationImages1,
-];
-
-const row2Base = [
-  ...transformationImages2,
-  ...transformationImages2,
-  ...transformationImages2,
 ];
 
 interface TransformationCardProps {
@@ -163,47 +175,23 @@ export default function BrandLogos() {
         </div>
       </motion.div>
 
-      {/* Task 1: Dual Marquee Rows */}
-      <div className="space-y-6 sm:space-y-8">
-        {/* Row 1: Continuously scrolling from right to left (transformationImages1) */}
-        <div className="relative w-full overflow-hidden py-4">
-          <div className="flex w-max animate-marquee-left hover:[animation-play-state:paused]">
-            {/* First identical half */}
-            <div className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8">
-              {row1Base.map((item, idx) => (
-                <TransformationCard key={`row1-a-${idx}`} item={item} />
-              ))}
-            </div>
-            {/* Second identical half for seamless infinite loop */}
-            <div
-              className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8"
-              aria-hidden="true"
-            >
-              {row1Base.map((item, idx) => (
-                <TransformationCard key={`row1-b-${idx}`} item={item} />
-              ))}
-            </div>
+      {/* Transformation Marquee Slider (Single Row) */}
+      <div className="relative w-full overflow-hidden py-2 sm:py-4">
+        <div className="flex w-max animate-marquee-left hover:[animation-play-state:paused]">
+          {/* First identical half */}
+          <div className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8">
+            {row1Base.map((item, idx) => (
+              <TransformationCard key={`row1-a-${idx}`} item={item} />
+            ))}
           </div>
-        </div>
-
-        {/* Row 2: Continuously scrolling from left to right (transformationImages2) */}
-        <div className="relative w-full overflow-hidden py-4">
-          <div className="flex w-max animate-marquee-right hover:[animation-play-state:paused]">
-            {/* First identical half */}
-            <div className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8">
-              {row2Base.map((item, idx) => (
-                <TransformationCard key={`row2-a-${idx}`} item={item} />
-              ))}
-            </div>
-            {/* Second identical half for seamless infinite loop */}
-            <div
-              className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8"
-              aria-hidden="true"
-            >
-              {row2Base.map((item, idx) => (
-                <TransformationCard key={`row2-b-${idx}`} item={item} />
-              ))}
-            </div>
+          {/* Second identical half for seamless infinite loop */}
+          <div
+            className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8"
+            aria-hidden="true"
+          >
+            {row1Base.map((item, idx) => (
+              <TransformationCard key={`row1-b-${idx}`} item={item} />
+            ))}
           </div>
         </div>
       </div>

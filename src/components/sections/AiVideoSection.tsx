@@ -101,12 +101,12 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
       <div className="pointer-events-none absolute bottom-12 left-10 w-[500px] h-[500px] bg-indigo-200/20 rounded-full blur-[150px] -z-10" />
 
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-        
+
         {/* ========================================================================= */}
         {/* 01. Top Hero: New Hook, Copy & 3D Fanned Visual Showcase                  */}
         {/* ========================================================================= */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center mb-16 sm:mb-24">
-          
+
           {/* Left Column: Heading & User Copy (CTA buttons removed per request) */}
           <div className="lg:col-span-5 space-y-6 text-left">
             {/* Category Pill */}
@@ -126,7 +126,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
               <p className="font-semibold text-slate-800 text-base sm:text-lg">
                 We all know Consistency is the gem of social media growth but daily content creation is exhausting. Let AI do the lifting so you don&apos;t have to burn out.
               </p>
-              
+
               <p>
                 With our AI video creation service solutions you no longer need to worry about setting up shoots, changing outfits or finding the location. In our social media services, we handle all of that digitally — swapping backgrounds, adjusting clothing styles and creating scenes that match your content needs.
               </p>
@@ -164,7 +164,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
 
           {/* Right Column: 3 Fanned Perspective Cards & "THE MAGIC" Feature Card (40% Larger) */}
           <div className="lg:col-span-7 relative flex items-center justify-center min-h-[460px] sm:min-h-[540px] lg:min-h-[620px]">
-            
+
             {/* Handwritten Note: "AI Generated" with curved arrow pointing to left card */}
             <div className="absolute -top-10 left-8 sm:left-20 z-20 pointer-events-none select-none">
               <div className="font-handwriting text-xl sm:text-2xl font-bold text-purple-600/90 flex flex-col items-center -rotate-6">
@@ -223,7 +223,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
 
             {/* Fanned Out Perspective 3 Cards Showcase (Increased Height by 40% More) */}
             <div className="relative w-full max-w-[700px] h-[480px] sm:h-[600px] lg:h-[660px] flex items-center justify-center">
-              
+
               {/* Left Card: Tilted -10deg with "Original" Badge */}
               <motion.div
                 initial={{ opacity: 0, x: -30, rotate: -10 }}
@@ -398,7 +398,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
         {/* ========================================================================= */}
         <div className="rounded-3xl border border-white/70 bg-white/80 p-5 sm:p-6 lg:p-7 shadow-[0_20px_50px_rgba(124,58,237,0.06)] backdrop-blur-xl">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-            
+
             {/* Left Label: "WHY AI VIDEOS?" + Arrow Cursor Graphic */}
             <div className="md:col-span-3 flex items-center gap-2">
               <div className="flex items-center gap-1.5">
@@ -415,7 +415,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
 
             {/* Right 4 Columns: Faster Production, Cost Efficient, Highly Engaging, Scales with Growth */}
             <div className="md:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              
+
               {/* Feature 1: Faster Production */}
               <div className="flex items-center gap-3">
                 <div className="h-9 w-9 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 shadow-2xs">
@@ -489,7 +489,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
       <AnimatePresence>
         {activeVideo && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6">
-            
+
             {/* Dark Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -511,11 +511,10 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
               <div className="p-3.5 sm:px-5 border-b border-slate-100 flex items-center justify-between gap-3 bg-slate-50/90 shrink-0">
                 <div className="flex items-center gap-2.5">
                   <span
-                    className={`inline-flex items-center justify-center h-6 w-6 rounded-lg text-[10px] font-black uppercase ${
-                      activeVideo.type === "AI"
+                    className={`inline-flex items-center justify-center h-6 w-6 rounded-lg text-[10px] font-black uppercase ${activeVideo.type === "AI"
                         ? "bg-purple-600 text-white shadow-xs"
                         : "bg-slate-800 text-white"
-                    }`}
+                      }`}
                   >
                     {activeVideo.type}
                   </span>
