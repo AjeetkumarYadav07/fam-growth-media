@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 
 const testimonials = [
   {
@@ -83,15 +83,19 @@ const testimonials = [
 
 export default function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { amount: 0.1 });
 
-  // Auto-change testimonial every 5 seconds
+  // Auto-change testimonial every 5 seconds only when visible
   useEffect(() => {
+    if (!isInView) return;
+
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [currentIndex]);
+  }, [currentIndex, isInView]);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
@@ -104,7 +108,7 @@ export default function TestimonialsSection() {
   const current = testimonials[currentIndex];
 
   return (
-    <section id="reviews" className="relative py-20 sm:py-28 bg-[#FAFAFE] border-t border-slate-200/70 overflow-hidden">
+    <section ref={sectionRef} id="reviews" className="relative py-20 sm:py-28 bg-[#FAFAFE] border-t border-slate-200/70 overflow-hidden">
       {/* Ambient background glows */}
       <div className="pointer-events-none absolute top-1/2 right-1/4 w-[600px] h-[400px] bg-purple-200/25 rounded-full blur-[150px] -z-10" />
 

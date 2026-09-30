@@ -6,10 +6,11 @@ import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
+import { useContactModal } from "@/components/providers/ContactModalProvider";
 import { cn } from "@/lib/utils";
 
 interface NavbarProps {
-  onOpenContactModal: () => void;
+  onOpenContactModal?: () => void;
 }
 
 const navLinks = [
@@ -23,6 +24,9 @@ const navLinks = [
 ];
 
 export default function Navbar({ onOpenContactModal }: NavbarProps) {
+  const { openContactModal } = useContactModal();
+  const handleOpenContactModal = onOpenContactModal || openContactModal;
+
   const [scrolled, setScrolled] = useState(false);
   const scrolledRef = useRef(false);
   const [activeSection, setActiveSection] = useState("Home");
@@ -148,7 +152,7 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
         <div className="flex items-center gap-3">
           {/* Button Hover: Scale (1.05), Gradient shift, Arrow move */}
           <button
-            onClick={onOpenContactModal}
+            onClick={() => handleOpenContactModal()}
             className="group hidden sm:inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 bg-[length:200%_auto] hover:bg-right px-5 py-2 text-xs font-bold text-white shadow-lg shadow-purple-500/20 hover:shadow-purple-500/35 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
           >
             <span>Let&apos;s Work Together</span>
@@ -202,7 +206,7 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    onOpenContactModal();
+                    handleOpenContactModal();
                   }}
                   className="group w-full flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 py-3 text-sm font-bold text-white shadow-lg shadow-purple-500/25 active:scale-95 transition"
                 >

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
+import { useContactModal } from "@/components/providers/ContactModalProvider";
 import { WHATSAPP_LINK } from "@/lib/constants";
 
 if (typeof window !== "undefined") {
@@ -24,7 +25,7 @@ if (typeof window !== "undefined") {
 }
 
 interface WhyFamSectionProps {
-  onOpenContactModal: () => void;
+  onOpenContactModal?: () => void;
 }
 
 const steps = [
@@ -189,6 +190,9 @@ const steps = [
 ];
 
 export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps) {
+  const { openContactModal } = useContactModal();
+  const handleOpenContactModal = onOpenContactModal || openContactModal;
+
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const activeStepIndexRef = useRef(0);
   const timelineProgressRef = useRef<HTMLDivElement>(null);
@@ -196,9 +200,50 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
   const celebrationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { scrollTo } = useSmoothScroll();
 
+  const [isNearViewport, setIsNearViewport] = useState(false);
+
   const sectionRef = useRef<HTMLElement>(null);
   const pinContainerRef = useRef<HTMLDivElement>(null);
   const stepLayersRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Deferred initialization: only initialize heavy GSAP/ScrollTrigger when approaching section
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const checkVisibility = () => {
+      const rect = section.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      if (rect.top <= windowHeight + 800) {
+        setIsNearViewport(true);
+        return true;
+      }
+      return false;
+    };
+
+    if (checkVisibility()) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsNearViewport(true);
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: "800px 0px 800px 0px",
+        threshold: 0,
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   // Party bumper blast celebration function (lasts ~1.2s)
   const triggerPartyBlast = () => {
@@ -257,6 +302,8 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
   };
 
   useEffect(() => {
+    if (!isNearViewport) return;
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
@@ -380,16 +427,19 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
 
     const timer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 250);
+    }, 150);
 
     return () => {
       clearTimeout(timer);
       ctx.revert();
     };
-  }, []);
+  }, [isNearViewport]);
 
   // Smooth scroll to a specific step when clicking navigation nodes or cards
   const scrollToStep = (index: number) => {
+    if (!isNearViewport) {
+      setIsNearViewport(true);
+    }
     if (!pinContainerRef.current) return;
     const allST = ScrollTrigger.getAll();
     const sectionST = allST.find((st) => st.trigger === pinContainerRef.current);
@@ -796,7 +846,7 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
               </a>
 
               <button
-                onClick={onOpenContactModal}
+                onClick={() => handleOpenContactModal()}
                 className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-slate-800 border border-slate-200 hover:border-purple-300 hover:bg-purple-50/50 hover:text-purple-600 shadow-sm transition-all cursor-pointer"
               >
                 <Calendar className="h-4 w-4 text-purple-600" />

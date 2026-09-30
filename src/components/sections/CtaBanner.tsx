@@ -4,12 +4,15 @@ import React from "react";
 import { ArrowRight, Calendar, Sparkles } from "lucide-react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { WHATSAPP_LINK } from "@/lib/constants";
+import { useContactModal } from "@/components/providers/ContactModalProvider";
 
 interface CtaBannerProps {
-  onOpenContactModal: () => void;
+  onOpenContactModal?: () => void;
 }
 
 export default function CtaBanner({ onOpenContactModal }: CtaBannerProps) {
+  const { openContactModal } = useContactModal();
+  const handleOpenContactModal = onOpenContactModal || openContactModal;
   return (
     <section id="contact" className="relative py-16 sm:py-24 overflow-hidden bg-[#FAFAFE]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -55,7 +58,7 @@ export default function CtaBanner({ onOpenContactModal }: CtaBannerProps) {
                 <MagneticButton
                   variant="secondary"
                   size="lg"
-                  onClick={onOpenContactModal}
+                  onClick={() => handleOpenContactModal()}
                   className="text-sm sm:text-base font-bold px-6 py-3.5 text-slate-800 bg-white/95 border-slate-200/90 shadow-sm hover:bg-white"
                 >
                   <Calendar className="h-4 w-4 text-purple-600" />

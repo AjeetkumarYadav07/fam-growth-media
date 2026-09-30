@@ -6,6 +6,7 @@ import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
 import { ArrowRight, Play, ArrowUpRight, ArrowDown, Eye, Users, Heart, Share2 } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
+import { useContactModal } from "@/components/providers/ContactModalProvider";
 
 // Founders Data for Hero Section with founder-specific badges & metric icons
 type MetricIconType = "views" | "followers" | "like" | "share";
@@ -103,13 +104,21 @@ const getMetricBadgeStyle = (icon: MetricIconType) => {
 };
 
 interface HeroSectionProps {
-  onOpenContactModal: () => void;
+  onOpenContactModal?: () => void;
 }
 
 export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
   const { scrollTo } = useSmoothScroll();
+  const { openContactModal } = useContactModal();
+  const handleOpenContactModal = onOpenContactModal || openContactModal;
+
+  const [isMounted, setIsMounted] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [currentFounderIndex, setCurrentFounderIndex] = useState(0);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Auto-switch founder every 5 seconds (Atiksha first, then Tarun)
   useEffect(() => {
@@ -177,7 +186,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* Category Pill */}
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
+              initial={isMounted ? { opacity: 0, y: 15 } : false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-200/90 bg-white/80 px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-slate-600 shadow-sm backdrop-blur-md"
@@ -192,7 +201,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
             {/* Kinetic Typography Headline: Line by Line Reveal, Fade + Slide up, Stagger (0.2s) */}
             <div className="space-y-1 overflow-hidden">
               <motion.div
-                initial={{ opacity: 0, y: 40 }}
+                initial={isMounted ? { opacity: 0, y: 40 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
               >
@@ -202,7 +211,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 40 }}
+                initial={isMounted ? { opacity: 0, y: 40 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
                 className="relative inline-block"
@@ -236,7 +245,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* Supporting Copy */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={isMounted ? { opacity: 0, y: 20 } : false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.45 }}
               className="text-sm sm:text-lg text-slate-600 max-w-xl leading-relaxed"
@@ -248,14 +257,14 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* CTA Buttons with Hover Scale, Arrow Move, and Soft Glow */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={isMounted ? { opacity: 0, y: 20 } : false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1"
             >
               {/* Primary CTA with Scale on Hover, Arrow Move & Soft Glow Effect */}
               <button
-                onClick={onOpenContactModal}
+                onClick={() => handleOpenContactModal()}
                 className="group relative inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 bg-[length:200%_auto] hover:bg-right px-5 sm:px-7 py-2.5 sm:py-3.5 text-xs sm:text-base font-bold text-white shadow-lg shadow-purple-500/25 hover:shadow-[0_0_30px_rgba(124,58,237,0.4)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
               >
                 <span>Get Started </span>
@@ -276,7 +285,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* Social Proof: Avatars + 50+ Brands */}
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={isMounted ? { opacity: 0 } : false}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.75 }}
               className="pt-2 sm:pt-3 flex items-center gap-2.5 sm:gap-3.5"
@@ -341,13 +350,13 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 x: mousePos.x * 6,
                 y: mousePos.y * 6,
               }}
-              initial={{ opacity: 0, scale: 0.94 }}
+              initial={isMounted ? { opacity: 0, scale: 0.94 } : false}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.9, delay: 0.2 }}
               className="relative z-10 w-full max-w-[240px] xs:max-w-[260px] sm:max-w-[340px] md:max-w-[390px] lg:max-w-[410px] aspect-[3/4] rounded-3xl overflow-hidden border border-purple-100/90 shadow-[0_25px_60px_rgba(124,58,237,0.18)] bg-slate-950 transition-transform duration-200 ease-out"
             >
               {/* Auto-switching founder portraits with smooth crossfade & scale */}
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={currentFounder.id}
                   initial={{ opacity: 0, scale: 1.05 }}
@@ -376,7 +385,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 x: mousePos.x * -10,
                 y: mousePos.y * -8,
               }}
-              initial={{ opacity: 0, y: -20 }}
+              initial={isMounted ? { opacity: 0, y: -20 } : false}
               animate={
                 isMobile
                   ? { opacity: 1, y: 0 }
@@ -397,7 +406,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
               className="absolute -top-4 sm:top-2 -left-2 sm:-left-6 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-xl"
             >
               <div className="flex items-start justify-between gap-2 sm:gap-3 mb-1 sm:mb-2 min-w-[105px] sm:min-w-[155px]">
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={currentFounder.id}
                     initial={{ opacity: 0, y: 5 }}
@@ -420,7 +429,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
               {/* Social Metric Badges according to title */}
               {currentFounder.badgeCardLeft.metrics.length > 0 && (
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={currentFounder.id}
                     initial={{ opacity: 0, y: 4 }}
@@ -451,13 +460,13 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 x: mousePos.x * -6,
                 y: mousePos.y * -5,
               }}
-              initial={{ opacity: 0, rotate: -12 }}
+              initial={isMounted ? { opacity: 0, rotate: -12 } : false}
               animate={{ opacity: 1, rotate: -12 }}
               transition={{ duration: 0.8, delay: 0.6 }}
               className="absolute top-20 sm:top-28 -left-3 sm:-left-12 z-20 select-none pointer-events-none"
             >
               <div className="font-handwriting text-base sm:text-2xl md:text-3xl font-bold text-indigo-600/90 flex flex-col items-center min-w-[90px] sm:min-w-[130px]">
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={currentFounder.id}
                     initial={{ opacity: 0, scale: 0.88, y: 6 }}
@@ -486,7 +495,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 x: mousePos.x * 12,
                 y: mousePos.y * -10,
               }}
-              initial={{ opacity: 0, y: -20 }}
+              initial={isMounted ? { opacity: 0, y: -20 } : false}
               animate={
                 isMobile
                   ? { opacity: 1, y: 0 }
@@ -507,7 +516,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
               className="absolute top-2 sm:top-14 -right-2 sm:-right-16 md:-right-24 lg:-right-28 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-xl"
             >
               <div className="flex items-start justify-between gap-2 sm:gap-3 mb-1 min-w-[120px] sm:min-w-[145px]">
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={currentFounder.id}
                     initial={{ opacity: 0, y: 5 }}
@@ -530,7 +539,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
               {/* Social Metric Badges according to title */}
               {currentFounder.badgeCardRight.metrics.length > 0 && (
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={currentFounder.id}
                     initial={{ opacity: 0, y: 4 }}
@@ -557,7 +566,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* Handwritten Accent (Top-Right): "IDEAS PEOPLE BRANDS GROW" with burst lines */}
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={isMounted ? { opacity: 0 } : false}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.7 }}
               className="absolute -top-10 sm:-top-8 right-1 sm:right-0 z-20 select-none pointer-events-none text-right"
@@ -581,7 +590,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 x: mousePos.x * 10,
                 y: mousePos.y * 8,
               }}
-              initial={{ opacity: 0, y: 30 }}
+              initial={isMounted ? { opacity: 0, y: 30 } : false}
               animate={
                 isMobile
                   ? { opacity: 1, y: 0 }
@@ -609,7 +618,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                       {currentFounder.title}
                     </span>
                   </div>
-                  <AnimatePresence mode="wait">
+                  <AnimatePresence mode="wait" initial={false}>
                     <motion.div
                       key={currentFounder.name}
                       initial={{ opacity: 0, y: 5 }}

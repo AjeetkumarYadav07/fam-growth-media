@@ -7,13 +7,14 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
+import { useContactModal } from "@/components/providers/ContactModalProvider";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 interface ServicesSectionProps {
-  onSelectService: (serviceName: string) => void;
+  onSelectService?: (serviceName: string) => void;
 }
 
 const services = [
@@ -84,6 +85,10 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
   const [activeIndex, setActiveIndex] = useState(0);
   const activeIndexRef = useRef(0);
   const { scrollTo } = useSmoothScroll();
+  const { openContactModal } = useContactModal();
+  const handleSelectService = onSelectService || openContactModal;
+
+  const [isNearViewport, setIsNearViewport] = useState(false);
 
   const sectionRef = useRef<HTMLElement>(null);
   const introHeaderRef = useRef<HTMLDivElement>(null);
@@ -98,7 +103,48 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
   const trackRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
+  // Deferred initialization: only initialize heavy GSAP/ScrollTrigger when approaching section
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const checkVisibility = () => {
+      const rect = section.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      if (rect.top <= windowHeight + 800) {
+        setIsNearViewport(true);
+        return true;
+      }
+      return false;
+    };
+
+    if (checkVisibility()) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsNearViewport(true);
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: "800px 0px 800px 0px",
+        threshold: 0,
+      }
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isNearViewport) return;
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
@@ -221,15 +267,18 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
 
     const t = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 250);
+    }, 150);
 
     return () => {
       clearTimeout(t);
       ctx.revert();
     };
-  }, []);
+  }, [isNearViewport]);
 
   const scrollToCard = (index: number) => {
+    if (!isNearViewport) {
+      setIsNearViewport(true);
+    }
     if (!pinContainerRef.current) return;
     const allST = ScrollTrigger.getAll();
     const sectionST = allST.find((st) => st.trigger === pinContainerRef.current);
@@ -293,7 +342,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
               className="pt-2 flex items-center gap-6 will-change-transform"
             >
               <button
-                onClick={() => onSelectService("All Services")}
+                onClick={() => handleSelectService("All Services")}
                 className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-purple-500/25 hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
                 <span>Explore All Services</span>
@@ -428,7 +477,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onSelectService(service.title);
+                          handleSelectService(service.title);
                         }}
                         className={`h-11 w-11 rounded-full flex items-center justify-center transition-all duration-300 shadow-md ${isActive
                             ? "bg-gradient-to-r from-purple-600 to-cyan-500 text-white shadow-[0_0_20px_rgba(124,58,237,0.5)] scale-110"

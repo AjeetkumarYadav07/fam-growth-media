@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import ResponsiveImage from "@/components/ui/ResponsiveImage";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ArrowRight, Users, Video, BarChart2, Clapperboard } from "lucide-react";
+import { useContactModal } from "@/components/providers/ContactModalProvider";
 
 interface BrandStatementProps {
   onLearnMore?: () => void;
@@ -33,26 +34,33 @@ const storySlides = [
 
 export default function BrandStatement({ onLearnMore }: BrandStatementProps) {
   const [storyIndex, setStoryIndex] = useState(0);
+  const { openContactModal } = useContactModal();
+  const handleLearnMore = onLearnMore || (() => openContactModal("Strategy Consulting"));
 
-  // Auto transition to second pic after 5 seconds (5000ms loop)
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { amount: 0.1 });
+
+  // Auto transition to second pic after 5 seconds only when section is visible
   useEffect(() => {
+    if (!isInView) return;
+
     const timer = setInterval(() => {
       setStoryIndex((prev) => (prev === 0 ? 1 : 0));
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isInView]);
 
   const handleScrollToStory = () => {
     const storyElement = document.getElementById("our-story");
     if (storyElement) {
       storyElement.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
-      onLearnMore?.();
+      handleLearnMore();
     }
   };
 
   return (
-    <section id="about" className="relative py-20 sm:py-28 overflow-hidden bg-white border-t border-slate-100">
+    <section ref={sectionRef} id="about" className="relative py-20 sm:py-28 overflow-hidden bg-white border-t border-slate-100">
       {/* Ambient background glows */}
       <div className="pointer-events-none absolute top-12 right-0 w-[550px] h-[550px] bg-gradient-to-br from-purple-200/30 via-sky-200/20 to-transparent rounded-full blur-[140px] -z-10" />
       <div className="pointer-events-none absolute bottom-12 left-0 w-[550px] h-[550px] bg-gradient-to-tr from-purple-200/35 via-indigo-100/25 to-sky-100/20 rounded-full blur-[140px] -z-10" />

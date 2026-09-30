@@ -1,82 +1,62 @@
-"use client";
-
-import React, { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
 import StatsBar from "@/components/sections/StatsBar";
 import BrandLogos from "@/components/sections/BrandLogos";
-import ServicesSection from "@/components/sections/ServicesSection";
-import BrandStatement from "@/components/sections/BrandStatement";
-
-import WhyFamSection from "@/components/sections/WhyFamSection";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
-import AiVideoSection from "@/components/sections/AiVideoSection";
-import FaqSection from "@/components/sections/FaqSection";
-import CtaBanner from "@/components/sections/CtaBanner";
 import dynamic from "next/dynamic";
-import Footer from "@/components/layout/Footer";
+import { ContactModalProvider } from "@/components/providers/ContactModalProvider";
 
-const WorkTogetherModal = dynamic(() => import("@/components/ui/WorkTogetherModal"), {
-  ssr: false,
-});
+// Viewport-priority loading architecture:
+// Immediate First Viewport: Navbar + HeroSection + StatsBar + BrandLogos
+// Deferred Below-the-fold chunks: ServicesSection, WhyFamSection, AiVideo, Reviews, FAQ, CTA, Footer
+const ServicesSection = dynamic(() => import("@/components/sections/ServicesSection"));
+const BrandStatement = dynamic(() => import("@/components/sections/BrandStatement"));
+const WhyFamSection = dynamic(() => import("@/components/sections/WhyFamSection"));
+const AiVideoSection = dynamic(() => import("@/components/sections/AiVideoSection"));
+const TestimonialsSection = dynamic(() => import("@/components/sections/TestimonialsSection"));
+const FaqSection = dynamic(() => import("@/components/sections/FaqSection"));
+const CtaBanner = dynamic(() => import("@/components/sections/CtaBanner"));
+const Footer = dynamic(() => import("@/components/layout/Footer"));
 
 export default function Home() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<string>("Content Creation & Strategic Scripting");
-
-  const handleOpenContact = (service?: string) => {
-    if (service) setSelectedService(service);
-    setModalOpen(true);
-  };
-
   return (
-    <main className="relative min-h-screen bg-[#FAFAFE] text-slate-900 selection:bg-purple-500/20 selection:text-purple-900 overflow-x-hidden">
-      {/* 01: Floating Glassmorphic Navbar */}
-      <Navbar onOpenContactModal={() => handleOpenContact()} />
+    <ContactModalProvider>
+      <main className="relative min-h-screen bg-[#FAFAFE] text-slate-900 selection:bg-purple-500/20 selection:text-purple-900 overflow-x-hidden">
+        {/* 01: Floating Glassmorphic Navbar */}
+        <Navbar />
 
-      {/* 02: Hero Section with Editorial Collage */}
-      <HeroSection onOpenContactModal={() => handleOpenContact()} />
+        {/* 02: Hero Section with Editorial Collage */}
+        <HeroSection />
 
-      {/* 03: Proof / Trust Bar (50+ Brands, 200% Growth, 5+ Industries, 98% Satisfaction) */}
-      <StatsBar />
+        {/* 03: Proof / Trust Bar (50+ Brands, 200% Growth, 5+ Industries, 98% Satisfaction) */}
+        <StatsBar />
 
-      {/* 04: Client Logo Marquee (Amazon, Google, Meta, Spotify, etc.) */}
-      <BrandLogos />
+        {/* 04: Client Logo Marquee (Amazon, Google, Meta, Spotify, etc.) */}
+        <BrandLogos />
 
-      {/* 05: Services (5 Cards matching Mockup) */}
-      <ServicesSection onSelectService={(s) => handleOpenContact(s)} />
+        {/* 05: Services (5 Cards matching Mockup) */}
+        <ServicesSection />
 
-      {/* 06: Big Statement / Editorial Team Moment (We Don't Just Make Things Look Good...) */}
-      <BrandStatement onLearnMore={() => handleOpenContact("Strategy Consulting")} />
+        {/* 06: Big Statement / Editorial Team Moment (We Don't Just Make Things Look Good...) */}
+        <BrandStatement />
 
-      {/* 07: Featured Work (Interactive Slider: Lume, VYBE, Altura, NOVA) */}
+        {/* 07: Why FAM? (5-Step Interactive Growth Partner Pipeline) */}
+        <WhyFamSection />
 
+        {/* 08: AI Video Showcase & Process */}
+        <AiVideoSection />
 
-      {/* 08: Why FAM? (5-Step Interactive Growth Partner Pipeline) */}
-      <WhyFamSection onOpenContactModal={() => handleOpenContact()} />
+        {/* 09: Client Success Stories (Editorial Split Card) */}
+        <TestimonialsSection />
 
+        {/* 10: Frequently Asked Questions */}
+        <FaqSection />
 
+        {/* 11: Final CTA Banner (Ready to Grow Your Brand? / Stories That Grow) */}
+        <CtaBanner />
 
-      {/* 09: AI Video Showcase & Process */}
-      <AiVideoSection onOpenContactModal={() => handleOpenContact("AI Video Creation")} />
-
-      {/* 10: Client Success Stories (Editorial Split Card with Rohan Mehta) */}
-      <TestimonialsSection />
-      {/* 11: Frequently Asked Questions */}
-      <FaqSection />
-
-      {/* 12: Final CTA Banner (Ready to Grow Your Brand? / Stories That Grow) */}
-      <CtaBanner onOpenContactModal={() => handleOpenContact()} />
-
-      {/* 13: Footer */}
-      <Footer />
-
-      {/* Interactive Modal */}
-      <WorkTogetherModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        prefilledService={selectedService}
-      />
-    </main>
+        {/* 12: Footer */}
+        <Footer />
+      </main>
+    </ContactModalProvider>
   );
 }
