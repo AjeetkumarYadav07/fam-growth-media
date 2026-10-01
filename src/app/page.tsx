@@ -36,14 +36,14 @@ export default function Home() {
         {/* 05: Services (5 Cards matching Mockup) */}
         <ServicesSection />
 
-        {/* 06: Big Statement / Editorial Team Moment (We Don't Just Make Things Look Good...) */}
+        {/* 06: AI Video Showcase & Process */}
+        <AiVideoSection />
+
+        {/* 07: Big Statement / Editorial Team Moment (We Don't Just Make Things Look Good...) */}
         <BrandStatement />
 
-        {/* 07: Why FAM? (5-Step Interactive Growth Partner Pipeline) */}
+        {/* 08: Why FAM? (5-Step Interactive Growth Partner Pipeline) */}
         <WhyFamSection />
-
-        {/* 08: AI Video Showcase & Process */}
-        <AiVideoSection />
 
         {/* 09: Client Success Stories (Editorial Split Card) */}
         <TestimonialsSection />
