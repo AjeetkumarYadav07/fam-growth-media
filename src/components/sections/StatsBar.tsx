@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Box, BarChart2, Users2, ShieldCheck } from "lucide-react";
+import { Box, BarChart2, ShieldCheck } from "lucide-react";
 
 interface CounterProps {
   target: number;
@@ -67,20 +67,11 @@ const stats = [
     label: "Average Growth",
   },
   {
-    icon: Users2,
-    iconColor: "text-pink-600",
-    bgColor: "bg-pink-100/80",
-    borderColor: "border-pink-200/60",
-    target: 5,
-    suffix: "+",
-    label: "Categories Served",
-  },
-  {
     icon: ShieldCheck,
     iconColor: "text-cyan-600",
     bgColor: "bg-cyan-100/80",
     borderColor: "border-cyan-200/60",
-    target: 98.5,
+    target: 100,
     suffix: "%",
     label: "Client Satisfaction",
   },
@@ -102,7 +93,7 @@ export default function StatsBar() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="rounded-3xl border border-slate-200/90 bg-white/95 p-6 sm:p-8 shadow-[0_12px_40px_rgba(0,0,0,0.03)] backdrop-blur-xl"
         >
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x lg:divide-slate-200/80">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-0 sm:divide-x sm:divide-slate-200/80">
             {stats.map((stat, idx) => {
               const Icon = stat.icon;
               return (
@@ -111,7 +102,7 @@ export default function StatsBar() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.6, delay: idx * 0.15, ease: "easeOut" }}
-                  className="flex items-center justify-start lg:justify-center gap-3.5 px-3 sm:px-6 py-2"
+                  className="flex items-center justify-center gap-3.5 px-3 sm:px-6 py-2"
                 >
                   {/* Icon Box */}
                   <div

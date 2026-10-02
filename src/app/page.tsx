@@ -27,7 +27,7 @@ export default function Home() {
         {/* 02: Hero Section with Editorial Collage */}
         <HeroSection />
 
-        {/* 03: Proof / Trust Bar (50+ Brands, 200% Growth, 5+ Industries, 98% Satisfaction) */}
+        {/* 03: Proof / Trust Bar (100+ Creators Profiles, 200% Average Growth, 100% Client Satisfaction) */}
         <StatsBar />
 
         {/* 04: Client Logo Marquee (Amazon, Google, Meta, Spotify, etc.) */}
@@ -46,7 +46,7 @@ export default function Home() {
         <WhyFamSection />
 
         {/* 09: Client Success Stories (Editorial Split Card) */}
-        <TestimonialsSection />
+        {/* <TestimonialsSection /> */}
 
         {/* 10: Frequently Asked Questions */}
         <FaqSection />

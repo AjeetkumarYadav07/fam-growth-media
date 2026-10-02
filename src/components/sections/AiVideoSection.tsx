@@ -119,7 +119,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
             {/* New Hook Headline */}
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.08]">
               Don&apos;t have Time To Shoot?? <br />
-              <span className="fam-gradient-text">Let AI Create Videos!</span>
+              <span className="fam-gradient-text">Let's AI Create Videos!</span>
             </h2>
 
             {/* User Provided Replacement Context */}
@@ -514,8 +514,8 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
                 <div className="flex items-center gap-2.5">
                   <span
                     className={`inline-flex items-center justify-center h-6 w-6 rounded-lg text-[10px] font-black uppercase ${activeVideo.type === "AI"
-                        ? "bg-purple-600 text-white shadow-xs"
-                        : "bg-slate-800 text-white"
+                      ? "bg-purple-600 text-white shadow-xs"
+                      : "bg-slate-800 text-white"
                       }`}
                   >
                     {activeVideo.type}

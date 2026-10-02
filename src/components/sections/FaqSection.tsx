@@ -368,12 +368,6 @@ const faqs: FaqItem[] = [
   },
 ];
 
-const brandAvatars = [
-  { src: "/images/hero-woman.jpg", alt: "Brand Partner 1" },
-  { src: "/images/rohan-mehta.jpg", alt: "Brand Partner 2" },
-  { src: "/images/hero-talent.jpg", alt: "Brand Partner 3" },
-  { src: "/images/why-fam-strategist.jpg", alt: "Brand Partner 4" },
-];
 
 function SparklesIcon({ className }: { className?: string }) {
   return (
@@ -624,40 +618,14 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
                 </button>
               </motion.div>
 
-              {/* Trust Avatars & Proof */}
+              {/* Handwritten Callout: Good Questions Better Growth */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="pt-2 flex items-center justify-between flex-wrap gap-4"
+                className="pt-2"
               >
-                <div className="flex items-center gap-3">
-                  {/* Stacked Avatars */}
-                  <div className="flex -space-x-2.5 overflow-hidden">
-                    {brandAvatars.map((av, idx) => (
-                      <div
-                        key={idx}
-                        className="inline-block h-9 w-9 rounded-full ring-2 ring-white shadow-sm overflow-hidden relative"
-                      >
-                        <ResponsiveImage
-                          src={av.src}
-                          alt={av.alt}
-                          fill
-                          sizes="36px"
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  {/* Trust Text */}
-                  <div className="text-xs font-semibold text-slate-700 leading-snug">
-                    <span className="block font-bold text-slate-900">Join 50+ brands</span>
-                    <span>who trust FAM</span>
-                  </div>
-                </div>
-
-                {/* Handwritten Callout: Good Questions Better Growth */}
                 <div className="font-handwriting text-2xl sm:text-3xl font-medium sm:font-semibold text-indigo-600/90 -rotate-2 select-none">
                   Good Questions
                   <br />
