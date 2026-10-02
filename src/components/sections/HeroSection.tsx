@@ -57,7 +57,7 @@ const founders = [
     instagramUrl: "https://www.instagram.com/tarunmalhotraaa/",
     instagramHandle: "@tarunmalhotraaa",
     // Badges: 1 = More Than Marketing, 2 = Creative Strategy, 3 = +200% Avg. Growth
-    handwrittenTag: ["More", "Than", "Marketing"],
+    handwrittenTag: ["More Than", "Marketing"],
     badgeCardLeft: {
       tag: "Generated Millions of views",
       title: "660k+ followers",
@@ -112,34 +112,22 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
   const { openContactModal } = useContactModal();
   const handleOpenContactModal = onOpenContactModal || openContactModal;
 
-  const [isMounted, setIsMounted] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [currentFounderIndex, setCurrentFounderIndex] = useState(0);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const sectionRef = useRef<HTMLElement>(null);
+  const isHeroInView = useInView(sectionRef, { amount: 0.05 });
 
-  // Auto-switch founder every 5 seconds (Atiksha first, then Tarun)
+  // Auto-switch founder every 5 seconds when hero is visible
   useEffect(() => {
+    if (!isHeroInView) return;
     const timer = setInterval(() => {
       setCurrentFounderIndex((prev) => (prev + 1) % founders.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isHeroInView]);
 
   const currentFounder = founders[currentFounderIndex];
-
-  const sectionRef = useRef<HTMLElement>(null);
-  const isHeroInView = useInView(sectionRef, { amount: 0.05 });
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile, { passive: true });
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -149,7 +137,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
   // Scale hero talent slightly on scroll
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
-  // Subtle mouse move parallax calculation
+  // Subtle mouse move parallax calculation (desktop only)
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     if (typeof window !== "undefined" && window.innerWidth < 1024) return;
     const rect = e.currentTarget.getBoundingClientRect();
@@ -170,10 +158,10 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
       onMouseLeave={handleMouseLeave}
       className="relative min-h-[92vh] pt-28 sm:pt-36 pb-14 overflow-hidden flex flex-col justify-center"
     >
-      {/* Background Soft Pastel Ambient Glows */}
-      <div className="pointer-events-none absolute top-12 right-1/4 w-[650px] h-[650px] bg-purple-300/30 rounded-full blur-[160px] -z-10" />
-      <div className="pointer-events-none absolute top-36 right-4 w-[500px] h-[500px] bg-cyan-200/35 rounded-full blur-[140px] -z-10" />
-      <div className="pointer-events-none absolute bottom-12 left-10 w-[550px] h-[550px] bg-indigo-200/25 rounded-full blur-[150px] -z-10" />
+      {/* Background Soft Pastel Ambient Glows - tuned sizes & blur for mobile GPU efficiency */}
+      <div className="pointer-events-none absolute top-12 right-1/4 w-[300px] sm:w-[650px] h-[300px] sm:h-[650px] bg-purple-300/30 rounded-full blur-[60px] sm:blur-[160px] -z-10" />
+      <div className="pointer-events-none absolute top-36 right-4 w-[240px] sm:w-[500px] h-[240px] sm:h-[500px] bg-cyan-200/35 rounded-full blur-[50px] sm:blur-[140px] -z-10" />
+      <div className="pointer-events-none absolute bottom-12 left-10 w-[260px] sm:w-[550px] h-[260px] sm:h-[550px] bg-indigo-200/25 rounded-full blur-[50px] sm:blur-[150px] -z-10" />
 
       {/* Subtle Dot Grid pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(#7c3aed0f_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_75%_65%_at_50%_35%,#000_65%,transparent_100%)] -z-10" />
@@ -186,10 +174,10 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* Category Pill */}
             <motion.div
-              initial={isMounted ? { opacity: 0, y: 15 } : false}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-200/90 bg-white/80 px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-slate-600 shadow-sm backdrop-blur-md"
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-200/90 bg-white/95 sm:bg-white/80 px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-slate-600 shadow-sm backdrop-blur-none sm:backdrop-blur-md"
             >
               <span>STRATEGY</span>
               <span className="text-purple-500">•</span>
@@ -201,9 +189,9 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
             {/* Kinetic Typography Headline: Line by Line Reveal, Fade + Slide up, Stagger (0.2s) */}
             <div className="space-y-1 overflow-hidden">
               <motion.div
-                initial={isMounted ? { opacity: 0, y: 40 } : false}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
               >
                 <span className="block text-4xl sm:text-7xl lg:text-8xl font-black text-slate-900 tracking-tight leading-[1.04]">
                   Let&apos;s Make
@@ -211,9 +199,9 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
               </motion.div>
 
               <motion.div
-                initial={isMounted ? { opacity: 0, y: 40 } : false}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
                 className="relative inline-block"
               >
                 <span className="text-4xl sm:text-7xl lg:text-8xl font-black text-slate-900 tracking-tight leading-[1.04]">
@@ -245,9 +233,9 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* Supporting Copy */}
             <motion.p
-              initial={isMounted ? { opacity: 0, y: 20 } : false}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.45 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
               className="text-sm sm:text-lg text-slate-600 max-w-xl leading-relaxed"
             >
               Fam Growth Media is your done-for-you social media growth partner; scripting, shooting, editing, and page management, all handled by one expert team. <br />
@@ -257,9 +245,9 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* CTA Buttons with Hover Scale, Arrow Move, and Soft Glow */}
             <motion.div
-              initial={isMounted ? { opacity: 0, y: 20 } : false}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.35 }}
               className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1"
             >
               {/* Primary CTA with Scale on Hover, Arrow Move & Soft Glow Effect */}
@@ -285,9 +273,9 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* Social Proof: Avatars + 50+ Brands */}
             <motion.div
-              initial={isMounted ? { opacity: 0 } : false}
+              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.75 }}
+              transition={{ duration: 0.6, delay: 0.45 }}
               className="pt-2 sm:pt-3 flex items-center gap-2.5 sm:gap-3.5"
             >
               <div className="flex -space-x-1.5 sm:-space-x-2 overflow-hidden">
@@ -341,7 +329,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
           <div className="lg:col-span-6 relative flex items-center justify-center mt-6 lg:mt-0">
 
             {/* Glowing Backdrop Aura */}
-            <div className="absolute inset-0 m-auto h-[440px] w-[440px] sm:h-[500px] sm:w-[500px] rounded-full bg-gradient-to-tr from-purple-400/25 via-indigo-300/20 to-cyan-300/25 blur-3xl pointer-events-none" />
+            <div className="absolute inset-0 m-auto h-[260px] w-[260px] sm:h-[500px] sm:w-[500px] rounded-full bg-gradient-to-tr from-purple-400/25 via-indigo-300/20 to-cyan-300/25 blur-2xl sm:blur-3xl pointer-events-none" />
 
             {/* Main Founder Portrait Container with Parallax & Scroll Scale */}
             <motion.div
@@ -350,9 +338,9 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 x: mousePos.x * 6,
                 y: mousePos.y * 6,
               }}
-              initial={isMounted ? { opacity: 0, scale: 0.94 } : false}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.9, delay: 0.2 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
               className="relative z-10 w-full max-w-[240px] xs:max-w-[260px] sm:max-w-[340px] md:max-w-[390px] lg:max-w-[410px] aspect-[3/4] rounded-3xl overflow-hidden border border-purple-100/90 shadow-[0_25px_60px_rgba(124,58,237,0.18)] bg-slate-950 transition-transform duration-200 ease-out"
             >
               {/* Auto-switching founder portraits with smooth crossfade & scale */}
@@ -385,25 +373,21 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 x: mousePos.x * -10,
                 y: mousePos.y * -8,
               }}
-              initial={isMounted ? { opacity: 0, y: -20 } : false}
+              initial={{ opacity: 0, y: -15 }}
               animate={
-                isMobile
-                  ? { opacity: 1, y: 0 }
-                  : isHeroInView
+                isHeroInView
                   ? { opacity: 1, y: [-4, 4, -4] }
                   : { opacity: 1, y: 0 }
               }
               transition={
-                isMobile
-                  ? { opacity: { duration: 0.6, delay: 0.4 }, y: { duration: 0.6, delay: 0.4 } }
-                  : isHeroInView
+                isHeroInView
                   ? {
-                      opacity: { duration: 0.6, delay: 0.4 },
-                      y: { duration: 4.5, repeat: Infinity, ease: "easeInOut" },
+                      opacity: { duration: 0.5, delay: 0.5 },
+                      y: { duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
                     }
                   : { duration: 0.3 }
               }
-              className="absolute -top-4 sm:top-2 -left-2 sm:-left-6 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-xl"
+              className="absolute -top-4 sm:top-2 -left-2 sm:-left-6 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-none sm:backdrop-blur-xl"
             >
               <div className="flex items-start justify-between gap-2 sm:gap-3 mb-1 sm:mb-2 min-w-[105px] sm:min-w-[155px]">
                 <AnimatePresence mode="wait" initial={false}>
@@ -460,12 +444,12 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 x: mousePos.x * -6,
                 y: mousePos.y * -5,
               }}
-              initial={isMounted ? { opacity: 0, rotate: -12 } : false}
-              animate={{ opacity: 1, rotate: -12 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              initial={{ opacity: 0, rotate: -3 }}
+              animate={{ opacity: 1, rotate: -3 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
               className="absolute top-20 sm:top-28 -left-3 sm:-left-12 z-20 select-none pointer-events-none"
             >
-              <div className="font-handwriting text-base sm:text-2xl md:text-3xl font-bold text-indigo-600/90 flex flex-col items-center min-w-[90px] sm:min-w-[130px]">
+              <div className="font-handwriting text-lg sm:text-2xl md:text-3xl font-medium sm:font-semibold text-indigo-600/90 flex flex-col items-center min-w-[90px] sm:min-w-[130px]">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={currentFounder.id}
@@ -482,7 +466,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                     ))}
                   </motion.div>
                 </AnimatePresence>
-                <svg className="w-8 h-5 sm:w-12 sm:h-8 text-indigo-500/80 -rotate-12 mt-0.5 sm:mt-1" viewBox="0 0 50 30" fill="none">
+                <svg className="w-8 h-5 sm:w-12 sm:h-8 text-indigo-500/80 -rotate-6 mt-0.5 sm:mt-1" viewBox="0 0 50 30" fill="none">
                   <path d="M5 5 C 20 20, 35 15, 45 25" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="3 3" />
                   <path d="M37 25 L 45 25 L 43 17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -495,25 +479,21 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 x: mousePos.x * 12,
                 y: mousePos.y * -10,
               }}
-              initial={isMounted ? { opacity: 0, y: -20 } : false}
+              initial={{ opacity: 0, y: -15 }}
               animate={
-                isMobile
-                  ? { opacity: 1, y: 0 }
-                  : isHeroInView
+                isHeroInView
                   ? { opacity: 1, y: [4, -4, 4] }
                   : { opacity: 1, y: 0 }
               }
               transition={
-                isMobile
-                  ? { opacity: { duration: 0.6, delay: 0.5 }, y: { duration: 0.6, delay: 0.5 } }
-                  : isHeroInView
+                isHeroInView
                   ? {
-                      opacity: { duration: 0.6, delay: 0.5 },
-                      y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
+                      opacity: { duration: 0.5, delay: 0.65 },
+                      y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.65 },
                     }
                   : { duration: 0.3 }
               }
-              className="absolute top-2 sm:top-14 -right-2 sm:-right-16 md:-right-24 lg:-right-28 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-xl"
+              className="absolute top-2 sm:top-14 -right-2 sm:-right-16 md:-right-24 lg:-right-28 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-none sm:backdrop-blur-xl"
             >
               <div className="flex items-start justify-between gap-2 sm:gap-3 mb-1 min-w-[120px] sm:min-w-[145px]">
                 <AnimatePresence mode="wait" initial={false}>
@@ -566,9 +546,9 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
 
             {/* Handwritten Accent (Top-Right): "IDEAS PEOPLE BRANDS GROW" with burst lines */}
             <motion.div
-              initial={isMounted ? { opacity: 0 } : false}
+              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
               className="absolute -top-10 sm:-top-8 right-1 sm:right-0 z-20 select-none pointer-events-none text-right"
             >
               <div className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] sm:tracking-[0.25em] font-extrabold text-slate-400">
@@ -583,32 +563,27 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
               </svg>
             </motion.div>
 
-
             {/* Floating Card 3: Founder Profile & Instagram Link (Bottom-Right) */}
             <motion.div
               style={{
                 x: mousePos.x * 10,
                 y: mousePos.y * 8,
               }}
-              initial={isMounted ? { opacity: 0, y: 30 } : false}
+              initial={{ opacity: 0, y: 20 }}
               animate={
-                isMobile
-                  ? { opacity: 1, y: 0 }
-                  : isHeroInView
+                isHeroInView
                   ? { opacity: 1, y: [3, -3, 3] }
                   : { opacity: 1, y: 0 }
               }
               transition={
-                isMobile
-                  ? { opacity: { duration: 0.6, delay: 0.7 }, y: { duration: 0.6, delay: 0.7 } }
-                  : isHeroInView
+                isHeroInView
                   ? {
-                      opacity: { duration: 0.6, delay: 0.7 },
-                      y: { duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 1.5 },
+                      opacity: { duration: 0.5, delay: 0.75 },
+                      y: { duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 1.0 },
                     }
                   : { duration: 0.3 }
               }
-              className="absolute -bottom-5 sm:bottom-6 -right-1 sm:-right-8 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_16px_40px_rgba(124,58,237,0.14)] backdrop-blur-xl"
+              className="absolute -bottom-5 sm:bottom-6 -right-1 sm:-right-8 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_16px_40px_rgba(124,58,237,0.14)] backdrop-blur-none sm:backdrop-blur-xl"
             >
               <div className="flex items-center justify-between gap-2.5 sm:gap-4 min-w-[135px] sm:min-w-[195px]">
                 <div>
@@ -686,11 +661,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
             className="group flex flex-col items-center gap-1.5 text-slate-400 hover:text-purple-600 transition-colors cursor-pointer"
           >
             <div className="h-7 w-4 rounded-full border-2 border-slate-300 flex justify-center p-0.5 group-hover:border-purple-600 transition-colors">
-              <motion.div
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                className="h-1.5 w-1 bg-purple-600 rounded-full"
-              />
+              <div className="h-1.5 w-1 bg-purple-600 rounded-full animate-scroll-bounce" />
             </div>
             <span className="text-[10px] font-bold tracking-widest uppercase">
               Scroll to explore

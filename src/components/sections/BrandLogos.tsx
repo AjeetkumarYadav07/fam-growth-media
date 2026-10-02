@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef } from "react";
-import Image from "next/image";
 import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, useInView } from "framer-motion";
 
@@ -51,7 +50,8 @@ const transformationImages1: TransformationItem[] = [
   },
 ];
 
-// Repeat base array 3 times so each half of the marquee is sufficiently wide (18 cards)
+// Repeat base array 3 times so each half of the marquee is sufficiently wide on desktop (18 cards)
+// On mobile, items 6-17 are hidden via responsive CSS classes so mobile only renders 6 cards per half (12 total).
 const row1Base = [
   ...transformationImages1,
   ...transformationImages1,
@@ -60,16 +60,17 @@ const row1Base = [
 
 interface TransformationCardProps {
   item: TransformationItem;
+  className?: string;
 }
 
-function TransformationCard({ item }: TransformationCardProps) {
+function TransformationCard({ item, className = "" }: TransformationCardProps) {
   return (
-    <div className="relative group/card shrink-0 cursor-pointer transition-transform duration-300 ease-out hover:scale-[1.04] hover:z-20">
+    <div className={`relative group/card shrink-0 cursor-pointer transition-transform duration-300 ease-out hover:scale-[1.04] hover:z-20 ${className}`}>
       {/* Polished ambient glass glow behind the hovered item */}
       <div className="absolute -inset-2.5 sm:-inset-3 rounded-3xl bg-gradient-to-r from-purple-600/30 via-indigo-600/20 to-cyan-500/30 opacity-0 blur-xl group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none -z-10" />
 
-      {/* Glassmorphic card frame with smooth scale and border lighting */}
-      <div className="relative w-[336px] sm:w-[384px] md:w-[420px] lg:w-[432px] h-[432px] sm:h-[468px] md:h-[504px] rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-white/95 sm:bg-white/80 group-hover/card:bg-white/95 backdrop-blur-sm sm:backdrop-blur-xl border border-slate-200/80 group-hover/card:border-purple-300/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] group-hover/card:shadow-[0_20px_40px_-8px_rgba(124,58,237,0.22)] transition-all duration-300 overflow-hidden flex flex-col">
+      {/* Glassmorphic card frame: backdrop-blur-none on mobile to save GPU compositor passes; backdrop-blur-xl on desktop */}
+      <div className="relative w-[336px] sm:w-[384px] md:w-[420px] lg:w-[432px] h-[432px] sm:h-[468px] md:h-[504px] rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-white/95 sm:bg-white/80 group-hover/card:bg-white/95 backdrop-blur-none sm:backdrop-blur-xl border border-slate-200/80 group-hover/card:border-purple-300/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] group-hover/card:shadow-[0_20px_40px_-8px_rgba(124,58,237,0.22)] transition-all duration-300 overflow-hidden flex flex-col">
         {/* Inner Screenshot Container */}
         <div className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-950">
           <ResponsiveImage
@@ -119,8 +120,8 @@ export default function BrandLogos() {
       className="relative py-14 sm:py-20 border-b border-slate-200/70 bg-gradient-to-b from-white via-slate-50/50 to-white overflow-hidden"
     >
       {/* Subtle Background Glows matching site aesthetic */}
-      <div className="pointer-events-none absolute top-10 left-1/3 w-[500px] h-[500px] bg-purple-200/25 rounded-full blur-[140px] -z-10" />
-      <div className="pointer-events-none absolute bottom-10 right-1/4 w-[450px] h-[450px] bg-cyan-200/20 rounded-full blur-[130px] -z-10" />
+      <div className="pointer-events-none absolute top-10 left-1/3 w-[240px] sm:w-[500px] h-[240px] sm:h-[500px] bg-purple-200/25 rounded-full blur-[50px] sm:blur-[140px] -z-10" />
+      <div className="pointer-events-none absolute bottom-10 right-1/4 w-[220px] sm:w-[450px] h-[220px] sm:h-[450px] bg-cyan-200/20 rounded-full blur-[40px] sm:blur-[130px] -z-10" />
 
       {/* Header & Subtitle */}
       <motion.div
@@ -189,7 +190,11 @@ export default function BrandLogos() {
           {/* First identical half */}
           <div className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8">
             {row1Base.map((item, idx) => (
-              <TransformationCard key={`row1-a-${idx}`} item={item} />
+              <TransformationCard
+                key={`row1-a-${idx}`}
+                item={item}
+                className={idx >= 6 ? "hidden sm:block" : ""}
+              />
             ))}
           </div>
           {/* Second identical half for seamless infinite loop */}
@@ -198,7 +203,11 @@ export default function BrandLogos() {
             aria-hidden="true"
           >
             {row1Base.map((item, idx) => (
-              <TransformationCard key={`row1-b-${idx}`} item={item} />
+              <TransformationCard
+                key={`row1-b-${idx}`}
+                item={item}
+                className={idx >= 6 ? "hidden sm:block" : ""}
+              />
             ))}
           </div>
         </div>

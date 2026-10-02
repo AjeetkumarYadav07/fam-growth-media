@@ -108,10 +108,16 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
     const section = sectionRef.current;
     if (!section) return;
 
+    // If navigating directly via URL hash, initialize immediately
+    if (typeof window !== "undefined" && window.location.hash === "#services") {
+      setIsNearViewport(true);
+      return;
+    }
+
     const checkVisibility = () => {
       const rect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      if (rect.top <= windowHeight + 800) {
+      if (rect.top <= windowHeight + 250) {
         setIsNearViewport(true);
         return true;
       }
@@ -130,7 +136,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         });
       },
       {
-        rootMargin: "800px 0px 800px 0px",
+        rootMargin: "350px 0px 350px 0px",
         threshold: 0,
       }
     );
@@ -314,17 +320,17 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
 
           {/* Left Column: Eyebrow, Main Title, Paragraph, Button & Handwriting */}
-          <div className="lg:col-span-7 space-y-4 will-change-transform">
+          <div className="lg:col-span-7 space-y-4">
             <div
               ref={eyebrowRef}
-              className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-purple-600 will-change-transform"
+              className="text-xs sm:text-sm font-extrabold uppercase tracking-[0.2em] text-purple-600"
             >
               OUR SERVICES
             </div>
 
             <h2
               ref={titleRef}
-              className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.06] will-change-transform"
+              className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.06]"
             >
               <span>Everything You Need</span> <br />
               <span>to <span className="fam-gradient-text">Grow Your Brand.</span></span>
@@ -332,14 +338,14 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
 
             <p
               ref={descRef}
-              className="text-xs sm:text-sm md:text-base text-slate-600 max-w-lg leading-relaxed will-change-transform"
+              className="text-xs sm:text-sm md:text-base text-slate-600 max-w-lg leading-relaxed"
             >
               From strategy to execution, we offer end-to-end solutions to help your brand stand out in the digital world.
             </p>
 
             <div
               ref={ctaGroupRef}
-              className="pt-2 flex items-center gap-6 will-change-transform"
+              className="pt-2 flex items-center gap-6"
             >
               <button
                 onClick={() => handleSelectService("All Services")}
@@ -360,11 +366,11 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
           </div>
 
           {/* Right Column: Panoramic Curved Filmstrip Collage & Callout */}
-          <div className="lg:col-span-5 relative flex flex-col items-end justify-center will-change-transform">
+          <div className="lg:col-span-5 relative flex flex-col items-end justify-center">
             {/* Filmstrip Curved Track (Only 3 real images) */}
             <div
               ref={filmstripRef}
-              className="relative w-full max-w-sm sm:max-w-md h-28 sm:h-32 rounded-3xl overflow-hidden border border-slate-200/90 bg-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)] p-1.5 backdrop-blur-md will-change-transform"
+              className="relative w-full max-w-sm sm:max-w-md h-28 sm:h-32 rounded-3xl overflow-hidden border border-slate-200/90 bg-white/95 sm:bg-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)] p-1.5 backdrop-blur-none sm:backdrop-blur-md"
             >
               <div className="flex items-center gap-2.5 h-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
                 {filmstripImages.map((img, i) => (
@@ -385,7 +391,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
             {/* Handwritten: Real People. Real Work. Real Growth. */}
             <div
               ref={captionRef}
-              className="mt-3 text-right font-handwriting text-lg sm:text-xl font-bold text-slate-800 flex flex-col items-end select-none pointer-events-none will-change-transform"
+              className="mt-3 text-right font-handwriting text-lg sm:text-xl font-bold text-slate-800 flex flex-col items-end select-none pointer-events-none"
             >
               <span>Real People.</span>
               <span className="-mt-1">Real Work.</span>
@@ -405,8 +411,8 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         className="w-full h-screen min-h-[640px] flex flex-col justify-between pt-16 sm:pt-20 pb-4 overflow-hidden relative"
       >
         {/* Ambient Soft Glowing Background Blooms */}
-        <div className="pointer-events-none absolute top-1/4 left-1/4 w-[750px] h-[450px] bg-purple-200/25 rounded-full blur-[170px] -z-10" />
-        <div className="pointer-events-none absolute bottom-1/4 right-1/4 w-[650px] h-[400px] bg-cyan-200/20 rounded-full blur-[150px] -z-10" />
+        <div className="pointer-events-none absolute top-1/4 left-1/4 w-[300px] sm:w-[750px] h-[200px] sm:h-[450px] bg-purple-200/25 rounded-full blur-[60px] sm:blur-[170px] -z-10" />
+        <div className="pointer-events-none absolute bottom-1/4 right-1/4 w-[260px] sm:w-[650px] h-[180px] sm:h-[400px] bg-cyan-200/20 rounded-full blur-[50px] sm:blur-[150px] -z-10" />
 
         {/* GSAP Horizontal Scroll Track */}
         <div className="flex-1 flex items-center overflow-visible w-full my-auto">

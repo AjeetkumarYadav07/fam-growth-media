@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, createContext, useContext, useRef } from "react";
+import React, { useEffect, createContext, useContext, useRef, useState } from "react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -28,6 +28,7 @@ export default function SmoothScrollProvider({
   children: React.ReactNode;
 }) {
   const lenisRef = useRef<Lenis | null>(null);
+  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
 
   useEffect(() => {
     // Check user preference for reduced motion
@@ -43,9 +44,13 @@ export default function SmoothScrollProvider({
       typeof window !== "undefined" &&
       (window.innerWidth <= 768 || window.matchMedia("(pointer: coarse)").matches);
 
-    // Initialize Lenis:
-    // Desktop: existing smooth wheel & touch multiplier
-    // Mobile: disable touch hijacking to let native hardware compositor handle momentum scroll
+    // On mobile touch devices, native hardware-accelerated momentum scrolling is optimal.
+    // Avoid instantiating Lenis or running continuous RAF ticker loops on mobile.
+    if (isMobileTouch) {
+      return;
+    }
+
+    // Initialize Lenis for desktop:
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // smooth expo out curve
@@ -53,11 +58,12 @@ export default function SmoothScrollProvider({
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 0.9,
-      touchMultiplier: isMobileTouch ? 0 : 1.5,
+      touchMultiplier: 1.5,
       syncTouch: false,
     });
 
     lenisRef.current = lenis;
+    setLenisInstance(lenis);
 
     // Synchronize Lenis scroll with GSAP ScrollTrigger
     lenis.on("scroll", () => {
@@ -70,11 +76,7 @@ export default function SmoothScrollProvider({
     };
 
     gsap.ticker.add(updateTicker);
-    if (isMobileTouch) {
-      gsap.ticker.lagSmoothing(500, 33);
-    } else {
-      gsap.ticker.lagSmoothing(0);
-    }
+    gsap.ticker.lagSmoothing(0);
 
     // Refresh ScrollTrigger after DOM has fully rendered
     const timeout = setTimeout(() => {
@@ -86,6 +88,7 @@ export default function SmoothScrollProvider({
       gsap.ticker.remove(updateTicker);
       lenis.destroy();
       lenisRef.current = null;
+      setLenisInstance(null);
     };
   }, []);
 
@@ -96,17 +99,20 @@ export default function SmoothScrollProvider({
         duration: options?.duration ?? 1.2,
       });
     } else {
-      if (typeof target === "string") {
-        const el = document.querySelector(target);
-        el?.scrollIntoView({ behavior: "smooth" });
-      } else if (typeof target === "number") {
+      if (typeof target === "number") {
         window.scrollTo({ top: target, behavior: "smooth" });
+      } else {
+        const el = typeof target === "string" ? document.querySelector(target) : target;
+        if (el instanceof HTMLElement) {
+          const top = el.getBoundingClientRect().top + window.scrollY + (options?.offset ?? 0);
+          window.scrollTo({ top, behavior: "smooth" });
+        }
       }
     }
   };
 
   return (
-    <SmoothScrollContext.Provider value={{ lenis: lenisRef.current, scrollTo }}>
+    <SmoothScrollContext.Provider value={{ lenis: lenisInstance, scrollTo }}>
       {children}
     </SmoothScrollContext.Provider>
   );

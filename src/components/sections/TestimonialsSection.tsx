@@ -110,7 +110,7 @@ export default function TestimonialsSection() {
   return (
     <section ref={sectionRef} id="reviews" className="relative py-20 sm:py-28 bg-[#FAFAFE] border-t border-slate-200/70 overflow-hidden">
       {/* Ambient background glows */}
-      <div className="pointer-events-none absolute top-1/2 right-1/4 w-[600px] h-[400px] bg-purple-200/25 rounded-full blur-[150px] -z-10" />
+      <div className="pointer-events-none absolute top-1/2 right-1/4 w-[280px] sm:w-[600px] h-[200px] sm:h-[400px] bg-purple-200/25 rounded-full blur-[50px] sm:blur-[150px] -z-10" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 

@@ -97,9 +97,9 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
   return (
     <section id="ai-videos" className="relative py-20 sm:py-28 overflow-hidden bg-[#FAFAFE]">
       {/* Background Soft Pastel Glows */}
-      <div className="pointer-events-none absolute top-12 left-1/4 w-[650px] h-[650px] bg-purple-300/25 rounded-full blur-[170px] -z-10" />
-      <div className="pointer-events-none absolute top-1/2 right-4 w-[550px] h-[550px] bg-cyan-200/25 rounded-full blur-[160px] -z-10" />
-      <div className="pointer-events-none absolute bottom-12 left-10 w-[500px] h-[500px] bg-indigo-200/20 rounded-full blur-[150px] -z-10" />
+      <div className="pointer-events-none absolute top-12 left-1/4 w-[280px] sm:w-[650px] h-[280px] sm:h-[650px] bg-purple-300/25 rounded-full blur-[60px] sm:blur-[170px] -z-10" />
+      <div className="pointer-events-none absolute top-1/2 right-4 w-[260px] sm:w-[550px] h-[260px] sm:h-[550px] bg-cyan-200/25 rounded-full blur-[50px] sm:blur-[160px] -z-10" />
+      <div className="pointer-events-none absolute bottom-12 left-10 w-[240px] sm:w-[500px] h-[240px] sm:h-[500px] bg-indigo-200/20 rounded-full blur-[50px] sm:blur-[150px] -z-10" />
 
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
 

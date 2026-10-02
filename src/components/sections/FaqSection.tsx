@@ -501,15 +501,15 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
       {/* ----------------- Background Ambient Gradients ----------------- */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 left-1/4 w-[500px] h-[500px] bg-purple-200/25 rounded-full blur-[140px] -z-10"
+        className="pointer-events-none absolute -top-24 left-1/4 w-[260px] sm:w-[500px] h-[260px] sm:h-[500px] bg-purple-200/25 rounded-full blur-[50px] sm:blur-[140px] -z-10"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 -right-20 w-[550px] h-[550px] bg-cyan-200/25 rounded-full blur-[150px] -z-10"
+        className="pointer-events-none absolute top-1/2 -right-20 w-[260px] sm:w-[550px] h-[260px] sm:h-[550px] bg-cyan-200/25 rounded-full blur-[50px] sm:blur-[150px] -z-10"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-20 left-10 w-[600px] h-[600px] bg-indigo-200/20 rounded-full blur-[160px] -z-10"
+        className="pointer-events-none absolute -bottom-20 left-10 w-[280px] sm:w-[600px] h-[280px] sm:h-[600px] bg-indigo-200/20 rounded-full blur-[50px] sm:blur-[160px] -z-10"
       />
 
       {/* ----------------- Pure Luminous Atmosphere Light (Reduced by 15%, No Circle/Icon) ----------------- */}
@@ -658,7 +658,7 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
                 </div>
 
                 {/* Handwritten Callout: Good Questions Better Growth */}
-                <div className="font-handwriting text-2xl sm:text-3xl text-purple-600/90 -rotate-6 select-none">
+                <div className="font-handwriting text-2xl sm:text-3xl font-medium sm:font-semibold text-indigo-600/90 -rotate-2 select-none">
                   Good Questions
                   <br />
                   Better Growth

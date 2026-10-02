@@ -1,4 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
 @import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-sans), "Plus Jakarta Sans", sans-serif;
+  --font-handwriting: "Caveat", var(--font-handwriting), cursive;
+}
 
 @layer base {
   :root {
@@ -40,7 +46,7 @@
 
 /* Handwritten font utility */
 .font-handwriting {
-  font-family: var(--font-handwriting), "Caveat", "Kalam", cursive;
+  font-family: "Caveat", var(--font-handwriting), "Kalam", cursive, sans-serif !important;
 }
 
 /* FAM Signature Gradient Text: Purple -> Blue -> Cyan */
@@ -115,6 +121,19 @@
 .animate-marquee-left:hover,
 .animate-marquee-right:hover {
   animation-play-state: paused;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.animate-scroll-bounce {
+  animation: scroll-bounce 1.6s ease-in-out infinite;
 }
 
 /* Accessibility: respect user preference */

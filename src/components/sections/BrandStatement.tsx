@@ -62,8 +62,8 @@ export default function BrandStatement({ onLearnMore }: BrandStatementProps) {
   return (
     <section ref={sectionRef} id="about" className="relative py-20 sm:py-28 overflow-hidden bg-white border-t border-slate-100">
       {/* Ambient background glows */}
-      <div className="pointer-events-none absolute top-12 right-0 w-[550px] h-[550px] bg-gradient-to-br from-purple-200/30 via-sky-200/20 to-transparent rounded-full blur-[140px] -z-10" />
-      <div className="pointer-events-none absolute bottom-12 left-0 w-[550px] h-[550px] bg-gradient-to-tr from-purple-200/35 via-indigo-100/25 to-sky-100/20 rounded-full blur-[140px] -z-10" />
+      <div className="pointer-events-none absolute top-12 right-0 w-[260px] sm:w-[550px] h-[260px] sm:h-[550px] bg-gradient-to-br from-purple-200/30 via-sky-200/20 to-transparent rounded-full blur-[50px] sm:blur-[140px] -z-10" />
+      <div className="pointer-events-none absolute bottom-12 left-0 w-[260px] sm:w-[550px] h-[260px] sm:h-[550px] bg-gradient-to-tr from-purple-200/35 via-indigo-100/25 to-sky-100/20 rounded-full blur-[50px] sm:blur-[140px] -z-10" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-24 sm:space-y-32">
 

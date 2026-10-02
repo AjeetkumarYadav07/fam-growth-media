@@ -211,10 +211,16 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
     const section = sectionRef.current;
     if (!section) return;
 
+    // If navigating directly via URL hash, initialize immediately
+    if (typeof window !== "undefined" && window.location.hash === "#why-fam") {
+      setIsNearViewport(true);
+      return;
+    }
+
     const checkVisibility = () => {
       const rect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      if (rect.top <= windowHeight + 800) {
+      if (rect.top <= windowHeight + 250) {
         setIsNearViewport(true);
         return true;
       }
@@ -233,7 +239,7 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
         });
       },
       {
-        rootMargin: "800px 0px 800px 0px",
+        rootMargin: "350px 0px 350px 0px",
         threshold: 0,
       }
     );
@@ -499,8 +505,8 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
         className="w-full h-screen min-h-[640px] max-h-[850px] flex flex-col justify-center overflow-hidden relative"
       >
         {/* Ambient Glowing Background Blooms */}
-        <div className="pointer-events-none absolute top-1/3 left-1/4 w-[750px] h-[450px] bg-purple-200/20 rounded-full blur-[180px] -z-10" />
-        <div className="pointer-events-none absolute bottom-1/4 right-1/4 w-[650px] h-[400px] bg-cyan-200/15 rounded-full blur-[160px] -z-10" />
+        <div className="pointer-events-none absolute top-1/3 left-1/4 w-[300px] sm:w-[750px] h-[200px] sm:h-[450px] bg-purple-200/20 rounded-full blur-[60px] sm:blur-[180px] -z-10" />
+        <div className="pointer-events-none absolute bottom-1/4 right-1/4 w-[260px] sm:w-[650px] h-[180px] sm:h-[400px] bg-cyan-200/15 rounded-full blur-[50px] sm:blur-[160px] -z-10" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full h-full flex flex-col justify-center">
 
