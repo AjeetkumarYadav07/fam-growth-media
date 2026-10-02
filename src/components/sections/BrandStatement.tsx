@@ -38,7 +38,7 @@ export default function BrandStatement({ onLearnMore }: BrandStatementProps) {
   const handleLearnMore = onLearnMore || (() => openContactModal("Strategy Consulting"));
 
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { amount: 0.1 });
+  const isInView = useInView(sectionRef, { margin: "100px 0px 100px 0px" });
 
   // Auto transition to second pic after 5 seconds only when section is visible
   useEffect(() => {

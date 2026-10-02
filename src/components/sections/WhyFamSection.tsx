@@ -220,7 +220,7 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
     const checkVisibility = () => {
       const rect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      if (rect.top <= windowHeight + 250) {
+      if (rect.top <= windowHeight + 800) {
         setIsNearViewport(true);
         return true;
       }
@@ -239,7 +239,7 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
         });
       },
       {
-        rootMargin: "350px 0px 350px 0px",
+        rootMargin: "800px 0px 800px 0px",
         threshold: 0,
       }
     );
@@ -431,12 +431,12 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
       masterTL.to({}, { duration: 0.4 });
     }, sectionRef);
 
-    const timer = setTimeout(() => {
+    const rafId = requestAnimationFrame(() => {
       ScrollTrigger.refresh();
-    }, 150);
+    });
 
     return () => {
-      clearTimeout(timer);
+      cancelAnimationFrame(rafId);
       ctx.revert();
     };
   }, [isNearViewport]);
@@ -600,6 +600,7 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
                     ref={(el) => {
                       stepLayersRef.current[idx] = el;
                     }}
+                    style={{ opacity: idx === 0 ? 1 : 0, pointerEvents: idx === 0 ? "auto" : "none" }}
                     className="absolute inset-0 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center will-change-transform"
                   >
                     {/* Left Sub-Column: Title, Description, Checkpoints, Handwritten Note */}

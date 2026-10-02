@@ -44,10 +44,29 @@ export default function SmoothScrollProvider({
       typeof window !== "undefined" &&
       (window.innerWidth <= 768 || window.matchMedia("(pointer: coarse)").matches);
 
+    // Configure ScrollTrigger for mobile/touch stability:
+    // ignoreMobileResize prevents iPhone address bar show/hide from resetting/glitching triggers mid-scroll
+    ScrollTrigger.config({
+      ignoreMobileResize: true,
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
+    });
+
     // On mobile touch devices, native hardware-accelerated momentum scrolling is optimal.
-    // Avoid instantiating Lenis or running continuous RAF ticker loops on mobile.
+    // Connect passive scroll listener to keep ScrollTrigger updated without main-thread contention.
     if (isMobileTouch) {
-      return;
+      const onScroll = () => {
+        ScrollTrigger.update();
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      const refreshId = requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        cancelAnimationFrame(refreshId);
+      };
     }
 
     // Initialize Lenis for desktop:
@@ -78,13 +97,13 @@ export default function SmoothScrollProvider({
     gsap.ticker.add(updateTicker);
     gsap.ticker.lagSmoothing(0);
 
-    // Refresh ScrollTrigger after DOM has fully rendered
-    const timeout = setTimeout(() => {
+    // Refresh ScrollTrigger once DOM layout has completed
+    const refreshId = requestAnimationFrame(() => {
       ScrollTrigger.refresh();
-    }, 150);
+    });
 
     return () => {
-      clearTimeout(timeout);
+      cancelAnimationFrame(refreshId);
       gsap.ticker.remove(updateTicker);
       lenis.destroy();
       lenisRef.current = null;

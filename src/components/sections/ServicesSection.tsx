@@ -117,7 +117,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
     const checkVisibility = () => {
       const rect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      if (rect.top <= windowHeight + 250) {
+      if (rect.top <= windowHeight + 600) {
         setIsNearViewport(true);
         return true;
       }
@@ -136,7 +136,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         });
       },
       {
-        rootMargin: "350px 0px 350px 0px",
+        rootMargin: "600px 0px 600px 0px",
         threshold: 0,
       }
     );
@@ -166,8 +166,8 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         const introTL = gsap.timeline({
           scrollTrigger: {
             trigger: introHeader,
-            start: "top 25%",
-            end: "bottom 5%",
+            start: () => (window.innerWidth < 768 ? "top 65%" : "top 25%"),
+            end: () => (window.innerWidth < 768 ? "bottom 20%" : "bottom 5%"),
             scrub: 1,
             invalidateOnRefresh: true,
           },
@@ -271,12 +271,12 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
       });
     }, sectionRef);
 
-    const t = setTimeout(() => {
+    const rafId = requestAnimationFrame(() => {
       ScrollTrigger.refresh();
-    }, 150);
+    });
 
     return () => {
-      clearTimeout(t);
+      cancelAnimationFrame(rafId);
       ctx.revert();
     };
   }, [isNearViewport]);

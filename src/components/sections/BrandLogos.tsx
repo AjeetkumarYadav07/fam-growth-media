@@ -111,7 +111,7 @@ function TransformationCard({ item, className = "" }: TransformationCardProps) {
 
 export default function BrandLogos() {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { amount: 0.05 });
+  const isInView = useInView(sectionRef, { margin: "200px 0px 200px 0px" });
 
   return (
     <section

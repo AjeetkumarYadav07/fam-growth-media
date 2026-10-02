@@ -84,7 +84,7 @@ const testimonials = [
 export default function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { amount: 0.1 });
+  const isInView = useInView(sectionRef, { margin: "100px 0px 100px 0px" });
 
   // Auto-change testimonial every 5 seconds only when visible
   useEffect(() => {
