@@ -140,6 +140,29 @@ export async function POST(request: Request) {
       );
     }
 
+    // 3. Send lead to Google Sheets if webhook is configured
+    const googleSheetsWebhook = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    if (googleSheetsWebhook) {
+      try {
+        await fetch(googleSheetsWebhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+            name,
+            email,
+            phone,
+            service,
+            message: message || "",
+          }),
+          redirect: "follow",
+        });
+        console.log("✅ Lead successfully forwarded to Google Sheet!");
+      } catch (sheetError) {
+        console.error("Error forwarding lead to Google Sheet:", sheetError);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       message: `Inquiry received and forwarded to ${RECIPIENT_EMAIL}`,
