@@ -93,11 +93,11 @@ export default function BrandStatement({ onLearnMore }: BrandStatementProps) {
                 brand on Instagram or scaling your presence on YouTube, we make sure
                 your content is consistent and polished.
               </p>
-              <p>
+              {/*    <p>
                 We believe good content isn&apos;t about luck, it&apos;s about strategy,
                 consistency, and craft. That&apos;s exactly what we bring to every client
                 we work with.
-              </p>
+              </p> */ }
             </div>
 
             {/* Stats Row */}

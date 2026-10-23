@@ -4,18 +4,11 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
-import { ArrowRight, Play, ArrowUpRight, ArrowDown, Eye, Users, Heart, Share2 } from "lucide-react";
+import { ArrowRight, Play, ArrowDown } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { useContactModal } from "@/components/providers/ContactModalProvider";
 
-// Founders Data for Hero Section with founder-specific badges & metric icons
-type MetricIconType = "views" | "followers" | "like" | "share";
-
-interface BadgeMetric {
-  icon: MetricIconType;
-  label: string;
-}
-
+// Founders Data for Hero Section
 const founders = [
   {
     id: "atiksha",
@@ -27,24 +20,6 @@ const founders = [
     // Founder Instagram Profile URL
     instagramUrl: "https://www.instagram.com/fin_saheli/",
     instagramHandle: "@fin_saheli",
-    // Badges: 1 = Viral Influencer, 2 = Expert In Brand Management, 3 = Fashion Creator
-    handwrittenTag: ["Viral", "Influencer"],
-    badgeCardLeft: {
-      tag: "Expert In",
-      title: "Brand Management",
-      metrics: [
-        // { icon: "like" as const, label: "Likes" },
-        // { icon: "share" as const, label: "Shares" },
-      ],
-    },
-    badgeCardRight: {
-      title: "Generated 100+ Million views Monthly",
-      subtitle: "1.2m+ Followers",
-      metrics: [
-        { icon: "views" as const, label: "Views" },
-        { icon: "followers" as const, label: "Followers" },
-      ],
-    },
   },
   {
     id: "tarun",
@@ -56,52 +31,8 @@ const founders = [
     // Founder Instagram Profile URL
     instagramUrl: "https://www.instagram.com/tarunmalhotraaa/",
     instagramHandle: "@tarunmalhotraaa",
-    // Badges: 1 = More Than Marketing, 2 = Creative Strategy, 3 = +200% Avg. Growth
-    handwrittenTag: ["More Than", "Marketing"],
-    badgeCardLeft: {
-      tag: "Generated Millions of views",
-      title: "660k+ followers",
-      metrics: [
-        { icon: "views" as const, label: "Views" },
-        { icon: "followers" as const, label: "Followers" },
-      ],
-    },
-    badgeCardRight: {
-      title: "Fastest-growing social media agency",
-      subtitle: "Specializing in AI-powered video content",
-      metrics: [
-        { icon: "like" as const, label: "Likes" },
-        { icon: "share" as const, label: "Shares" },
-      ],
-    },
   },
 ];
-
-const renderMetricIcon = (icon: MetricIconType) => {
-  switch (icon) {
-    case "views":
-      return <Eye className="h-3 w-3 text-cyan-600" />;
-    case "followers":
-      return <Users className="h-3 w-3 text-purple-600" />;
-    case "like":
-      return <Heart className="h-3 w-3 text-rose-500 fill-rose-500" />;
-    case "share":
-      return <Share2 className="h-3 w-3 text-blue-600" />;
-  }
-};
-
-const getMetricBadgeStyle = (icon: MetricIconType) => {
-  switch (icon) {
-    case "views":
-      return "bg-cyan-50/90 border-cyan-200/80 text-cyan-700 hover:bg-cyan-100/90";
-    case "followers":
-      return "bg-purple-50/90 border-purple-200/80 text-purple-700 hover:bg-purple-100/90";
-    case "like":
-      return "bg-rose-50/90 border-rose-200/80 text-rose-700 hover:bg-rose-100/90";
-    case "share":
-      return "bg-blue-50/90 border-blue-200/80 text-blue-700 hover:bg-blue-100/90";
-  }
-};
 
 interface HeroSectionProps {
   onOpenContactModal?: () => void;
@@ -365,202 +296,6 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
                 </motion.div>
               </AnimatePresence>
-            </motion.div>
-
-            {/* Floating Card 1 (2 in user markup): Expert In Brand Management (Atiksha) vs Creative Strategy (Tarun) */}
-            <motion.div
-              style={{
-                x: mousePos.x * -10,
-                y: mousePos.y * -8,
-              }}
-              initial={{ opacity: 0, y: -15 }}
-              animate={
-                isHeroInView
-                  ? { opacity: 1, y: [-4, 4, -4] }
-                  : { opacity: 1, y: 0 }
-              }
-              transition={
-                isHeroInView
-                  ? {
-                      opacity: { duration: 0.5, delay: 0.5 },
-                      y: { duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
-                    }
-                  : { duration: 0.3 }
-              }
-              className="absolute -top-4 sm:top-2 -left-2 sm:-left-6 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-none sm:backdrop-blur-xl"
-            >
-              <div className="flex items-start justify-between gap-2 sm:gap-3 mb-1 sm:mb-2 min-w-[105px] sm:min-w-[155px]">
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={currentFounder.id}
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    <div className="text-[9px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                      {currentFounder.badgeCardLeft.tag}
-                    </div>
-                    <div className="text-[11px] sm:text-sm font-black text-slate-900 leading-tight">
-                      {currentFounder.badgeCardLeft.title}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-                <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                  <ArrowUpRight className="h-3 w-3 sm:h-4 sm:w-4" />
-                </div>
-              </div>
-
-              {/* Social Metric Badges according to title */}
-              {currentFounder.badgeCardLeft.metrics.length > 0 && (
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={currentFounder.id}
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.25 }}
-                    className="flex items-center gap-1 sm:gap-1.5 pt-1.5 sm:pt-2 border-t border-slate-100/90 mt-1 sm:mt-1.5"
-                  >
-                    {currentFounder.badgeCardLeft.metrics.map((metric, idx) => (
-                      <div
-                        key={idx}
-                        className={`inline-flex items-center gap-1 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-lg border text-[9px] sm:text-[11px] font-bold shadow-2xs transition-all duration-200 hover:scale-105 cursor-default ${getMetricBadgeStyle(
-                          metric.icon
-                        )}`}
-                      >
-                        {renderMetricIcon(metric.icon)}
-                        <span>{metric.label}</span>
-                      </div>
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
-              )}
-            </motion.div>
-
-            {/* Handwritten Accent 1: "Viral Influencer" (Atiksha) vs "More Than Marketing" (Tarun) */}
-            <motion.div
-              style={{
-                x: mousePos.x * -6,
-                y: mousePos.y * -5,
-              }}
-              initial={{ opacity: 0, rotate: -3 }}
-              animate={{ opacity: 1, rotate: -3 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="absolute top-20 sm:top-28 -left-3 sm:-left-12 z-20 select-none pointer-events-none"
-            >
-              <div className="font-handwriting text-lg sm:text-2xl md:text-3xl font-medium sm:font-semibold text-indigo-600/90 flex flex-col items-center min-w-[90px] sm:min-w-[130px]">
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={currentFounder.id}
-                    initial={{ opacity: 0, scale: 0.88, y: 6 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.88, y: -6 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col items-center text-center"
-                  >
-                    {currentFounder.handwrittenTag.map((word, idx) => (
-                      <span key={word} className={idx > 0 ? "-mt-1" : ""}>
-                        {word}
-                      </span>
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
-                <svg className="w-8 h-5 sm:w-12 sm:h-8 text-indigo-500/80 -rotate-6 mt-0.5 sm:mt-1" viewBox="0 0 50 30" fill="none">
-                  <path d="M5 5 C 20 20, 35 15, 45 25" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="3 3" />
-                  <path d="M37 25 L 45 25 L 43 17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-            </motion.div>
-
-            {/* Floating Card 2: Generated 100M+ Views (Atiksha) vs Fastest-growing social media agency (Tarun) */}
-            <motion.div
-              style={{
-                x: mousePos.x * 12,
-                y: mousePos.y * -10,
-              }}
-              initial={{ opacity: 0, y: -15 }}
-              animate={
-                isHeroInView
-                  ? { opacity: 1, y: [4, -4, 4] }
-                  : { opacity: 1, y: 0 }
-              }
-              transition={
-                isHeroInView
-                  ? {
-                      opacity: { duration: 0.5, delay: 0.65 },
-                      y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.65 },
-                    }
-                  : { duration: 0.3 }
-              }
-              className="absolute top-2 sm:top-14 -right-2 sm:-right-16 md:-right-24 lg:-right-28 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_12px_35px_rgba(0,0,0,0.07)] backdrop-blur-none sm:backdrop-blur-xl"
-            >
-              <div className="flex items-start justify-between gap-2 sm:gap-3 mb-1 min-w-[120px] sm:min-w-[145px]">
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={currentFounder.id}
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    <div className="text-[11px] sm:text-sm font-black text-slate-900 tracking-tight leading-tight max-w-[135px] sm:max-w-none">
-                      {currentFounder.badgeCardRight.title}
-                    </div>
-                    <div className="text-[9px] sm:text-[10px] text-purple-600 font-bold uppercase tracking-wider">
-                      {currentFounder.badgeCardRight.subtitle}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-                <div className="h-5 w-5 sm:h-6 sm:w-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                  <ArrowUpRight className="h-3 w-3 sm:h-4 sm:w-4" />
-                </div>
-              </div>
-
-              {/* Social Metric Badges according to title */}
-              {currentFounder.badgeCardRight.metrics.length > 0 && (
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={currentFounder.id}
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.25 }}
-                    className="flex items-center gap-1 sm:gap-1.5 pt-1.5 sm:pt-2 border-t border-slate-100/90 mt-1 sm:mt-1.5"
-                  >
-                    {currentFounder.badgeCardRight.metrics.map((metric, idx) => (
-                      <div
-                        key={idx}
-                        className={`inline-flex items-center gap-1 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-lg border text-[9px] sm:text-[11px] font-bold shadow-2xs transition-all duration-200 hover:scale-105 cursor-default ${getMetricBadgeStyle(
-                          metric.icon
-                        )}`}
-                      >
-                        {renderMetricIcon(metric.icon)}
-                        <span>{metric.label}</span>
-                      </div>
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
-              )}
-            </motion.div>
-
-            {/* Handwritten Accent (Top-Right): "IDEAS PEOPLE BRANDS GROW" with burst lines */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="absolute -top-10 sm:-top-8 right-1 sm:right-0 z-20 select-none pointer-events-none text-right"
-            >
-              <div className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] sm:tracking-[0.25em] font-extrabold text-slate-400">
-                IDEAS <br />
-                CONTENT <br />
-                PROFILE <br />
-                GROW
-              </div>
-              {/* Curved gradient line under text */}
-              <svg className="w-8 sm:w-10 h-3 text-purple-500 ml-auto mt-0.5" viewBox="0 0 40 10" fill="none">
-                <path d="M2 5 C 15 2, 28 8, 38 4" stroke="#7C3AED" strokeWidth="2.5" strokeLinecap="round" />
-              </svg>
             </motion.div>
 
             {/* Floating Card 3: Founder Profile & Instagram Link (Bottom-Right) */}

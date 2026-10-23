@@ -145,9 +145,9 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
                     <p>
                       It is designed for creators, business owners and professionals who want quality content without spending hours on production.
                     </p>
-                    <p>
+                    {/*    <p>
                       Every video goes through a process to ensure it looks natural and authentic, not robotic or fake. You tell us your vision and we bring it to life using smart AI tools combined with real creative direction. No more waiting for the &quot;perfect&quot; shoot day or juggling endless retakes. Just share your ideas, and we deliver ready-to-use social media videos that save you time, scale your reach, and keep your audience hooked.
-                    </p>
+                    </p> */}
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -166,55 +166,55 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         const introTL = gsap.timeline({
           scrollTrigger: {
             trigger: introHeader,
-            start: () => (window.innerWidth < 768 ? "top 65%" : "top 25%"),
-            end: () => (window.innerWidth < 768 ? "bottom 20%" : "bottom 5%"),
+            start: () => (window.innerWidth < 768 ? "top 30%" : "top 15%"),
+            end: () => "bottom 5%",
             scrub: 1,
             invalidateOnRefresh: true,
           },
         });
 
-        // LEFT group elements move diagonally DOWN + LEFT (staggered with subtle scale change)
+        // LEFT group elements move diagonally UP + LEFT (natural scroll exit)
         if (eyebrowRef.current) {
           introTL.to(
             eyebrowRef.current,
-            { x: -110, y: 70, opacity: 0, scale: 0.92, ease: "power1.inOut" },
+            { x: -60, y: -20, opacity: 0, scale: 0.95, ease: "power1.inOut" },
             0
           );
         }
         if (titleRef.current) {
           introTL.to(
             titleRef.current,
-            { x: -160, y: 100, opacity: 0, scale: 1.04, ease: "power1.inOut" },
+            { x: -90, y: -30, opacity: 0, scale: 1.02, ease: "power1.inOut" },
             0.04
           );
         }
         if (descRef.current) {
           introTL.to(
             descRef.current,
-            { x: -130, y: 85, opacity: 0, scale: 0.94, ease: "power1.inOut" },
+            { x: -70, y: -25, opacity: 0, scale: 0.95, ease: "power1.inOut" },
             0.08
           );
         }
         if (ctaGroupRef.current) {
           introTL.to(
             ctaGroupRef.current,
-            { x: -95, y: 65, opacity: 0, scale: 0.9, ease: "power1.inOut" },
+            { x: -50, y: -20, opacity: 0, scale: 0.92, ease: "power1.inOut" },
             0.12
           );
         }
 
-        // RIGHT group elements move diagonally DOWN + RIGHT (staggered with subtle scale change)
+        // RIGHT group elements move diagonally UP + RIGHT (natural scroll exit)
         if (filmstripRef.current) {
           introTL.to(
             filmstripRef.current,
-            { x: 160, y: 100, opacity: 0, scale: 1.05, ease: "power1.inOut" },
+            { x: 90, y: -30, opacity: 0, scale: 1.02, ease: "power1.inOut" },
             0.04
           );
         }
         if (captionRef.current) {
           introTL.to(
             captionRef.current,
-            { x: 120, y: 75, opacity: 0, scale: 0.92, ease: "power1.inOut" },
+            { x: 70, y: -20, opacity: 0, scale: 0.95, ease: "power1.inOut" },
             0.12
           );
         }
@@ -315,7 +315,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
       {/* 1. Intro Section Header with Diagonal Split Scroll Animation */}
       <div
         ref={introHeaderRef}
-        className="min-h-[75vh] sm:min-h-[85vh] flex items-center justify-center pt-24 pb-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full"
+        className="pt-14 sm:pt-20 pb-4 sm:pb-6 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
 
@@ -354,14 +354,6 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
                 <span>Explore All Services</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
-
-              {/* Cursive Handwriting: Ideas Strategy Execution Growth */}
-              <div className="font-handwriting text-xl sm:text-2xl font-bold text-indigo-600/90 leading-tight -rotate-6 select-none pointer-events-none">
-                <div>Ideas</div>
-                <div className="-mt-1">Strategy</div>
-                <div className="-mt-1">Execution</div>
-                <div className="-mt-1 text-purple-600">Growth</div>
-              </div>
             </div>
           </div>
 
@@ -408,14 +400,14 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
       {/* 2. Pinned Carousel Container (Full Viewport Height, matching reference image) */}
       <div
         ref={pinContainerRef}
-        className="w-full h-screen min-h-[640px] flex flex-col justify-between pt-16 sm:pt-20 pb-4 overflow-hidden relative"
+        className="w-full h-screen min-h-[620px] flex flex-col justify-between pt-2 sm:pt-4 pb-4 overflow-hidden relative"
       >
         {/* Ambient Soft Glowing Background Blooms */}
         <div className="pointer-events-none absolute top-1/4 left-1/4 w-[300px] sm:w-[750px] h-[200px] sm:h-[450px] bg-purple-200/25 rounded-full blur-[60px] sm:blur-[170px] -z-10" />
         <div className="pointer-events-none absolute bottom-1/4 right-1/4 w-[260px] sm:w-[650px] h-[180px] sm:h-[400px] bg-cyan-200/20 rounded-full blur-[50px] sm:blur-[150px] -z-10" />
 
         {/* GSAP Horizontal Scroll Track */}
-        <div className="flex-1 flex items-center overflow-visible w-full my-auto">
+        <div className="flex-1 flex items-center overflow-visible w-full">
           <div
             ref={trackRef}
             className="flex items-center gap-6 sm:gap-8 lg:gap-10 px-6 sm:px-16 lg:px-24 will-change-transform"
@@ -469,14 +461,9 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl sm:text-2xl lg:text-[25px] font-black text-white tracking-tight leading-tight mb-2">
+                    <h3 className="text-xl sm:text-2xl lg:text-[25px] font-black text-white tracking-tight leading-tight mb-5">
                       {service.title}
                     </h3>
-
-                    {/* Description */}
-                    <p className="text-xs sm:text-[13px] text-slate-300 leading-relaxed mb-4 line-clamp-4">
-                      {service.description}
-                    </p>
 
                     {/* Circular Action Arrow Button */}
                     <div className="flex items-center justify-between">
