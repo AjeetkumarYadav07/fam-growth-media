@@ -633,71 +633,6 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
                 </div>
               </motion.div>
             </div>
-
-            {/* Editorial Cutout Portrait with Floating Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="relative mt-8 sm:mt-14 lg:mt-34 xl:mt-48 pt-4 max-w-sm"
-            >
-              {/* Decorative Purple Accent Sparkles / Burst Lines */}
-              <div className="absolute top-4 left-0 text-purple-400 select-none">
-                <svg
-                  width="36"
-                  height="36"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  className="opacity-80"
-                >
-                  <line x1="4" y1="4" x2="8" y2="8" />
-                  <line x1="2" y1="12" x2="7" y2="12" />
-                  <line x1="4" y1="20" x2="8" y2="16" />
-                </svg>
-              </div>
-
-              {/* Subtle Ambient Backing Glow */}
-              <div className="absolute -inset-4 bg-gradient-to-tr from-purple-200/40 via-cyan-100/30 to-transparent rounded-full blur-2xl -z-10" />
-
-              {/* Portrait Image */}
-              <div className="relative w-full aspect-square max-w-[270px] sm:max-w-[380px] rounded-3xl overflow-hidden shadow-2xl shadow-purple-500/10 border border-white/80 mx-auto">
-                <ResponsiveImage
-                  src="/client_face/faq.JPG"
-                  alt="Client inquiring about FAM Growth Media"
-                  fill
-                  sizes="(max-width: 660px) 270px, 390px"
-                  className="object-cover object-[center_15%]"
-                  priority={false}
-                />
-              </div>
-
-              {/* Floating Chat Bubble Pill: Still Curious? Let's Talk! */}
-              <motion.div
-                initial={{ y: 15, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                onClick={handleAction}
-                onMouseEnter={() => setIsHoveredInteractive(true)}
-                onMouseLeave={() => setIsHoveredInteractive(false)}
-                className="absolute -bottom-4 right-0 sm:-right-4 z-20 flex items-center gap-3 rounded-2xl border border-purple-200/80 bg-white/95 backdrop-blur-xl px-4 py-3 shadow-[0_14px_35px_rgba(124,58,237,0.14)] hover:shadow-purple-500/25 hover:border-purple-400 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer group"
-              >
-                <div className="text-left">
-                  <div className="text-[11px] font-medium text-slate-500">Still Curious?</div>
-                  <div className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
-                    Let&apos;s Talk!
-                  </div>
-                </div>
-
-                <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-purple-500/25 group-hover:rotate-12 transition-transform">
-                  <Send className="h-4 w-4" />
-                </div>
-              </motion.div>
-            </motion.div>
           </div>
 
           {/* ================= RIGHT COLUMN (FAQ ACCORDION) ================= */}
@@ -826,32 +761,6 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
                   </motion.div>
                 );
               })}
-            </div>
-
-            {/* Bottom-Right Handwritten Note: Ideas to Impact */}
-            <div className="flex justify-end mt-8 relative">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="font-handwriting text-3xl sm:text-4xl text-purple-600/90 -rotate-3 select-none text-right"
-              >
-                Ideas to Impact
-                {/* Decorative underline flourish */}
-                <svg
-                  className="w-32 sm:w-40 h-3 text-purple-400 mt-0.5 ml-auto"
-                  viewBox="0 0 100 12"
-                  fill="none"
-                >
-                  <path
-                    d="M2 9C25 3 75 1 98 6"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </motion.div>
             </div>
           </div>
         </div>

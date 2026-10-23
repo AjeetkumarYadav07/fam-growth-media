@@ -12,8 +12,6 @@ import {
   Film,
   Sliders,
   TrendingUp,
-  Zap,
-  Coins,
   ChevronDown,
 } from "lucide-react";
 
@@ -166,28 +164,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
           {/* Right Column: 3 Fanned Perspective Cards & "THE MAGIC" Feature Card (40% Larger) */}
           <div className="lg:col-span-7 relative flex items-center justify-center min-h-[460px] sm:min-h-[540px] lg:min-h-[620px]">
 
-            {/* Handwritten Note: "AI Generated" with curved arrow pointing to left card */}
-            <div className="absolute -top-10 left-8 sm:left-20 z-20 pointer-events-none select-none">
-              <div className="font-handwriting text-xl sm:text-2xl font-bold text-purple-600/90 flex flex-col items-center -rotate-6">
-                <span>AI Generated</span>
-                <svg className="w-10 h-7 text-purple-500/80 rotate-12 -mt-1" viewBox="0 0 40 25" fill="none">
-                  <path d="M5 5 C 15 15, 25 15, 32 20" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="3 3" />
-                  <path d="M26 21 L 33 21 L 32 14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-            </div>
 
-            {/* Handwritten Note (Top-Right): "Real & AI Generated" with curved arrows */}
-            <div className="absolute -top-12 right-6 sm:right-16 z-20 pointer-events-none select-none">
-              <div className="font-handwriting text-xl sm:text-2xl font-bold text-indigo-600/90 flex flex-col items-center rotate-12">
-                <span>Real &amp;</span>
-                <span className="-mt-1">AI Generated</span>
-                <svg className="w-14 h-8 text-indigo-500/80 -rotate-12 mt-0.5" viewBox="0 0 50 30" fill="none">
-                  <path d="M5 25 C 20 15, 35 15, 45 5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="3 3" />
-                  <path d="M37 5 L 45 5 L 44 13" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-            </div>
 
             {/* Floating Side Card: "THE MAGIC" (Matches Far-Right of Mockup) */}
             <div className="absolute -bottom-8 -right-2 sm:-right-4 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-4 sm:p-5 shadow-[0_16px_40px_rgba(124,58,237,0.14)] backdrop-blur-xl min-w-[180px] sm:min-w-[210px]">
@@ -340,9 +317,9 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
         </div>
 
         {/* ========================================================================= */}
-        {/* 02. Middle Row: 4 Showcase Video Cards (Enlarged 40% More in Height/Scale) */}
+        {/* 02. Middle Row: 4 Showcase Video Cards                                    */}
         {/* ========================================================================= */}
-        <div className="mb-16 sm:mb-24">
+        <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {aiVideosData.map((video) => (
               <motion.div
@@ -360,7 +337,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
 
-                  {/* Top-Left Badge: "Original" or "AI" matching mockup */}
+                  {/* Top-Left Badge: "Original" or "AI" */}
                   <div className="absolute top-4 left-4 z-10">
                     {video.type === "Original" ? (
                       <span className="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-slate-900/90 text-white border border-white/20 shadow-xs backdrop-blur-md">
@@ -394,95 +371,6 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
             ))}
           </div>
         </div>
-
-        {/* ========================================================================= */}
-        {/* 03. Bottom Banner: "WHY AI VIDEOS?" with 4 Value Props (Matches Mockup)   */}
-        {/* ========================================================================= */}
-        <div className="rounded-3xl border border-white/70 bg-white/80 p-5 sm:p-6 lg:p-7 shadow-[0_20px_50px_rgba(124,58,237,0.06)] backdrop-blur-xl">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-
-            {/* Left Label: "WHY AI VIDEOS?" + Arrow Cursor Graphic */}
-            <div className="md:col-span-3 flex items-center gap-2">
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="h-4 w-4 text-purple-600" />
-                <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-purple-700">
-                  WHY AI VIDEOS?
-                </span>
-              </div>
-              {/* Cute Cursor Pointer Arrow */}
-              <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M4 2 L20 10 L12 12 L10 20 Z" />
-              </svg>
-            </div>
-
-            {/* Right 4 Columns: Faster Production, Cost Efficient, Highly Engaging, Scales with Growth */}
-            <div className="md:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-
-              {/* Feature 1: Faster Production */}
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 shadow-2xs">
-                  <Zap className="h-4 w-4" />
-                </div>
-                <div>
-                  <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">
-                    Faster Production
-                  </div>
-                  <div className="text-[11px] text-slate-500 font-medium">
-                    Create more, faster.
-                  </div>
-                </div>
-              </div>
-
-              {/* Feature 2: Cost Efficient */}
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 shadow-2xs">
-                  <Coins className="h-4 w-4" />
-                </div>
-                <div>
-                  <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">
-                    Cost Efficient
-                  </div>
-                  <div className="text-[11px] text-slate-500 font-medium">
-                    Better results, less cost.
-                  </div>
-                </div>
-              </div>
-
-              {/* Feature 3: Highly Engaging */}
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-pink-100 text-pink-700 flex items-center justify-center shrink-0 shadow-2xs">
-                  <Sparkles className="h-4 w-4" />
-                </div>
-                <div>
-                  <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">
-                    Highly Engaging
-                  </div>
-                  <div className="text-[11px] text-slate-500 font-medium">
-                    Grabs more attention.
-                  </div>
-                </div>
-              </div>
-
-              {/* Feature 4: Scales with Growth */}
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center shrink-0 shadow-2xs">
-                  <TrendingUp className="h-4 w-4" />
-                </div>
-                <div>
-                  <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">
-                    Scales with Growth
-                  </div>
-                  <div className="text-[11px] text-slate-500 font-medium">
-                    Perfect for all platforms.
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
       </div>
 
       {/* ========================================================================= */}
