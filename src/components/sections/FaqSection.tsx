@@ -1,32 +1,10 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import Image from "next/image";
-import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import {
   ChevronDown,
   ArrowRight,
-  Send,
-  Headphones,
-  Mail,
-  Calendar,
-  Diamond,
-  BarChart3,
-  Star,
-  Palette,
-  Zap,
-  Target,
-  Clock,
-  Rocket,
-  Code2,
-  Cpu,
-  Layers,
-  Award,
-  Globe2,
-  CheckCircle2,
-  Edit,
-  FileText,
 } from "lucide-react";
 
 interface FaqItem {
@@ -36,13 +14,6 @@ interface FaqItem {
   badgeText: string;
   question: string;
   answer: string;
-  highlights: {
-    icon: React.ComponentType<{ className?: string }>;
-    iconBg: string;
-    iconColor: string;
-    title: string;
-    desc: string;
-  }[];
 }
 
 const faqs: FaqItem[] = [
@@ -54,29 +25,6 @@ const faqs: FaqItem[] = [
     question: "If I don't have time to shoot content regularly then how does this work?",
     answer:
       "That's exactly what we're built for. Basically, we plan and organize your shoots efficiently, so you spend minimal time in front of the camera while we handle scripting, direction, and everything else.",
-    highlights: [
-      {
-        icon: Clock,
-        iconBg: "bg-purple-100/80",
-        iconColor: "text-purple-600",
-        title: "Batch Shoots",
-        desc: "Weeks of content in one half-day session.",
-      },
-      {
-        icon: Layers,
-        iconBg: "bg-cyan-100/80",
-        iconColor: "text-cyan-600",
-        title: "Full Pre-Production",
-        desc: "Everything scripted before you hit record.",
-      },
-      {
-        icon: Zap,
-        iconBg: "bg-pink-100/80",
-        iconColor: "text-pink-600",
-        title: "Done-For-You",
-        desc: "We take care of editing, posting & managing.",
-      },
-    ],
   },
   {
     id: "camera-confidence",
@@ -86,29 +34,6 @@ const faqs: FaqItem[] = [
     question: "I'm not confident on camera, so can you still help me?",
     answer:
       "Absolutely, our team guides you through every shot from what to say to how to present it so you don't need prior on-camera experience to create great content.",
-    highlights: [
-      {
-        icon: Headphones,
-        iconBg: "bg-violet-100/80",
-        iconColor: "text-violet-600",
-        title: "On-Set Direction",
-        desc: "Live framing, coaching & real-time feedback.",
-      },
-      {
-        icon: FileText,
-        iconBg: "bg-amber-100/80",
-        iconColor: "text-amber-600",
-        title: "Natural Delivery",
-        desc: "Guided prompts, zero memorization needed.",
-      },
-      {
-        icon: Palette,
-        iconBg: "bg-emerald-100/80",
-        iconColor: "text-emerald-600",
-        title: "Confidence Edit",
-        desc: "Clean pacing that makes you look authoritative.",
-      },
-    ],
   },
   {
     id: "content-strategy",
@@ -118,29 +43,6 @@ const faqs: FaqItem[] = [
     question: "I don't know what kind of content will work for my brand.",
     answer:
       "We handle the strategy means our team researches your niche and audience to write scripts and plan content that's built to perform, so you don't have to guess.",
-    highlights: [
-      {
-        icon: Target,
-        iconBg: "bg-cyan-100/80",
-        iconColor: "text-cyan-600",
-        title: "Niche Research",
-        desc: "In-depth competitor & market analysis.",
-      },
-      {
-        icon: BarChart3,
-        iconBg: "bg-purple-100/80",
-        iconColor: "text-purple-600",
-        title: "Trend Forecasting",
-        desc: "Built around what works on platforms now.",
-      },
-      {
-        icon: CheckCircle2,
-        iconBg: "bg-pink-100/80",
-        iconColor: "text-pink-600",
-        title: "Data-Backed Hooks",
-        desc: "Strategy-first scripts engineered to stop the scroll.",
-      },
-    ],
   },
   {
     id: "real-growth",
@@ -150,29 +52,6 @@ const faqs: FaqItem[] = [
     question: "Will this actually grow my followers, or just look good?",
     answer:
       "Our focus is real growth; it means engagement, shares, comments, and followers not just polished visuals. Every script and edit is built with performance in mind.",
-    highlights: [
-      {
-        icon: Rocket,
-        iconBg: "bg-indigo-100/80",
-        iconColor: "text-indigo-600",
-        title: "Retention Pacing",
-        desc: "Hooking viewers till the last second.",
-      },
-      {
-        icon: Zap,
-        iconBg: "bg-amber-100/80",
-        iconColor: "text-amber-600",
-        title: "Viral Triggers",
-        desc: "Crafted for shares, saves & comments.",
-      },
-      {
-        icon: Star,
-        iconBg: "bg-cyan-100/80",
-        iconColor: "text-cyan-600",
-        title: "Real Followers",
-        desc: "Building a loyal community that converts.",
-      },
-    ],
   },
   {
     id: "platforms-supported",
@@ -182,29 +61,6 @@ const faqs: FaqItem[] = [
     question: "Do you only work with Instagram, or other platforms too?",
     answer:
       "We manage content across Instagram, YouTube, and podcasts, tailoring our scripting and editing style to fit each platform.",
-    highlights: [
-      {
-        icon: Palette,
-        iconBg: "bg-pink-100/80",
-        iconColor: "text-pink-600",
-        title: "Instagram",
-        desc: "Reels, carousels & profile optimization.",
-      },
-      {
-        icon: Layers,
-        iconBg: "bg-purple-100/80",
-        iconColor: "text-purple-600",
-        title: "YouTube",
-        desc: "Long-form authority videos & viral Shorts.",
-      },
-      {
-        icon: Headphones,
-        iconBg: "bg-indigo-100/80",
-        iconColor: "text-indigo-600",
-        title: "Podcasts",
-        desc: "Audio & visual studio podcast management.",
-      },
-    ],
   },
   {
     id: "podcast-management",
@@ -214,29 +70,6 @@ const faqs: FaqItem[] = [
     question: "Can you manage my podcast too?",
     answer:
       "Yes, we offer full-service podcast management, from recording support to editing and repurposing episodes into short clips for social media.",
-    highlights: [
-      {
-        icon: Headphones,
-        iconBg: "bg-emerald-100/80",
-        iconColor: "text-emerald-600",
-        title: "Recording Support",
-        desc: "Setup, framing & audio direction.",
-      },
-      {
-        icon: Layers,
-        iconBg: "bg-violet-100/80",
-        iconColor: "text-violet-600",
-        title: "Full Master Edit",
-        desc: "Multi-cam cuts, clean audio & sound design.",
-      },
-      {
-        icon: Zap,
-        iconBg: "bg-amber-100/80",
-        iconColor: "text-amber-600",
-        title: "Micro-Clips",
-        desc: "15–30 short-form clips to maximize reach.",
-      },
-    ],
   },
   {
     id: "involvement-level",
@@ -246,29 +79,6 @@ const faqs: FaqItem[] = [
     question: "How involved do I need to be in the process?",
     answer:
       "Mainly for shoots, once that's done, our team handles scripting, editing, posting, and page management, so you can stay focused on your business.",
-    highlights: [
-      {
-        icon: Clock,
-        iconBg: "bg-cyan-100/80",
-        iconColor: "text-cyan-600",
-        title: "Minimal Time",
-        desc: "Just show up for designated shoot days.",
-      },
-      {
-        icon: CheckCircle2,
-        iconBg: "bg-purple-100/80",
-        iconColor: "text-purple-600",
-        title: "Done For You",
-        desc: "Scripts, edits & post schedules managed.",
-      },
-      {
-        icon: Diamond,
-        iconBg: "bg-emerald-100/80",
-        iconColor: "text-emerald-600",
-        title: "Focus on Business",
-        desc: "Run your company while your brand grows.",
-      },
-    ],
   },
   {
     id: "revision-policy",
@@ -278,29 +88,6 @@ const faqs: FaqItem[] = [
     question: "What if I don't like the final edit?",
     answer:
       "We share previews and welcome your feedback means we revise until the final content matches your brand and feels right to you.",
-    highlights: [
-      {
-        icon: FileText,
-        iconBg: "bg-indigo-100/80",
-        iconColor: "text-indigo-600",
-        title: "Preview Portals",
-        desc: "Streamlined previews with time-stamped feedback.",
-      },
-      {
-        icon: Edit,
-        iconBg: "bg-pink-100/80",
-        iconColor: "text-pink-600",
-        title: "Quick Revisions",
-        desc: "Pacing, cuts & style tuned to your vision.",
-      },
-      {
-        icon: Award,
-        iconBg: "bg-purple-100/80",
-        iconColor: "text-purple-600",
-        title: "100% Satisfaction",
-        desc: "Nothing is published without your green light.",
-      },
-    ],
   },
   {
     id: "creators-and-businesses",
@@ -310,29 +97,6 @@ const faqs: FaqItem[] = [
     question: "Is this only for influencers, or can businesses use it too?",
     answer:
       "Both, we work with individual creators building a personal brand as well as businesses looking to grow their social media presence.",
-    highlights: [
-      {
-        icon: Star,
-        iconBg: "bg-amber-100/80",
-        iconColor: "text-amber-600",
-        title: "Founders & Creators",
-        desc: "Position yourself as an industry authority.",
-      },
-      {
-        icon: BarChart3,
-        iconBg: "bg-cyan-100/80",
-        iconColor: "text-cyan-600",
-        title: "Brands & Businesses",
-        desc: "Drive inbound customers & organic trust.",
-      },
-      {
-        icon: Globe2,
-        iconBg: "bg-purple-100/80",
-        iconColor: "text-purple-600",
-        title: "Hybrid Strategy",
-        desc: "Custom content systems tailored to your model.",
-      },
-    ],
   },
   {
     id: "get-started",
@@ -342,29 +106,6 @@ const faqs: FaqItem[] = [
     question: "How do I get started?",
     answer:
       "Just reach out via phone, WhatsApp, or email, we'll walk you through our process and figure out the right plan for your goals.",
-    highlights: [
-      {
-        icon: Calendar,
-        iconBg: "bg-purple-100/80",
-        iconColor: "text-purple-600",
-        title: "Free Discovery Call",
-        desc: "We discuss your brand & current bottlenecks.",
-      },
-      {
-        icon: Rocket,
-        iconBg: "bg-cyan-100/80",
-        iconColor: "text-cyan-600",
-        title: "Tailored Growth Plan",
-        desc: "Custom production & strategy blueprint.",
-      },
-      {
-        icon: Send,
-        iconBg: "bg-pink-100/80",
-        iconColor: "text-pink-600",
-        title: "Rapid Kickoff",
-        desc: "Scripts & shoot days booked within days.",
-      },
-    ],
   },
 ];
 
@@ -721,38 +462,9 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
                             {/* Polished Gradient Inner Container */}
                             <div className="rounded-2xl bg-gradient-to-br from-purple-50/80 via-indigo-50/40 to-pink-50/60 p-4 sm:p-5 border border-purple-100/70 shadow-sm">
                               {/* Descriptive Answer Copy */}
-                              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal mb-4">
+                              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
                                 {faq.answer}
                               </p>
-
-                              {/* 3 Value Highlight Cards */}
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                                {faq.highlights.map((item, hIdx) => {
-                                  const IconComponent = item.icon;
-                                  return (
-                                    <div
-                                      key={hIdx}
-                                      onMouseEnter={() => setIsHoveredInteractive(true)}
-                                      onMouseLeave={() => setIsHoveredInteractive(false)}
-                                      className="rounded-xl bg-white/95 backdrop-blur-sm p-3 border border-purple-100/60 shadow-sm hover:border-purple-200 hover:shadow-md transition-all duration-200 flex items-start gap-2.5"
-                                    >
-                                      <div
-                                        className={`h-7 w-7 rounded-lg ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 mt-0.5`}
-                                      >
-                                        <IconComponent className="h-3.5 w-3.5" />
-                                      </div>
-                                      <div>
-                                        <div className="text-xs font-bold text-slate-900 leading-tight">
-                                          {item.title}
-                                        </div>
-                                        <div className="text-[11px] text-slate-500 mt-0.5 leading-snug">
-                                          {item.desc}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
                             </div>
                           </div>
                         </motion.div>
@@ -765,75 +477,7 @@ export default function FaqSection({ onOpenContactModal }: FaqSectionProps) {
           </div>
         </div>
 
-        {/* ================= BOTTOM CONTACT STRIP ================= */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-16 sm:mt-24 pt-10 border-t border-slate-200/70"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {/* Card 1: Still Have a Question? */}
-            <div
-              onMouseEnter={() => setIsHoveredInteractive(true)}
-              onMouseLeave={() => setIsHoveredInteractive(false)}
-              className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/60 transition-colors"
-            >
-              <div className="h-12 w-12 rounded-full bg-cyan-100/70 text-cyan-600 flex items-center justify-center shrink-0 shadow-sm">
-                <Headphones className="h-6 w-6" />
-              </div>
-              <div>
-                <div className="text-sm sm:text-base font-bold text-slate-900">
-                  Still Have a Question?
-                </div>
-                <div className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                  We&apos;re here to help.
-                </div>
-              </div>
-            </div>
 
-            {/* Card 2: Email Us */}
-            <a
-              href="mailto:info@famgrowthmedia.com "
-              onMouseEnter={() => setIsHoveredInteractive(true)}
-              onMouseLeave={() => setIsHoveredInteractive(false)}
-              className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/60 transition-colors group cursor-pointer"
-            >
-              <div className="h-12 w-12 rounded-full bg-purple-100/70 text-purple-600 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
-                <Mail className="h-6 w-6" />
-              </div>
-              <div>
-                <div className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
-                  Email Us
-                </div>
-                <div className="text-xs sm:text-sm text-slate-500 mt-0.5 underline decoration-purple-200 group-hover:decoration-purple-400 transition-colors">
-                  info@famgrowthmedia.com
-                </div>
-              </div>
-            </a>
-
-            {/* Card 3: Schedule a Call */}
-            <button
-              onClick={handleAction}
-              onMouseEnter={() => setIsHoveredInteractive(true)}
-              onMouseLeave={() => setIsHoveredInteractive(false)}
-              className="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/60 transition-colors group text-left cursor-pointer"
-            >
-              <div className="h-12 w-12 rounded-full bg-blue-100/70 text-blue-600 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
-                <Calendar className="h-6 w-6" />
-              </div>
-              <div>
-                <div className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-                  Schedule a Call
-                </div>
-                <div className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                  Let&apos;s discuss your goals.
-                </div>
-              </div>
-            </button>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

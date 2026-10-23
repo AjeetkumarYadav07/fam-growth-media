@@ -78,7 +78,7 @@ const services = [
 const filmstripImages = [
   "/services_img/studio.jpeg",
   "/services_img/team.JPG",
-  "/services_img/face.JPG",
+  "/services_img/ourservices_3rd.JPG",
 ];
 
 export default function ServicesSection({ onSelectService }: ServicesSectionProps) {

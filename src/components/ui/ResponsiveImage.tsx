@@ -178,7 +178,7 @@ export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
       {/* Desktop source: > 768px */}
       <source
         media={`(min-width: ${mobileBreakpoint + 0.01}px)`}
-        srcSet={desktopSrcSet}
+        srcSet={desktopSrcSet || restDesktop.src}
         sizes={sizes || (fill ? "100vw" : undefined)}
       />
       {/* Fallback <img>: receives all classes and mobile-safe fallback src */}

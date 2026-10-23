@@ -9,9 +9,6 @@ import {
   X,
   Sparkles,
   ExternalLink,
-  Film,
-  Sliders,
-  TrendingUp,
   ChevronDown,
 } from "lucide-react";
 
@@ -161,43 +158,8 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
             </div>
           </div>
 
-          {/* Right Column: 3 Fanned Perspective Cards & "THE MAGIC" Feature Card (40% Larger) */}
+          {/* Right Column: 3 Fanned Perspective Cards Showcase */}
           <div className="lg:col-span-7 relative flex items-center justify-center min-h-[460px] sm:min-h-[540px] lg:min-h-[620px]">
-
-
-
-            {/* Floating Side Card: "THE MAGIC" (Matches Far-Right of Mockup) */}
-            <div className="absolute -bottom-8 -right-2 sm:-right-4 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-4 sm:p-5 shadow-[0_16px_40px_rgba(124,58,237,0.14)] backdrop-blur-xl min-w-[180px] sm:min-w-[210px]">
-              <div className="text-[11px] font-extrabold tracking-widest text-purple-600 uppercase mb-3">
-                THE MAGIC
-              </div>
-              <div className="space-y-2.5 text-xs sm:text-sm font-bold text-slate-800">
-                <div className="flex items-center gap-2.5">
-                  <div className="h-6 w-6 rounded-md bg-purple-50 text-purple-600 flex items-center justify-center shadow-2xs">
-                    <Film className="h-3.5 w-3.5" />
-                  </div>
-                  <span>Real Footage</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <div className="h-6 w-6 rounded-md bg-cyan-50 text-cyan-600 flex items-center justify-center shadow-2xs">
-                    <Sparkles className="h-3.5 w-3.5" />
-                  </div>
-                  <span>AI Generation</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <div className="h-6 w-6 rounded-md bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-2xs">
-                    <Sliders className="h-3.5 w-3.5" />
-                  </div>
-                  <span>Perfect Editing</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <div className="h-6 w-6 rounded-md bg-pink-50 text-pink-600 flex items-center justify-center shadow-2xs">
-                    <TrendingUp className="h-3.5 w-3.5" />
-                  </div>
-                  <span>Maximum Impact</span>
-                </div>
-              </div>
-            </div>
 
             {/* Fanned Out Perspective 3 Cards Showcase (Increased Height by 40% More) */}
             <div className="relative w-full max-w-[700px] h-[390px] sm:h-[600px] lg:h-[660px] flex items-center justify-center">

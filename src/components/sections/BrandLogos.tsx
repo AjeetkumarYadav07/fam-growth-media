@@ -48,6 +48,18 @@ const transformationImages1: TransformationItem[] = [
     highlightText: "Ongoing",
     highlightEmoji: "🎉",
   },
+  {
+    client: "dr_amit",
+    transformationImage: "/clients_instagram/dr_amit.jpeg",
+    highlightText: "Ongoing",
+    highlightEmoji: "🎉",
+  },
+  {
+    client: "priyanka",
+    transformationImage: "/clients_instagram/priyanka.jpeg",
+    highlightText: "Fastest 200k",
+    highlightEmoji: "🎉",
+  },
 ];
 
 // Repeat base array 3 times so each half of the marquee is sufficiently wide on desktop (18 cards)
@@ -66,29 +78,25 @@ interface TransformationCardProps {
 function TransformationCard({ item, className = "" }: TransformationCardProps) {
   return (
     <div className={`relative group/card shrink-0 cursor-pointer transition-transform duration-300 ease-out hover:scale-[1.04] hover:z-20 ${className}`}>
-      {/* Polished ambient glass glow behind the hovered item */}
-      <div className="absolute -inset-2.5 sm:-inset-3 rounded-3xl bg-gradient-to-r from-purple-600/30 via-indigo-600/20 to-cyan-500/30 opacity-0 blur-xl group-hover/card:opacity-100 transition-opacity duration-300 pointer-events-none -z-10" />
-
-      {/* Glassmorphic card frame: backdrop-blur-none on mobile to save GPU compositor passes; backdrop-blur-xl on desktop */}
-      <div className="relative w-[336px] sm:w-[384px] md:w-[420px] lg:w-[432px] h-[432px] sm:h-[468px] md:h-[504px] rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-white/95 sm:bg-white/80 group-hover/card:bg-white/95 backdrop-blur-none sm:backdrop-blur-xl border border-slate-200/80 group-hover/card:border-purple-300/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] group-hover/card:shadow-[0_20px_40px_-8px_rgba(124,58,237,0.22)] transition-all duration-300 overflow-hidden flex flex-col">
+      {/* Clean card frame with crisp white background and zero blur effect */}
+      <div className="relative w-[336px] sm:w-[384px] md:w-[420px] lg:w-[432px] h-[432px] sm:h-[468px] md:h-[504px] rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-white border border-slate-200/90 group-hover/card:border-purple-300/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] group-hover/card:shadow-[0_20px_40px_-8px_rgba(124,58,237,0.22)] transition-all duration-300 overflow-hidden flex flex-col">
         {/* Inner Screenshot Container */}
         <div className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-950">
           <ResponsiveImage
             src={item.transformationImage}
             alt={`Instagram growth transformation for ${item.client}`}
             fill
+            unoptimized={true}
+            quality={95}
             sizes="(max-width: 640px) 336px, (max-width: 768px) 384px, 432px"
             className="object-cover object-top transition-transform duration-500 group-hover/card:scale-[1.02]"
             priority={false}
           />
 
-          {/* Top subtle vignette */}
-          <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-black/35 to-transparent pointer-events-none" />
-
-          {/* Center Highlight Badge */}
+          {/* Center Highlight Badge with clean, crisp shadow and zero blur halo */}
           {item.highlightText && (
             <div className="absolute inset-x-0 top-[47%] -translate-y-1/2 flex items-center justify-center px-4 pointer-events-none z-10">
-              <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-300 text-slate-950 font-black text-xs sm:text-sm md:text-[15px] tracking-tight shadow-[0_10px_25px_-3px_rgba(245,158,11,0.55),0_4px_12px_rgba(0,0,0,0.3)] border-2 border-yellow-100/95 -rotate-1 select-none group-hover/card:scale-105 group-hover/card:rotate-0 transition-all duration-300">
+              <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-300 text-slate-950 font-black text-xs sm:text-sm md:text-[15px] tracking-tight shadow-[0_4px_14px_rgba(0,0,0,0.22)] border-2 border-yellow-100/95 -rotate-1 select-none group-hover/card:scale-105 group-hover/card:rotate-0 transition-all duration-300">
                 {item.highlightEmoji && (
                   <span className="text-base sm:text-lg leading-none" role="img" aria-label="party">
                     {item.highlightEmoji}
@@ -193,7 +201,7 @@ export default function BrandLogos() {
               <TransformationCard
                 key={`row1-a-${idx}`}
                 item={item}
-                className={idx >= 6 ? "hidden sm:block" : ""}
+                className={idx >= transformationImages1.length ? "hidden sm:block" : ""}
               />
             ))}
           </div>
@@ -206,7 +214,7 @@ export default function BrandLogos() {
               <TransformationCard
                 key={`row1-b-${idx}`}
                 item={item}
-                className={idx >= 6 ? "hidden sm:block" : ""}
+                className={idx >= transformationImages1.length ? "hidden sm:block" : ""}
               />
             ))}
           </div>
