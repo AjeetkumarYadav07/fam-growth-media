@@ -109,7 +109,8 @@
 }
 
 .animate-marquee-left {
-  animation: marquee-left 38s linear infinite;
+  /* Default duration for marquee left - higher seconds = slower, calmer motion */
+  animation: marquee-left 80s linear infinite;
   will-change: transform;
 }
 

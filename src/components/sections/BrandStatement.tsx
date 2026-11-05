@@ -17,7 +17,7 @@ const storySlides = [
     tag: "Founder",
     title: "Tarun Malhotra",
     role: "Founder, FAM Growth Media",
-    image: "/founders_img/our_story.jpg",
+    image: "/founders_img/tarun.jpeg",
     alt: "Tarun Malhotra - Founder, FAM Growth Media",
   },
   {
@@ -25,7 +25,7 @@ const storySlides = [
     tag: "Behind The Scenes",
     title: "Atiksha Rathi",
     role: "Founder, FAM Growth Media",
-    image: "/founders_img/our_story2.jpeg",
+    image: "/founders_img/ourstory.jpeg",
     alt: "FAM Growth Media - Full-Service Studio Production",
   },
 ];

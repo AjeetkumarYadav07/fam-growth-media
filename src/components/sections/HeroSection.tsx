@@ -16,7 +16,7 @@ const founders = [
     fullName: "Atiksha Rathi",
     title: "Founder",
     role: "Founder, FAM Growth Media",
-    image: "/founders_img/our_storyf.jpeg",
+    image: "/founders_img/atikshaF.jpeg",
     // Founder Instagram Profile URL
     instagramUrl: "https://www.instagram.com/fin_saheli/",
     instagramHandle: "@fin_saheli",
@@ -251,7 +251,7 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
                 </div>
               </div>
               <div className="text-[11px] sm:text-xs font-semibold tracking-wider text-slate-500">
-                Trusted by <span className="text-slate-900 font-extrabold">50+ Creators</span> worldwide.
+                Trusted by <span className="text-slate-900 font-extrabold">100+ Creators</span> worldwide.
               </div>
             </motion.div>
           </div>
@@ -313,9 +313,9 @@ export default function HeroSection({ onOpenContactModal }: HeroSectionProps) {
               transition={
                 isHeroInView
                   ? {
-                      opacity: { duration: 0.5, delay: 0.75 },
-                      y: { duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 1.0 },
-                    }
+                    opacity: { duration: 0.5, delay: 0.75 },
+                    y: { duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 1.0 },
+                  }
                   : { duration: 0.3 }
               }
               className="absolute -bottom-5 sm:bottom-6 -right-1 sm:-right-8 z-20 rounded-2xl border border-slate-200/90 bg-white/95 p-2 sm:p-4 shadow-[0_16px_40px_rgba(124,58,237,0.14)] backdrop-blur-none sm:backdrop-blur-xl"

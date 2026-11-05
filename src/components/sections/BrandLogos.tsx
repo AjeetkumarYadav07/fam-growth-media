@@ -4,6 +4,15 @@ import React, { useRef } from "react";
 import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, useInView } from "framer-motion";
 
+// ============================================================================
+// CAROUSEL SPEED SETTING:
+// Controls the duration for one complete marquee cycle.
+// - Higher number (e.g., "80s", "90s", "100s") => Much SLOWER, relaxed & readable
+// - Lower number (e.g., "38s", "20s", "10s") => FASTER moving
+// Adjust this value anytime to change the scroll speed.
+// ============================================================================
+export const CLIENTS_MARQUEE_DURATION = "80s";
+
 interface TransformationItem {
   client: string;
   transformationImage: string;
@@ -44,8 +53,8 @@ const transformationImages1: TransformationItem[] = [
   },
   {
     client: "priyank",
-    transformationImage: "/clients_instagram/priyank.jpeg",
-    highlightText: "Ongoing",
+    transformationImage: "/clients_instagram/priyank_aujha2.jpeg",
+    highlightText: "100k",
     highlightEmoji: "🎉",
   },
   {
@@ -193,7 +202,10 @@ export default function BrandLogos() {
       <div className="relative w-full overflow-hidden py-2 sm:py-4">
         <div
           className="flex w-max animate-marquee-left hover:[animation-play-state:paused]"
-          style={{ animationPlayState: isInView ? "running" : "paused" }}
+          style={{
+            animationDuration: CLIENTS_MARQUEE_DURATION,
+            animationPlayState: isInView ? "running" : "paused",
+          }}
         >
           {/* First identical half */}
           <div className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8">
