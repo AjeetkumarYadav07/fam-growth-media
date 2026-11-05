@@ -36,7 +36,7 @@ const services = [
     title: "Professional Shooting",
     description:
       "High-quality shoots that make your brand look premium and professional. Our team handles setup, direction, and framing so you can simply show up and speak with no experience in front of the camera required.",
-    image: "/services_img/shooting.jpeg",
+    image: "/services_img/editing.jpeg",
     cardBadge: "PREMIUM 4K SHOOTS",
     hasLogo: false,
   },
@@ -76,9 +76,9 @@ const services = [
 ];
 
 const filmstripImages = [
-  "/services_img/studio.jpeg",
+  "/services_img/tarun_team.JPG",
   "/services_img/team.JPG",
-  "/services_img/ourservices_3rd.JPG",
+  "/services_img/studios.jpeg",
 ];
 
 export default function ServicesSection({ onSelectService }: ServicesSectionProps) {
