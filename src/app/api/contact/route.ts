@@ -144,7 +144,7 @@ export async function POST(request: Request) {
     const googleSheetsWebhook = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
     if (googleSheetsWebhook) {
       try {
-        await fetch(googleSheetsWebhook, {
+        const sheetResponse = await fetch(googleSheetsWebhook, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -157,7 +157,18 @@ export async function POST(request: Request) {
           }),
           redirect: "follow",
         });
-        console.log("✅ Lead successfully forwarded to Google Sheet!");
+
+        if (sheetResponse.ok && !sheetResponse.url.includes("accounts.google.com")) {
+          const resText = await sheetResponse.text();
+          console.log("✅ Lead successfully forwarded to Google Sheet! Response:", resText);
+        } else {
+          console.error(`❌ Google Sheet webhook returned status ${sheetResponse.status}`);
+          if (sheetResponse.status === 401 || sheetResponse.url.includes("accounts.google.com")) {
+            console.error(
+              "⚠️ GOOGLE APPS SCRIPT PERMISSION ERROR: Google is blocking access because 'Who has access' is set to 'Only myself'. In Apps Script, go to Deploy > Manage deployments > Edit > set 'Who has access' to 'Anyone' > Deploy."
+            );
+          }
+        }
       } catch (sheetError) {
         console.error("Error forwarding lead to Google Sheet:", sheetError);
       }
