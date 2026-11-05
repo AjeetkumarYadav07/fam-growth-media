@@ -17,7 +17,7 @@ const storySlides = [
     tag: "Founder",
     title: "Tarun Malhotra",
     role: "Founder, FAM Growth Media",
-    image: "/founders_img/tarun.jpeg",
+    image: "/founders_img/tarunM.jpeg",
     alt: "Tarun Malhotra - Founder, FAM Growth Media",
   },
   {
@@ -25,7 +25,7 @@ const storySlides = [
     tag: "Behind The Scenes",
     title: "Atiksha Rathi",
     role: "Founder, FAM Growth Media",
-    image: "/founders_img/ourstory.jpeg",
+    image: "/founders_img/ourstoryf.jpeg",
     alt: "FAM Growth Media - Full-Service Studio Production",
   },
 ];
@@ -300,7 +300,7 @@ export default function BrandStatement({ onLearnMore }: BrandStatementProps) {
                   So we built Fam Growth Media to close that gap. What began as a small
                   team helping a handful of creators with scripting and editing has
                   grown into a full-service social media management agency, trusted by
-                  150+ clients to handle everything from the first script to the final
+                  100+ clients to handle everything from the first script to the final
                   post.
                 </p>
                 <p>

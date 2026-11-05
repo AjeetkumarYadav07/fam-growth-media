@@ -54,7 +54,7 @@ const transformationImages1: TransformationItem[] = [
   {
     client: "priyank",
     transformationImage: "/clients_instagram/priyank_aujha2.jpeg",
-    highlightText: "100k",
+    highlightText: "100k in just 4 months. And still counting ",
     highlightEmoji: "🎉",
   },
   {

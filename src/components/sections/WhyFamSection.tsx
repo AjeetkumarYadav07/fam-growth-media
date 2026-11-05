@@ -97,7 +97,7 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
                   Trusted by
                 </div>
                 <div className="text-xs sm:text-sm font-black text-slate-900 leading-tight">
-                  150+ Creators
+                  100+ Creators
                 </div>
                 <div className="text-[10px] font-semibold text-slate-500">
                   &amp; Businesses
@@ -201,15 +201,15 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
               </div>
 
               {/* Visual Preview Container */}
-              <div className="sm:col-span-5 relative w-full h-[180px] sm:h-[195px] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200/70">
+              <div className="sm:col-span-5 relative w-full h-[190px] sm:h-[210px] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200/70">
                 <ResponsiveImage
                   src="/services_img/hook_img.PNG"
                   alt="Content That's Built to Hook"
                   fill
                   sizes="(max-width: 640px) 100vw, 240px"
-                  className="object-cover object-[center_30%] group-hover:scale-105 transition-transform duration-500"
+                  className="object-contain group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
 
                 {/* Floating Hook / Engage / Retain Badge */}
                 <div className="absolute top-2.5 right-2.5 z-10 rounded-xl bg-white/95 backdrop-blur-md px-2.5 py-2 shadow-md border border-pink-100/90 text-right">
@@ -252,7 +252,7 @@ export default function WhyFamSection({ onOpenContactModal }: WhyFamSectionProps
               {/* Visual Preview Container */}
               <div className="sm:col-span-5 relative w-full h-[180px] sm:h-[195px] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200/70">
                 <ResponsiveImage
-                  src="/services_img/social_media.JPG"
+                  src="/services_img/DSC01699.JPG"
                   alt="Real Results on Social Media"
                   fill
                   sizes="(max-width: 640px) 100vw, 240px"
