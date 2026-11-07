@@ -114,7 +114,7 @@ export default function AiVideoSection({ onOpenContactModal }: AiVideoSectionPro
             {/* New Hook Headline */}
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.08]">
               Don&apos;t have Time To Shoot?? <br />
-              <span className="fam-gradient-text">Let's AI Create Videos!</span>
+              <span className="fam-gradient-text">Let&apos;s AI Create Videos!</span>
             </h2>
 
             {/* User Provided Replacement Context */}

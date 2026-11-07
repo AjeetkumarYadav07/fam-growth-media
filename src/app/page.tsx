@@ -12,7 +12,6 @@ const ServicesSection = dynamic(() => import("@/components/sections/ServicesSect
 const BrandStatement = dynamic(() => import("@/components/sections/BrandStatement"));
 const WhyFamSection = dynamic(() => import("@/components/sections/WhyFamSection"));
 const AiVideoSection = dynamic(() => import("@/components/sections/AiVideoSection"));
-const TestimonialsSection = dynamic(() => import("@/components/sections/TestimonialsSection"));
 const FaqSection = dynamic(() => import("@/components/sections/FaqSection"));
 const CtaBanner = dynamic(() => import("@/components/sections/CtaBanner"));
 const Footer = dynamic(() => import("@/components/layout/Footer"));
@@ -45,16 +44,13 @@ export default function Home() {
         {/* 08: Why FAM? (5-Step Interactive Growth Partner Pipeline) */}
         <WhyFamSection />
 
-        {/* 09: Client Success Stories (Editorial Split Card) */}
-        {/* <TestimonialsSection /> */}
-
-        {/* 10: Frequently Asked Questions */}
+        {/* 09: Frequently Asked Questions */}
         <FaqSection />
 
-        {/* 11: Final CTA Banner (Ready to Grow Your Brand? / Stories That Grow) */}
+        {/* 10: Final CTA Banner (Ready to Grow Your Brand? / Stories That Grow) */}
         <CtaBanner />
 
-        {/* 12: Footer */}
+        {/* 11: Footer */}
         <Footer />
       </main>
     </ContactModalProvider>

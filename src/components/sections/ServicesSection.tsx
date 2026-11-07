@@ -110,7 +110,9 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
 
     // If navigating directly via URL hash, initialize immediately
     if (typeof window !== "undefined" && window.location.hash === "#services") {
-      setIsNearViewport(true);
+      requestAnimationFrame(() => {
+        setIsNearViewport(true);
+      });
       return;
     }
 

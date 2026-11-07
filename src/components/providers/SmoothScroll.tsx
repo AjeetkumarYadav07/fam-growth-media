@@ -82,7 +82,9 @@ export default function SmoothScrollProvider({
     });
 
     lenisRef.current = lenis;
-    setLenisInstance(lenis);
+    requestAnimationFrame(() => {
+      setLenisInstance(lenis);
+    });
 
     // Synchronize Lenis scroll with GSAP ScrollTrigger
     lenis.on("scroll", () => {

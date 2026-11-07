@@ -179,7 +179,7 @@ export async function POST(request: Request) {
       message: `Inquiry received and forwarded to ${RECIPIENT_EMAIL}`,
       recipient: RECIPIENT_EMAIL,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error processing contact form submission:", error);
     return NextResponse.json(
       { error: "Failed to process inquiry. Please try again or message directly." },
