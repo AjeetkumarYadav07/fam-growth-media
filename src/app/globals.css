@@ -92,38 +92,6 @@
   background-size: 28px 28px;
 }
 
-/* Infinite Marquee Animation */
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-33.333333%); }
-}
-
-@keyframes marquee-left {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-@keyframes marquee-right {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0%); }
-}
-
-.animate-marquee-left {
-  /* Default duration for marquee left - higher seconds = slower, calmer motion */
-  animation: marquee-left 80s linear infinite;
-  will-change: transform;
-}
-
-.animate-marquee-right {
-  animation: marquee-right 42s linear infinite;
-  will-change: transform;
-}
-
-.animate-marquee-left:hover,
-.animate-marquee-right:hover {
-  animation-play-state: paused;
-}
-
 @keyframes scroll-bounce {
   0%, 100% {
     transform: translateY(0);

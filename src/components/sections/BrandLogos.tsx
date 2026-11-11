@@ -3,15 +3,18 @@
 import React, { useRef } from "react";
 import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { motion, useInView } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { buildClonedSlides, useInfiniteCarousel } from "@/hooks/useInfiniteCarousel";
 
 // ============================================================================
 // CAROUSEL SPEED SETTING:
-// Controls the duration for one complete marquee cycle.
-// - Higher number (e.g., "80s", "90s", "100s") => Much SLOWER, relaxed & readable
-// - Lower number (e.g., "38s", "20s", "10s") => FASTER moving
-// Adjust this value anytime to change the scroll speed.
+// Controls how often the carousel auto-advances by 1 client card (in ms).
+// - Higher number (e.g., 4500, 6000) => SLOWER, more time per client
+// - Lower number (e.g., 2500, 2000)  => FASTER moving
+// Adjust this value anytime to change the autoscroll speed.
 // ============================================================================
-export const CLIENTS_MARQUEE_DURATION = "80s";
+export const CLIENTS_AUTOPLAY_INTERVAL_MS = 3500;
+const SLIDE_TRANSITION_MS = 500;
 
 interface TransformationItem {
   client: string;
@@ -71,13 +74,10 @@ const transformationImages1: TransformationItem[] = [
   },
 ];
 
-// Repeat base array 3 times so each half of the marquee is sufficiently wide on desktop (18 cards)
-// On mobile, items 6-17 are hidden via responsive CSS classes so mobile only renders 6 cards per half (12 total).
-const row1Base = [
-  ...transformationImages1,
-  ...transformationImages1,
-  ...transformationImages1,
-];
+// Clone tail/head items so infinite wrapping works smoothly with up to 3 visible cards on desktop
+const LEFT_CLONES = 3;
+const RIGHT_CLONES = 5;
+const extendedSlides = buildClonedSlides(transformationImages1, LEFT_CLONES, RIGHT_CLONES);
 
 interface TransformationCardProps {
   item: TransformationItem;
@@ -86,9 +86,9 @@ interface TransformationCardProps {
 
 function TransformationCard({ item, className = "" }: TransformationCardProps) {
   return (
-    <div className={`relative group/card shrink-0 cursor-pointer transition-transform duration-300 ease-out hover:scale-[1.04] hover:z-20 ${className}`}>
+    <div className={`relative group/card w-full cursor-pointer transition-transform duration-300 ease-out hover:scale-[1.03] hover:z-20 ${className}`}>
       {/* Clean card frame with crisp white background and zero blur effect */}
-      <div className="relative w-[336px] sm:w-[384px] md:w-[420px] lg:w-[432px] h-[432px] sm:h-[468px] md:h-[504px] rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-white border border-slate-200/90 group-hover/card:border-purple-300/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] group-hover/card:shadow-[0_20px_40px_-8px_rgba(124,58,237,0.22)] transition-all duration-300 overflow-hidden flex flex-col">
+      <div className="relative w-full h-[430px] sm:h-[450px] md:h-[470px] lg:h-[490px] rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-white border border-slate-200/90 group-hover/card:border-purple-300/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] group-hover/card:shadow-[0_18px_36px_-8px_rgba(124,58,237,0.2)] transition-all duration-300 overflow-hidden flex flex-col">
         {/* Inner Screenshot Container */}
         <div className="relative w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-950">
           <ResponsiveImage
@@ -97,7 +97,8 @@ function TransformationCard({ item, className = "" }: TransformationCardProps) {
             fill
             unoptimized={true}
             quality={95}
-            sizes="(max-width: 640px) 336px, (max-width: 768px) 384px, 432px"
+            loading="eager"
+            sizes="(max-width: 768px) 360px, (max-width: 1024px) 400px, 410px"
             className="object-cover object-top transition-transform duration-500 group-hover/card:scale-[1.02]"
             priority={false}
           />
@@ -126,9 +127,32 @@ function TransformationCard({ item, className = "" }: TransformationCardProps) {
   );
 }
 
+const TOTAL_CLIENTS = transformationImages1.length;
+
 export default function BrandLogos() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { margin: "200px 0px 200px 0px" });
+
+  const {
+    trackRef,
+    trackIndex,
+    isAnimated,
+    activeIndex: activeRealIndex,
+    setIsPaused,
+    stepBy,
+    goTo: goToClient,
+    handleTransitionEnd: handleTrackTransitionEnd,
+    handleTouchStart,
+    handleTouchEnd,
+  } = useInfiniteCarousel({
+    itemCount: TOTAL_CLIENTS,
+    leftClones: LEFT_CLONES,
+    rightClones: RIGHT_CLONES,
+    maxVisible: 3,
+    transitionMs: SLIDE_TRANSITION_MS,
+    autoPlayMs: CLIENTS_AUTOPLAY_INTERVAL_MS,
+    isAutoPlayEnabled: isInView,
+  });
 
   return (
     <section
@@ -198,37 +222,117 @@ export default function BrandLogos() {
         </div>
       </motion.div>
 
-      {/* Transformation Marquee Slider (Single Row) */}
-      <div className="relative w-full overflow-hidden py-2 sm:py-4">
+      {/* Contained Client Carousel (1 card on mobile, 2 on tablet, 3 on desktop) */}
+      <div className="mx-auto max-w-[1420px] px-3 sm:px-5 lg:px-6">
         <div
-          className="flex w-max animate-marquee-left hover:[animation-play-state:paused]"
-          style={{
-            animationDuration: CLIENTS_MARQUEE_DURATION,
-            animationPlayState: isInView ? "running" : "paused",
-          }}
+          className="mx-auto max-w-[400px] md:max-w-none"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocusCapture={() => setIsPaused(true)}
+          onBlurCapture={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
-          {/* First identical half */}
-          <div className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8">
-            {row1Base.map((item, idx) => (
-              <TransformationCard
-                key={`row1-a-${idx}`}
-                item={item}
-                className={idx >= transformationImages1.length ? "hidden sm:block" : ""}
-              />
-            ))}
+          <div className="flex items-center gap-3 md:gap-4 lg:gap-5">
+            {/* Desktop / Tablet Left Navigation Arrow (placed completely outside the card images) */}
+            <button
+              type="button"
+              onClick={() => stepBy(-1, true)}
+              aria-label="Previous client"
+              className="hidden md:flex shrink-0 h-[54px] w-[54px] rounded-full bg-white border border-slate-200/95 text-slate-800 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300 shadow-[0_10px_28px_rgba(15,23,42,0.12)] transition-all duration-200 items-center justify-center cursor-pointer active:scale-95"
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </button>
+
+            {/* Clipped Slide Viewport */}
+            <div className="flex-1 min-w-0 max-w-7xl mx-auto overflow-hidden py-4 sm:py-5">
+              <div
+                ref={trackRef}
+                onTransitionEnd={handleTrackTransitionEnd}
+                className={
+                  "flex w-full [--slide-step:-100%] md:[--slide-step:-50%] lg:[--slide-step:-33.333333%] " +
+                  (isAnimated
+                    ? "transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                    : "transition-none")
+                }
+                style={
+                  {
+                    "--track-index": trackIndex,
+                    transform: "translate3d(calc(var(--track-index) * var(--slide-step)), 0, 0)",
+                  } as React.CSSProperties
+                }
+              >
+                {extendedSlides.map((item, idx) => (
+                  <div
+                    key={`client-slide-${idx}-${item.client}`}
+                    className="shrink-0 w-full md:w-1/2 lg:w-1/3 px-2 sm:px-2.5 lg:px-3"
+                  >
+                    <TransformationCard item={item} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop / Tablet Right Navigation Arrow (placed completely outside the card images) */}
+            <button
+              type="button"
+              onClick={() => stepBy(1, true)}
+              aria-label="Next client"
+              className="hidden md:flex shrink-0 h-[54px] w-[54px] rounded-full bg-white border border-slate-200/95 text-slate-800 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300 shadow-[0_10px_28px_rgba(15,23,42,0.12)] transition-all duration-200 items-center justify-center cursor-pointer active:scale-95"
+            >
+              <ArrowRight className="h-6 w-6" />
+            </button>
           </div>
-          {/* Second identical half for seamless infinite loop */}
-          <div
-            className="flex shrink-0 items-center gap-5 sm:gap-6 lg:gap-8 pr-5 sm:pr-6 lg:pr-8"
-            aria-hidden="true"
-          >
-            {row1Base.map((item, idx) => (
-              <TransformationCard
-                key={`row1-b-${idx}`}
-                item={item}
-                className={idx >= transformationImages1.length ? "hidden sm:block" : ""}
-              />
-            ))}
+
+          {/* Pagination Dots + Mobile Prev/Next Controls */}
+          <div className="mt-3 sm:mt-4 flex flex-col items-center gap-4">
+            <div className="flex items-center gap-1.5 sm:gap-2" role="tablist" aria-label="Client slides">
+              {transformationImages1.map((client, idx) => {
+                const isActive = idx === activeRealIndex;
+                return (
+                  <button
+                    key={client.client}
+                    type="button"
+                    role="tab"
+                    onClick={() => goToClient(idx)}
+                    aria-label={`View client ${idx + 1}: ${client.client}`}
+                    aria-selected={isActive}
+                    className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                      isActive
+                        ? "w-7 bg-gradient-to-r from-purple-600 to-cyan-500 shadow-sm"
+                        : "w-2 bg-slate-300 hover:bg-purple-400"
+                    }`}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Dedicated Mobile Previous / Next Controls (+20% size, completely outside the card image) */}
+            <div className="flex md:hidden items-center justify-between gap-3 w-full px-1">
+              <button
+                type="button"
+                onClick={() => stepBy(-1, true)}
+                aria-label="Previous client"
+                className="inline-flex items-center justify-center gap-2 h-12 px-5 rounded-full border border-slate-300 bg-white text-sm font-bold text-slate-800 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300 transition shadow-sm cursor-pointer active:scale-95"
+              >
+                <ArrowLeft className="h-5 w-5" />
+                <span>Previous</span>
+              </button>
+
+              <span className="text-xs font-mono font-bold text-slate-400 tabular-nums select-none">
+                {activeRealIndex + 1} / {TOTAL_CLIENTS}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => stepBy(1, true)}
+                aria-label="Next client"
+                className="inline-flex items-center justify-center gap-2 h-12 px-5 rounded-full border border-slate-300 bg-white text-sm font-bold text-slate-800 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300 transition shadow-sm cursor-pointer active:scale-95"
+              >
+                <span>Next</span>
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

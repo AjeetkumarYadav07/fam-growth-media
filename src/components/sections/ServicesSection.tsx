@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { useContactModal } from "@/components/providers/ContactModalProvider";
+import { buildClonedSlides, useInfiniteCarousel } from "@/hooks/useInfiniteCarousel";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -81,6 +82,104 @@ const filmstripImages = [
   "/services_img/studios.jpeg",
 ];
 
+type ServiceItem = (typeof services)[number];
+
+const SERVICE_LEFT_CLONES = 2;
+const SERVICE_RIGHT_CLONES = 4;
+const mobileExtendedServices = buildClonedSlides(
+  services,
+  SERVICE_LEFT_CLONES,
+  SERVICE_RIGHT_CLONES
+);
+
+interface ServiceCardProps {
+  service: ServiceItem;
+  isActive: boolean;
+  cardRef?: (el: HTMLDivElement | null) => void;
+  onCardClick: () => void;
+  onActionClick: (serviceTitle: string) => void;
+  sizes: string;
+  className?: string;
+}
+
+/** Single service showcase card reused across desktop pinned track and mobile/tablet carousel. */
+function ServiceCard({
+  service,
+  isActive,
+  cardRef,
+  onCardClick,
+  onActionClick,
+  sizes,
+  className = "",
+}: ServiceCardProps) {
+  return (
+    <div
+      ref={cardRef}
+      onClick={onCardClick}
+      className={`group relative rounded-[28px] lg:rounded-[32px] overflow-hidden border transition-all duration-300 cursor-pointer will-change-transform ${
+        isActive
+          ? "border-purple-300 shadow-[0_25px_60px_rgba(124,58,237,0.25)] ring-2 ring-purple-500/25"
+          : "border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)]"
+      } ${className}`}
+    >
+      <ResponsiveImage
+        src={service.image}
+        alt={service.title}
+        fill
+        loading="eager"
+        sizes={sizes}
+        className="object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/20" />
+
+      <div className="absolute top-5 left-5 right-5 flex items-center justify-between">
+        <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-white backdrop-blur-md border border-white/20">
+          {service.cardBadge}
+        </span>
+
+        {service.hasLogo && (
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md">
+            <span className="text-[9px] font-black text-white">FAM</span>
+          </div>
+        )}
+      </div>
+
+      <div className="absolute bottom-6 left-6 right-6 flex flex-col justify-end">
+        <div className="text-xs font-mono font-bold text-cyan-400 mb-1">
+          {service.number}
+        </div>
+
+        <h3 className="text-xl sm:text-2xl lg:text-[25px] font-black text-white tracking-tight leading-tight mb-5">
+          {service.title}
+        </h3>
+
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onActionClick(service.title);
+            }}
+            aria-label={`Select ${service.title}`}
+            className={`h-11 w-11 rounded-full flex items-center justify-center transition-all duration-300 shadow-md ${
+              isActive
+                ? "bg-gradient-to-r from-purple-600 to-cyan-500 text-white shadow-[0_0_20px_rgba(124,58,237,0.5)] scale-110"
+                : "bg-white/20 text-white hover:bg-white hover:text-purple-600 backdrop-blur-md border border-white/30"
+            }`}
+          >
+            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
+          </button>
+
+          <span className="text-[11px] font-bold text-slate-400 group-hover:text-white transition-colors">
+            Learn More →
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ServicesSection({ onSelectService }: ServicesSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeIndexRef = useRef(0);
@@ -89,6 +188,24 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
   const handleSelectService = onSelectService || openContactModal;
 
   const [isNearViewport, setIsNearViewport] = useState(false);
+
+  const {
+    trackRef: mobileTrackRef,
+    trackIndex: mobileTrackIndex,
+    isAnimated: isMobileAnimated,
+    activeIndex: activeMobileIndex,
+    stepBy: stepMobileBy,
+    goTo: goToMobileService,
+    handleTransitionEnd: handleMobileTransitionEnd,
+    handleTouchStart: handleMobileTouchStart,
+    handleTouchEnd: handleMobileTouchEnd,
+  } = useInfiniteCarousel({
+    itemCount: services.length,
+    leftClones: SERVICE_LEFT_CLONES,
+    rightClones: SERVICE_RIGHT_CLONES,
+    maxVisible: 2,
+    transitionMs: 500,
+  });
 
   const sectionRef = useRef<HTMLElement>(null);
   const introHeaderRef = useRef<HTMLDivElement>(null);
@@ -161,21 +278,22 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
     const track = trackRef.current;
     if (!pinContainer || !track) return;
 
-    const ctx = gsap.context(() => {
+    // Pinned vertical-to-horizontal scroll runs strictly on laptop/desktop (>= 1024px)
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 1024px)", () => {
       // 1. DIAGONAL EXIT ANIMATION FOR INTRO HEADER
-      // LEFT moves diagonally DOWN + LEFT, RIGHT moves diagonally DOWN + RIGHT with stagger & depth scaling
       if (introHeader) {
         const introTL = gsap.timeline({
           scrollTrigger: {
             trigger: introHeader,
-            start: () => (window.innerWidth < 768 ? "top 30%" : "top 15%"),
+            start: () => "top 15%",
             end: () => "bottom 5%",
             scrub: 1,
             invalidateOnRefresh: true,
           },
         });
 
-        // LEFT group elements move diagonally UP + LEFT (natural scroll exit)
         if (eyebrowRef.current) {
           introTL.to(
             eyebrowRef.current,
@@ -205,7 +323,6 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
           );
         }
 
-        // RIGHT group elements move diagonally UP + RIGHT (natural scroll exit)
         if (filmstripRef.current) {
           introTL.to(
             filmstripRef.current,
@@ -227,7 +344,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         if (!track) return 1800;
         const trackWidth = track.scrollWidth;
         const viewportWidth = window.innerWidth;
-        return Math.max(trackWidth - viewportWidth + (viewportWidth >= 1024 ? 120 : 60), 600);
+        return Math.max(trackWidth - viewportWidth + 120, 600);
       };
 
       gsap.to(track, {
@@ -279,7 +396,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
 
     return () => {
       cancelAnimationFrame(rafId);
-      ctx.revert();
+      mm.revert();
     };
   }, [isNearViewport]);
 
@@ -399,116 +516,155 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
         </div>
       </div>
 
-      {/* 2. Pinned Carousel Container (Full Viewport Height, matching reference image) */}
+      {/* 2A. Mobile & Tablet Simple Carousel (< 1024px): NO pinned scroll, NO mouse/timeline/tagline */}
+      <div className="block lg:hidden pt-4 pb-12 sm:pb-14">
+        <div
+          className="mx-auto max-w-[400px] md:max-w-3xl px-4 sm:px-6"
+          onTouchStart={handleMobileTouchStart}
+          onTouchEnd={handleMobileTouchEnd}
+        >
+          <div className="overflow-hidden py-3">
+            <div
+              ref={mobileTrackRef}
+              onTransitionEnd={handleMobileTransitionEnd}
+              className={
+                "flex w-full [--slide-step:-100%] md:[--slide-step:-50%] " +
+                (isMobileAnimated
+                  ? "transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  : "transition-none")
+              }
+              style={
+                {
+                  "--track-index": mobileTrackIndex,
+                  transform: "translate3d(calc(var(--track-index) * var(--slide-step)), 0, 0)",
+                } as React.CSSProperties
+              }
+            >
+              {mobileExtendedServices.map((service, idx) => {
+                const realIdx =
+                  (((idx - SERVICE_LEFT_CLONES) % services.length) + services.length) %
+                  services.length;
+                const isCardActive = realIdx === activeMobileIndex;
+                return (
+                  <div
+                    key={`mobile-service-${idx}-${service.id}`}
+                    className="shrink-0 w-full md:w-1/2 px-2 sm:px-3"
+                  >
+                    <ServiceCard
+                      service={service}
+                      isActive={isCardActive}
+                      onCardClick={() => goToMobileService(realIdx)}
+                      onActionClick={handleSelectService}
+                      sizes="(max-width: 768px) 360px, 340px"
+                      className="w-full h-[430px] sm:h-[450px]"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Pagination Dots + Industry-Standard Previous / Next Controls */}
+          <div className="mt-4 flex flex-col items-center gap-4">
+            <div className="flex items-center gap-2" role="tablist" aria-label="Service slides">
+              {services.map((service, idx) => {
+                const isDotActive = idx === activeMobileIndex;
+                return (
+                  <button
+                    key={`dot-${service.id}`}
+                    type="button"
+                    role="tab"
+                    onClick={() => goToMobileService(idx)}
+                    aria-label={`View ${service.title}`}
+                    aria-selected={isDotActive}
+                    className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                      isDotActive
+                        ? "w-7 bg-gradient-to-r from-purple-600 to-cyan-500 shadow-sm"
+                        : "w-2 bg-slate-300 hover:bg-purple-400"
+                    }`}
+                  />
+                );
+              })}
+            </div>
+
+            <div className="flex items-center justify-between sm:justify-center gap-3 sm:gap-5 w-full">
+              <button
+                type="button"
+                onClick={() => stepMobileBy(-1, true)}
+                aria-label="Previous service"
+                className="inline-flex items-center justify-center gap-2 h-12 px-5 sm:px-6 rounded-full border border-slate-300 bg-white text-sm font-bold text-slate-800 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition shadow-sm cursor-pointer active:scale-95"
+              >
+                <ArrowLeft className="h-5 w-5" />
+                <span>Previous</span>
+              </button>
+
+              <span className="text-xs font-mono font-bold text-slate-500 tabular-nums select-none">
+                {String(activeMobileIndex + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => stepMobileBy(1, true)}
+                aria-label="Next service"
+                className="inline-flex items-center justify-center gap-2 h-12 px-5 sm:px-6 rounded-full border border-slate-300 bg-white text-sm font-bold text-slate-800 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition shadow-sm cursor-pointer active:scale-95"
+              >
+                <span>Next</span>
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2B. Desktop/Laptop Pinned Carousel Container (>= 1024px, unchanged) */}
       <div
         ref={pinContainerRef}
-        className="w-full h-screen min-h-[620px] flex flex-col justify-between pt-2 sm:pt-4 pb-4 overflow-hidden relative"
+        className="hidden lg:flex w-full h-screen min-h-[620px] flex-col justify-between pt-2 sm:pt-4 pb-4 overflow-hidden relative"
       >
         {/* Ambient Soft Glowing Background Blooms */}
-        <div className="pointer-events-none absolute top-1/4 left-1/4 w-[300px] sm:w-[750px] h-[200px] sm:h-[450px] bg-purple-200/25 rounded-full blur-[60px] sm:blur-[170px] -z-10" />
-        <div className="pointer-events-none absolute bottom-1/4 right-1/4 w-[260px] sm:w-[650px] h-[180px] sm:h-[400px] bg-cyan-200/20 rounded-full blur-[50px] sm:blur-[150px] -z-10" />
+        <div className="pointer-events-none absolute top-1/4 left-1/4 w-[750px] h-[450px] bg-purple-200/25 rounded-full blur-[170px] -z-10" />
+        <div className="pointer-events-none absolute bottom-1/4 right-1/4 w-[650px] h-[400px] bg-cyan-200/20 rounded-full blur-[150px] -z-10" />
 
         {/* GSAP Horizontal Scroll Track */}
         <div className="flex-1 flex items-center overflow-visible w-full">
           <div
             ref={trackRef}
-            className="flex items-center gap-6 sm:gap-8 lg:gap-10 px-6 sm:px-16 lg:px-24 will-change-transform"
+            className="flex items-center gap-10 px-24 will-change-transform"
             style={{ width: "max-content" }}
           >
-            {services.map((service, index) => {
-              const isActive = activeIndex === index;
-
-              return (
-                <div
-                  key={service.id}
-                  ref={(el) => {
-                    if (el) cardsRef.current[index] = el;
-                  }}
-                  onClick={() => scrollToCard(index)}
-                  className={`group relative shrink-0 w-[285px] sm:w-[325px] lg:w-[365px] h-[410px] sm:h-[450px] lg:h-[485px] rounded-[32px] overflow-hidden border transition-all duration-300 cursor-pointer will-change-transform ${isActive
-                      ? "border-purple-300 shadow-[0_25px_60px_rgba(124,58,237,0.25)] ring-2 ring-purple-500/25"
-                      : "border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)]"
-                    }`}
-                >
-                  {/* Background Image with subtle zoom on hover */}
-                  <ResponsiveImage
-                    src={service.image}
-                    alt={service.title}
-                    fill
-                    sizes="(max-width: 768px) 320px, 365px"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-
-                  {/* Dark Gradient Overlay for high text contrast */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/20" />
-
-                  {/* Top Badge */}
-                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-white/15 text-white backdrop-blur-md border border-white/20">
-                      {service.cardBadge}
-                    </span>
-
-                    {service.hasLogo && (
-                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md">
-                        <span className="text-[9px] font-black text-white">FAM</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Bottom Content Area */}
-                  <div className="absolute bottom-6 left-6 right-6 flex flex-col justify-end">
-                    {/* Number */}
-                    <div className="text-xs font-mono font-bold text-cyan-400 mb-1">
-                      {service.number}
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-xl sm:text-2xl lg:text-[25px] font-black text-white tracking-tight leading-tight mb-5">
-                      {service.title}
-                    </h3>
-
-                    {/* Circular Action Arrow Button */}
-                    <div className="flex items-center justify-between">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSelectService(service.title);
-                        }}
-                        className={`h-11 w-11 rounded-full flex items-center justify-center transition-all duration-300 shadow-md ${isActive
-                            ? "bg-gradient-to-r from-purple-600 to-cyan-500 text-white shadow-[0_0_20px_rgba(124,58,237,0.5)] scale-110"
-                            : "bg-white/20 text-white hover:bg-white hover:text-purple-600 backdrop-blur-md border border-white/30"
-                          }`}
-                      >
-                        <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
-                      </button>
-
-                      <span className="text-[11px] font-bold text-slate-400 group-hover:text-white transition-colors">
-                        Learn More →
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {services.map((service, index) => (
+              <ServiceCard
+                key={service.id}
+                service={service}
+                isActive={activeIndex === index}
+                cardRef={(el) => {
+                  if (el) cardsRef.current[index] = el;
+                }}
+                onCardClick={() => scrollToCard(index)}
+                onActionClick={handleSelectService}
+                sizes="365px"
+                className="shrink-0 w-[365px] h-[485px]"
+              />
+            ))}
           </div>
         </div>
 
-        {/* 3. Bottom Interactive Timeline & Progress Bar (Pinned with cards) */}
+        {/* 3. Bottom Interactive Timeline & Progress Bar (Pinned with cards on Desktop) */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full pt-3 pb-2 border-t border-slate-200/80">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6">
+          <div className="flex flex-row items-center justify-between gap-6">
 
             {/* Left: Scroll to explore with mouse icon */}
             <div className="flex items-center gap-3 select-none">
               <div className="h-7 w-4 rounded-full border-2 border-slate-400 flex justify-center p-0.5">
                 <div className="h-1.5 w-1 bg-purple-600 rounded-full animate-bounce" />
               </div>
-              <div className="font-handwriting text-base sm:text-lg text-purple-600 font-bold -rotate-3">
+              <div className="font-handwriting text-lg text-purple-600 font-bold -rotate-3">
                 Scroll to explore our services ⤷
               </div>
             </div>
 
             {/* Center: Connected Pipeline Nodes with Prev/Next Arrows */}
-            <div className="flex items-center gap-3 sm:gap-6 w-full max-w-2xl justify-center">
+            <div className="flex items-center gap-6 w-full max-w-2xl justify-center">
               {/* Prev Button */}
               <button
                 onClick={handlePrev}
@@ -548,9 +704,9 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
                         {isActive && <div className="h-2 w-2 rounded-full bg-cyan-500" />}
                       </div>
 
-                      {/* Node Label (Visible on sm/md/lg screens) */}
+                      {/* Node Label */}
                       <span
-                        className={`hidden sm:block absolute top-6 text-[10px] font-bold tracking-tight whitespace-nowrap transition-colors ${isActive ? "text-purple-700 font-extrabold" : "text-slate-400 hover:text-slate-700"
+                        className={`block absolute top-6 text-[10px] font-bold tracking-tight whitespace-nowrap transition-colors ${isActive ? "text-purple-700 font-extrabold" : "text-slate-400 hover:text-slate-700"
                           }`}
                       >
                         {service.number} {service.shortTitle}
@@ -571,7 +727,7 @@ export default function ServicesSection({ onSelectService }: ServicesSectionProp
             </div>
 
             {/* Right: Different Services A Bigger Tomorrow */}
-            <div className="font-handwriting text-lg sm:text-xl font-bold text-indigo-600/90 text-right select-none pointer-events-none -rotate-3">
+            <div className="font-handwriting text-xl font-bold text-indigo-600/90 text-right select-none pointer-events-none -rotate-3">
               <span>Different Services</span> <br />
               <span className="-mt-1 text-purple-600">A Bigger Tomorrow</span>
             </div>
