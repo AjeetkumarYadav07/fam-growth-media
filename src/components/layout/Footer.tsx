@@ -10,6 +10,17 @@ import { WHATSAPP_LINK, WHATSAPP_PHONE_DISPLAY } from "@/lib/constants";
 export default function Footer() {
   const { scrollTo } = useSmoothScroll();
 
+  const handleHashNav = (e: React.MouseEvent<HTMLAnchorElement>, target: string) => {
+    e.preventDefault();
+    const nextUrl = target === "#home" ? window.location.pathname : target;
+    window.history.replaceState(null, "", nextUrl);
+    if (target === "#home") {
+      scrollTo(0);
+    } else {
+      scrollTo(target, { offset: -70 });
+    }
+  };
+
   return (
     <footer className="relative bg-white border-t border-slate-200/80 pt-16 pb-12 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -19,9 +30,10 @@ export default function Footer() {
 
           {/* Logo, Tagline & Socials (full width on mobile, 4 cols on desktop) */}
           <div className="col-span-2 md:col-span-4 space-y-4">
-            <button
-              onClick={() => scrollTo(0)}
-              className="flex items-center gap-2 cursor-pointer group text-left transition-transform duration-300 hover:scale-105"
+            <a
+              href="#home"
+              onClick={(e) => handleHashNav(e, "#home")}
+              className="inline-flex items-center gap-2 cursor-pointer group text-left transition-transform duration-300 hover:scale-105"
             >
               <ResponsiveImage
                 src="/images/logo.png"
@@ -30,7 +42,7 @@ export default function Footer() {
                 height={138}
                 className="h-12 sm:h-14 w-auto object-contain transition-all duration-300 group-hover:filter group-hover:drop-shadow-[0_0_12px_rgba(124,58,237,0.35)]"
               />
-            </button>
+            </a>
 
             <p className="text-sm text-slate-600 max-w-sm leading-relaxed">
               Stories That <span className="text-purple-600 font-bold">Grow.</span>
@@ -71,39 +83,39 @@ export default function Footer() {
             </div>
             <ul className="space-y-2 text-xs sm:text-sm text-slate-600">
               <li>
-                <button onClick={() => scrollTo(0)} className="hover:text-purple-600 transition cursor-pointer">
+                <a href="#home" onClick={(e) => handleHashNav(e, "#home")} className="hover:text-purple-600 transition cursor-pointer">
                   Home
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#services")} className="hover:text-purple-600 transition cursor-pointer">
+                <a href="#services" onClick={(e) => handleHashNav(e, "#services")} className="hover:text-purple-600 transition cursor-pointer">
                   Services
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#about")} className="hover:text-purple-600 transition cursor-pointer">
+                <a href="#about" onClick={(e) => handleHashNav(e, "#about")} className="hover:text-purple-600 transition cursor-pointer">
                   About Us
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#why-fam")} className="hover:text-purple-600 transition cursor-pointer">
+                <a href="#clients" onClick={(e) => handleHashNav(e, "#clients")} className="hover:text-purple-600 transition cursor-pointer">
                   Clients
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#why-fam")} className="hover:text-purple-600 transition cursor-pointer">
+                <a href="#why-fam" onClick={(e) => handleHashNav(e, "#why-fam")} className="hover:text-purple-600 transition cursor-pointer">
                   Why FAM?
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#faq")} className="hover:text-purple-600 transition cursor-pointer">
+                <a href="#faq" onClick={(e) => handleHashNav(e, "#faq")} className="hover:text-purple-600 transition cursor-pointer">
                   FAQ
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#contact")} className="hover:text-purple-600 transition cursor-pointer">
+                <a href="#contact" onClick={(e) => handleHashNav(e, "#contact")} className="hover:text-purple-600 transition cursor-pointer">
                   Contact Us
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -115,29 +127,29 @@ export default function Footer() {
             </div>
             <ul className="space-y-2 text-xs sm:text-sm text-slate-600">
               <li>
-                <button onClick={() => scrollTo("#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
+                <a href="#services" onClick={(e) => handleHashNav(e, "#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
                   Content Creation & Scripting
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
+                <a href="#services" onClick={(e) => handleHashNav(e, "#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
                   Professional Shooting
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
+                <a href="#services" onClick={(e) => handleHashNav(e, "#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
                   Editing Services
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
+                <a href="#services" onClick={(e) => handleHashNav(e, "#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
                   Podcast Management
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => scrollTo("#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
+                <a href="#services" onClick={(e) => handleHashNav(e, "#services")} className="hover:text-purple-600 transition cursor-pointer text-left">
                   Social Media Handling
-                </button>
+                </a>
               </li>
             </ul>
           </div>

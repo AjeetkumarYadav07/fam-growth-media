@@ -31,10 +31,34 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
   const scrolledRef = useRef(false);
   const [activeSection, setActiveSection] = useState("Home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const programmaticLockUntilRef = useRef(0);
+  const hasSettledMountRef = useRef(false);
   const { scrollTo } = useSmoothScroll();
 
   useEffect(() => {
     let ticking = false;
+    const mountTimer = setTimeout(() => {
+      hasSettledMountRef.current = true;
+    }, 600);
+
+    const initialHash = window.location.hash;
+    if (initialHash) {
+      const initialMatch = navLinks.find((l) => l.target === initialHash);
+      if (initialMatch) {
+        programmaticLockUntilRef.current = Date.now() + 900;
+        requestAnimationFrame(() => setActiveSection(initialMatch.label));
+      }
+    }
+
+    const syncHash = (hash: string) => {
+      if (!hasSettledMountRef.current) return;
+      if (Date.now() < programmaticLockUntilRef.current) return;
+      const nextUrl = hash === "#home" ? window.location.pathname : hash;
+      const currentUrl = `${window.location.pathname}${window.location.hash}`;
+      if (currentUrl !== nextUrl) {
+        window.history.replaceState(null, "", nextUrl);
+      }
+    };
 
     // Passive, RAF-throttled scroll handler for navbar background style
     const handleScroll = () => {
@@ -45,8 +69,9 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
             scrolledRef.current = isScrolled;
             setScrolled(isScrolled);
           }
-          if (window.scrollY < 180) {
+          if (window.scrollY < 180 && Date.now() >= programmaticLockUntilRef.current) {
             setActiveSection("Home");
+            syncHash("#home");
           }
           ticking = false;
         });
@@ -59,11 +84,13 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
     // Native IntersectionObserver for active section spy (Zero layout reflows/thrashing)
     const observer = new IntersectionObserver(
       (entries) => {
+        if (Date.now() < programmaticLockUntilRef.current) return;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const match = navLinks.find((l) => l.id === entry.target.id);
             if (match) {
               setActiveSection(match.label);
+              syncHash(match.target);
             }
           }
         });
@@ -80,14 +107,23 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
     });
 
     return () => {
+      clearTimeout(mountTimer);
       window.removeEventListener("scroll", handleScroll);
       observer.disconnect();
     };
   }, []);
 
-  const handleNavClick = (target: string, label: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    target: string,
+    label: string
+  ) => {
+    e.preventDefault();
+    programmaticLockUntilRef.current = Date.now() + 1300;
     setActiveSection(label);
     setMobileMenuOpen(false);
+    const nextUrl = target === "#home" ? window.location.pathname : target;
+    window.history.replaceState(null, "", nextUrl);
     if (target === "#home") {
       scrollTo(0);
     } else {
@@ -106,8 +142,9 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
         )}
       >
         {/* Brand Logo with hover: scale(1.05) */}
-        <button
-          onClick={() => handleNavClick("#home", "Home")}
+        <a
+          href="#home"
+          onClick={(e) => handleNavClick(e, "#home", "Home")}
           className="group flex items-center text-left cursor-pointer transition-transform duration-300 hover:scale-105"
         >
           <ResponsiveImage
@@ -118,16 +155,17 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
             className="h-10 sm:h-12 w-auto object-contain transition-all duration-300 group-hover:filter group-hover:drop-shadow-[0_0_12px_rgba(124,58,237,0.35)]"
             priority
           />
-        </button>
+        </a>
 
         {/* Desktop Navigation Links with Active Link Indicator */}
         <nav className="hidden lg:flex items-center gap-1 xl:gap-2 relative">
           {navLinks.map((link) => {
             const isActive = activeSection === link.label;
             return (
-              <button
+              <a
                 key={link.label}
-                onClick={() => handleNavClick(link.target, link.label)}
+                href={link.target}
+                onClick={(e) => handleNavClick(e, link.target, link.label)}
                 className={cn(
                   "relative px-3.5 py-1.5 text-xs font-bold transition-all duration-200 cursor-pointer rounded-full",
                   isActive
@@ -143,7 +181,7 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-              </button>
+              </a>
             );
           })}
         </nav>
@@ -182,12 +220,13 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
           >
             <div className="flex flex-col gap-2">
               {navLinks.map((link, idx) => (
-                <motion.button
+                <motion.a
                   key={link.label}
+                  href={link.target}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  onClick={() => handleNavClick(link.target, link.label)}
+                  onClick={(e) => handleNavClick(e, link.target, link.label)}
                   className={cn(
                     "w-full text-left px-4 py-2.5 text-sm font-bold rounded-xl transition flex items-center justify-between",
                     activeSection === link.label
@@ -199,7 +238,7 @@ export default function Navbar({ onOpenContactModal }: NavbarProps) {
                   {activeSection === link.label && (
                     <div className="h-1.5 w-1.5 rounded-full bg-purple-600" />
                   )}
-                </motion.button>
+                </motion.a>
               ))}
 
               <div className="mt-3 pt-3 border-t border-slate-100">

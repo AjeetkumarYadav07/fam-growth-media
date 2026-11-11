@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { ArrowRight, Calendar, Sparkles } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
 import MagneticButton from "@/components/ui/MagneticButton";
-import { WHATSAPP_LINK } from "@/lib/constants";
+import WhatsAppIcon from "@/components/ui/WhatsAppIcon";
+import { WHATSAPP_LINK, WHATSAPP_PHONE_DISPLAY } from "@/lib/constants";
 import { useContactModal } from "@/components/providers/ContactModalProvider";
 
 interface CtaBannerProps {
@@ -51,8 +52,9 @@ export default function CtaBanner({ onOpenContactModal }: CtaBannerProps) {
                   withConfetti={true}
                   className="text-sm sm:text-base font-bold px-7 py-3.5 shadow-xl shadow-purple-500/25"
                 >
+                  <WhatsAppIcon className="h-4 w-4 sm:h-[18px] sm:w-[18px] shrink-0" />
                   <span>Connect on WhatsApp</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
                 </MagneticButton>
 
                 <MagneticButton
@@ -64,6 +66,23 @@ export default function CtaBanner({ onOpenContactModal }: CtaBannerProps) {
                   <Calendar className="h-4 w-4 text-purple-600" />
                   <span>Schedule a Call</span>
                 </MagneticButton>
+              </div>
+
+              {/* Direct WhatsApp Number with Icon */}
+              <div className="pt-1">
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/wa inline-flex items-center gap-2.5 text-sm font-semibold text-slate-700 hover:text-emerald-700 transition-colors"
+                >
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm group-hover/wa:scale-110 transition-transform">
+                    <WhatsAppIcon className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="font-bold text-slate-900 group-hover/wa:text-emerald-700 tracking-tight tabular-nums">
+                    {WHATSAPP_PHONE_DISPLAY}
+                  </span>
+                </a>
               </div>
             </div>
 
