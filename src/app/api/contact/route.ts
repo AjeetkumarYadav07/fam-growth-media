@@ -8,12 +8,23 @@ const RECIPIENT_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || "info@famgrowthmed
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, phone, service, message } = body;
+    const name = typeof body?.name === "string" ? body.name.trim() : "";
+    const email = typeof body?.email === "string" ? body.email.trim() : "";
+    const phone = typeof body?.phone === "string" ? body.phone.trim() : "";
+    const service =
+      typeof body?.service === "string" && body.service.trim()
+        ? body.service.trim()
+        : "General Inquiry";
+    const message = typeof body?.message === "string" ? body.message.trim() : "";
 
-    // Validate required fields
-    if (!name || !email || !phone) {
+    // Validate required fields: Name, Call/WhatsApp Number, and Project Details / Goals
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (!name || !phone || phoneDigits.length < 7 || !message) {
       return NextResponse.json(
-        { error: "Name, email, and phone / WhatsApp number are required." },
+        {
+          error:
+            "Your Name, a valid Call / WhatsApp Number, and Project Details / Goals are required.",
+        },
         { status: 400 }
       );
     }
@@ -37,10 +48,10 @@ export async function POST(request: Request) {
       leads.push({
         id: `lead_${Date.now()}`,
         name,
-        email,
+        email: email || "Not provided",
         phone,
-        service: service || "General Inquiry",
-        message: message || "No message provided",
+        service,
+        message,
         submittedAt: timestamp,
         targetEmail: RECIPIENT_EMAIL,
       });
@@ -52,10 +63,10 @@ export async function POST(request: Request) {
     console.log("==================================================");
     console.log(`📩 NEW INQUIRY FOR: ${RECIPIENT_EMAIL}`);
     console.log(`👤 Name: ${name}`);
-    console.log(`📧 Email: ${email}`);
+    console.log(`📧 Email: ${email || "Not provided"}`);
     console.log(`📱 Phone / WhatsApp: ${phone}`);
     console.log(`🎯 Service: ${service}`);
-    console.log(`💬 Message: ${message || "N/A"}`);
+    console.log(`💬 Message: ${message}`);
     console.log(`⏰ Time: ${timestamp}`);
     console.log("==================================================");
 
@@ -90,7 +101,11 @@ export async function POST(request: Request) {
               <tr>
                 <td style="padding: 10px 0; color: #64748b; font-size: 13px; font-weight: bold;">WORK EMAIL:</td>
                 <td style="padding: 10px 0; color: #0f172a; font-size: 15px;">
-                  <a href="mailto:${email}" style="color: #7c3aed; text-decoration: none; font-weight: 600;">${email}</a>
+                  ${
+                    email
+                      ? `<a href="mailto:${email}" style="color: #7c3aed; text-decoration: none; font-weight: 600;">${email}</a>`
+                      : `<span style="color: #94a3b8;">Not provided</span>`
+                  }
                 </td>
               </tr>
               <tr>
@@ -127,9 +142,9 @@ export async function POST(request: Request) {
       await transporter.sendMail({
         from: process.env.SMTP_FROM || `"FAM Growth Media Leads" <${smtpUser}>`,
         to: RECIPIENT_EMAIL,
-        replyTo: email,
+        replyTo: email || undefined,
         subject: `🚀 New Lead: ${name} - ${service}`,
-        text: `New Inquiry from ${name}\nEmail: ${email}\nPhone: ${phone}\nService: ${service}\nMessage: ${message}`,
+        text: `New Inquiry from ${name}\nEmail: ${email || "Not provided"}\nPhone: ${phone}\nService: ${service}\nMessage: ${message}`,
         html: htmlContent,
       });
 

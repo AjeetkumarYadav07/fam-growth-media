@@ -13,6 +13,14 @@ interface WorkTogetherModalProps {
   prefilledService?: string;
 }
 
+interface FormErrors {
+  name?: string;
+  email?: string;
+  phone?: string;
+  message?: string;
+  submit?: string;
+}
+
 export default function WorkTogetherModal({
   isOpen,
   onClose,
@@ -21,6 +29,7 @@ export default function WorkTogetherModal({
 }: WorkTogetherModalProps) {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [errors, setErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -78,16 +87,65 @@ export default function WorkTogetherModal({
     }, 500);
   };
 
+  const validateForm = (): FormErrors => {
+    const nextErrors: FormErrors = {};
+
+    if (!formData.name.trim()) {
+      nextErrors.name = "Your Name is required.";
+    }
+
+    const trimmedPhone = formData.phone.trim();
+    const digitsOnly = trimmedPhone.replace(/\D/g, "");
+    if (!trimmedPhone) {
+      nextErrors.phone = "Call / WhatsApp Number is required.";
+    } else if (digitsOnly.length < 7) {
+      nextErrors.phone = "Please enter a valid Call / WhatsApp Number.";
+    }
+
+    const trimmedEmail = formData.email.trim();
+    if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      nextErrors.email = "Please enter a valid email address.";
+    }
+
+    if (!formData.message.trim()) {
+      nextErrors.message = "Project Details / Goals is required.";
+    }
+
+    return nextErrors;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setErrors({});
     setIsSubmitting(true);
 
     try {
-      await fetch("/api/contact", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          message: formData.message.trim(),
+        }),
       });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        setErrors({
+          submit: data?.error || "Please fill in all required fields before submitting.",
+        });
+        return;
+      }
 
       // Trigger celebratory party bumper effect immediately!
       triggerPartyBumperEffect();
@@ -95,10 +153,9 @@ export default function WorkTogetherModal({
       setSubmitted(true);
     } catch (error) {
       console.error("Error submitting contact form:", error);
-      // Still celebrate and show success screen to ensure great user experience
-      triggerPartyBumperEffect();
-      onSubmitted?.();
-      setSubmitted(true);
+      setErrors({
+        submit: "Something went wrong while sending your inquiry. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -108,6 +165,7 @@ export default function WorkTogetherModal({
     onClose();
     setTimeout(() => {
       setSubmitted(false);
+      setErrors({});
       setFormData({
         name: "",
         email: "",
@@ -121,7 +179,7 @@ export default function WorkTogetherModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -137,24 +195,29 @@ export default function WorkTogetherModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full max-w-lg overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 text-slate-900 shadow-2xl"
+            className="relative z-10 flex w-full max-w-lg max-h-[92dvh] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-2xl"
           >
-            {/* Ambient Background Glows */}
-            <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-purple-200/40 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-cyan-200/40 blur-3xl" />
+            {/* Ambient Background Glows (clipped inside outer card so they never cause scrollbars) */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
+              <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-purple-200/40 blur-3xl" />
+              <div className="absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-cyan-200/40 blur-3xl" />
+            </div>
 
             {/* Close Button */}
             <button
+              type="button"
               onClick={resetAndClose}
-              className="absolute right-4 top-4 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800 transition-colors cursor-pointer"
+              aria-label="Close modal"
+              className="absolute right-3.5 top-3.5 sm:right-4 sm:top-4 z-20 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800 transition-colors cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
 
+            <div className="relative z-10 overflow-y-auto overflow-x-hidden overscroll-contain p-5 sm:p-8">
             {!submitted ? (
               <div>
-                <div className="mb-3 flex items-center gap-2 text-purple-600 text-xs font-extrabold uppercase tracking-widest">
-                  <Sparkles className="h-4 w-4 text-purple-600" />
+                <div className="mb-2.5 pr-8 flex items-center gap-2 text-purple-600 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest">
+                  <Sparkles className="h-4 w-4 shrink-0 text-purple-600" />
                   <span>LET&apos;S BUILD SOMETHING EXTRAORDINARY</span>
                 </div>
 
@@ -165,71 +228,121 @@ export default function WorkTogetherModal({
                   Tell us about your brand vision, goals, and what you want to achieve. We will be in touch within 24 hours.
                 </p>
 
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                  {/* Row 1: Name and Work Email */}
+                <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
+                  {/* Row 1: Name (required) and Work Email (optional) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                        Your Name
+                      <label htmlFor="contact-name" className="block text-xs font-bold text-slate-700 mb-1.5">
+                        Your Name <span className="text-rose-500">*</span>
                       </label>
                       <input
+                        id="contact-name"
                         type="text"
                         required
+                        aria-required="true"
+                        aria-invalid={Boolean(errors.name)}
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) => {
+                          setFormData({ ...formData, name: e.target.value });
+                          if (errors.name || errors.submit) {
+                            setErrors((prev) => ({ ...prev, name: undefined, submit: undefined }));
+                          }
+                        }}
                         placeholder="Alex Rivera"
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-purple-600 focus:bg-white focus:outline-none focus:ring-1 focus:ring-purple-600 transition"
+                        className={`w-full rounded-xl border bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 transition ${
+                          errors.name
+                            ? "border-rose-500 focus:border-rose-500 focus:ring-rose-500"
+                            : "border-slate-200 focus:border-purple-600 focus:ring-purple-600"
+                        }`}
                       />
+                      {errors.name && (
+                        <p role="alert" className="mt-1 text-[11px] font-semibold text-rose-600">
+                          {errors.name}
+                        </p>
+                      )}
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                        Work Email
+                      <label htmlFor="contact-email" className="block text-xs font-bold text-slate-700 mb-1.5">
+                        Work Email <span className="font-normal text-slate-400">(Optional)</span>
                       </label>
                       <input
+                        id="contact-email"
                         type="email"
-                        required
+                        aria-invalid={Boolean(errors.email)}
                         value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        onChange={(e) => {
+                          setFormData({ ...formData, email: e.target.value });
+                          if (errors.email || errors.submit) {
+                            setErrors((prev) => ({ ...prev, email: undefined, submit: undefined }));
+                          }
+                        }}
                         placeholder="alex@company.com"
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-purple-600 focus:bg-white focus:outline-none focus:ring-1 focus:ring-purple-600 transition"
+                        className={`w-full rounded-xl border bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 transition ${
+                          errors.email
+                            ? "border-rose-500 focus:border-rose-500 focus:ring-rose-500"
+                            : "border-slate-200 focus:border-purple-600 focus:ring-purple-600"
+                        }`}
                       />
+                      {errors.email && (
+                        <p role="alert" className="mt-1 text-[11px] font-semibold text-rose-600">
+                          {errors.email}
+                        </p>
+                      )}
                     </div>
                   </div>
 
-                  {/* Row 2: Call / WhatsApp Number (replaced Brand/Company) and Primary Service */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <label className="block text-xs font-bold text-slate-700">
-                          Call / WhatsApp Number
+                  {/* Row 2: Call / WhatsApp Number (required) and Primary Service */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+                    <div className="min-w-0">
+                      <div className="flex items-center justify-between gap-2 mb-1.5 sm:min-h-[32px]">
+                        <label htmlFor="contact-phone" className="block text-xs font-bold text-slate-700 leading-tight">
+                          Call / WhatsApp Number <span className="text-rose-500">*</span>
                         </label>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                           WhatsApp
                         </span>
                       </div>
                       <div className="relative">
                         <input
+                          id="contact-phone"
                           type="tel"
                           required
+                          aria-required="true"
+                          aria-invalid={Boolean(errors.phone)}
                           value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          onChange={(e) => {
+                            setFormData({ ...formData, phone: e.target.value });
+                            if (errors.phone || errors.submit) {
+                              setErrors((prev) => ({ ...prev, phone: undefined, submit: undefined }));
+                            }
+                          }}
                           placeholder="+91 98765 43210"
-                          className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-purple-600 focus:bg-white focus:outline-none focus:ring-1 focus:ring-purple-600 transition"
+                          className={`w-full rounded-xl border bg-slate-50/70 pl-9 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 transition ${
+                            errors.phone
+                              ? "border-rose-500 focus:border-rose-500 focus:ring-rose-500"
+                              : "border-slate-200 focus:border-purple-600 focus:ring-purple-600"
+                          }`}
                         />
                         <Phone className="absolute left-3 top-3 h-4 w-4 text-slate-400 pointer-events-none" />
                       </div>
+                      {errors.phone && (
+                        <p role="alert" className="mt-1 text-[11px] font-semibold text-rose-600">
+                          {errors.phone}
+                        </p>
+                      )}
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    <div className="min-w-0">
+                      <label htmlFor="contact-service" className="flex items-end text-xs font-bold text-slate-700 mb-1.5 sm:min-h-[32px]">
                         Primary Service
                       </label>
                       <select
+                        id="contact-service"
                         value={formData.service}
                         onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 focus:border-purple-600 focus:bg-white focus:outline-none focus:ring-1 focus:ring-purple-600 transition"
+                        className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 focus:border-purple-600 focus:bg-white focus:outline-none focus:ring-1 focus:ring-purple-600 transition"
                       >
                         <option value="Content Creation & Strategic Scripting">01 Content Creation & Strategic Scripting</option>
                         <option value="Professional Shooting">02 Professional Shooting</option>
@@ -242,19 +355,46 @@ export default function WorkTogetherModal({
                     </div>
                   </div>
 
-                  {/* Row 3: Project Details / Goals */}
+                  {/* Row 3: Project Details / Goals (required) */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      Project Details / Goals
+                    <label htmlFor="contact-message" className="block text-xs font-bold text-slate-700 mb-1.5">
+                      Project Details / Goals <span className="text-rose-500">*</span>
                     </label>
                     <textarea
+                      id="contact-message"
                       rows={3}
+                      required
+                      aria-required="true"
+                      aria-invalid={Boolean(errors.message)}
                       value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, message: e.target.value });
+                        if (errors.message || errors.submit) {
+                          setErrors((prev) => ({ ...prev, message: undefined, submit: undefined }));
+                        }
+                      }}
                       placeholder="Briefly describe what you're looking to achieve..."
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-purple-600 focus:bg-white focus:outline-none focus:ring-1 focus:ring-purple-600 transition"
+                      className={`w-full rounded-xl border bg-slate-50/70 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 transition ${
+                        errors.message
+                          ? "border-rose-500 focus:border-rose-500 focus:ring-rose-500"
+                          : "border-slate-200 focus:border-purple-600 focus:ring-purple-600"
+                      }`}
                     />
+                    {errors.message && (
+                      <p role="alert" className="mt-1 text-[11px] font-semibold text-rose-600">
+                        {errors.message}
+                      </p>
+                    )}
                   </div>
+
+                  {errors.submit && (
+                    <p
+                      role="alert"
+                      className="rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2 text-xs font-semibold text-rose-700"
+                    >
+                      {errors.submit}
+                    </p>
+                  )}
 
                   {/* Submit Button */}
                   <button
@@ -326,6 +466,7 @@ export default function WorkTogetherModal({
                 </div>
               </motion.div>
             )}
+            </div>
           </motion.div>
         </div>
       )}
