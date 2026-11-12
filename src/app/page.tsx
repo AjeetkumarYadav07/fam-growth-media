@@ -4,6 +4,7 @@ import StatsBar from "@/components/sections/StatsBar";
 import BrandLogos from "@/components/sections/BrandLogos";
 import dynamic from "next/dynamic";
 import { ContactModalProvider } from "@/components/providers/ContactModalProvider";
+import FloatingWhatsAppButton from "@/components/ui/FloatingWhatsAppButton";
 
 // Viewport-priority loading architecture:
 // Immediate First Viewport: Navbar + HeroSection + StatsBar + BrandLogos
@@ -53,6 +54,7 @@ export default function Home() {
         {/* 11: Footer */}
         <Footer />
       </main>
+      <FloatingWhatsAppButton />
     </ContactModalProvider>
   );
 }

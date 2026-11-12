@@ -105,6 +105,19 @@
   animation: scroll-bounce 1.6s ease-in-out infinite;
 }
 
+@keyframes wa-shine {
+  0%, 55% {
+    transform: translateX(-160%) skewX(-24deg);
+  }
+  100% {
+    transform: translateX(260%) skewX(-24deg);
+  }
+}
+
+.animate-wa-shine {
+  animation: wa-shine 3.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
 /* Accessibility: respect user preference */
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -1,14 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import ResponsiveImage from "@/components/ui/ResponsiveImage";
 import { ArrowUp, Mail, Phone, MapPin } from "lucide-react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
+import { useContactModal } from "@/components/providers/ContactModalProvider";
 import { WHATSAPP_LINK, WHATSAPP_PHONE_DISPLAY } from "@/lib/constants";
 
 export default function Footer() {
   const { scrollTo } = useSmoothScroll();
+  const { notifyFooterVisible } = useContactModal();
+  const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = footerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        notifyFooterVisible(entry.isIntersecting);
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      notifyFooterVisible(false);
+    };
+  }, [notifyFooterVisible]);
 
   const handleHashNav = (e: React.MouseEvent<HTMLAnchorElement>, target: string) => {
     e.preventDefault();
@@ -22,7 +43,10 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-white border-t border-slate-200/80 pt-16 pb-12 overflow-hidden">
+    <footer
+      ref={footerRef}
+      className="relative bg-white border-t border-slate-200/80 pt-16 pb-12 overflow-hidden"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Top Footer Row */}

@@ -9,12 +9,14 @@ import { WHATSAPP_LINK } from "@/lib/constants";
 interface WorkTogetherModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmitted?: () => void;
   prefilledService?: string;
 }
 
 export default function WorkTogetherModal({
   isOpen,
   onClose,
+  onSubmitted,
   prefilledService,
 }: WorkTogetherModalProps) {
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -89,11 +91,13 @@ export default function WorkTogetherModal({
 
       // Trigger celebratory party bumper effect immediately!
       triggerPartyBumperEffect();
+      onSubmitted?.();
       setSubmitted(true);
     } catch (error) {
       console.error("Error submitting contact form:", error);
       // Still celebrate and show success screen to ensure great user experience
       triggerPartyBumperEffect();
+      onSubmitted?.();
       setSubmitted(true);
     } finally {
       setIsSubmitting(false);
@@ -117,7 +121,7 @@ export default function WorkTogetherModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
