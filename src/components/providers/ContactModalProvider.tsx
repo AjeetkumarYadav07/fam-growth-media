@@ -5,7 +5,6 @@ import React, {
   useContext,
   useState,
   useCallback,
-  useEffect,
   useRef,
 } from "react";
 import dynamic from "next/dynamic";
@@ -36,77 +35,40 @@ export function ContactModalProvider({ children }: { children: React.ReactNode }
     "Content Creation & Strategic Scripting"
   );
 
-  // Per-load refs reset automatically on page refresh (never persisted in localStorage)
+  // In-memory per-load refs: reset automatically on website refresh
   const isOpenRef = useRef(false);
-  const hasTriggered30Ref = useRef(false);
   const hasTriggeredFooterRef = useRef(false);
   const hasSubmittedRef = useRef(false);
-  const footerVisibleRef = useRef(false);
 
+  // Manual trigger from CTA buttons (always allowed)
   const openContactModal = useCallback((service?: string) => {
     if (service) setSelectedService(service);
     isOpenRef.current = true;
     setIsOpen(true);
   }, []);
 
+  // When user cuts/closes the modal, suppress any further auto-popups until website refresh
   const closeContactModal = useCallback(() => {
     isOpenRef.current = false;
     setIsOpen(false);
-    // Once dismissed at the footer, suppress all further auto-popups until page refresh
-    if (footerVisibleRef.current || hasTriggeredFooterRef.current) {
-      hasTriggered30Ref.current = true;
-      hasTriggeredFooterRef.current = true;
-    }
+    hasTriggeredFooterRef.current = true;
   }, []);
 
   const markSubmitted = useCallback(() => {
     hasSubmittedRef.current = true;
-    hasTriggered30Ref.current = true;
     hasTriggeredFooterRef.current = true;
   }, []);
 
+  // Automatic trigger: pop open only 1 time when user reaches the bottom / footer
   const notifyFooterVisible = useCallback((isVisible: boolean) => {
-    footerVisibleRef.current = isVisible;
     if (!isVisible) return;
     if (hasTriggeredFooterRef.current || hasSubmittedRef.current || isOpenRef.current) {
       return;
     }
 
     hasTriggeredFooterRef.current = true;
-    hasTriggered30Ref.current = true;
     isOpenRef.current = true;
     setIsOpen(true);
-  }, []);
-
-  useEffect(() => {
-    let isReady = false;
-    const readyTimer = window.setTimeout(() => {
-      isReady = true;
-    }, 300);
-
-    const handleScroll = () => {
-      if (!isReady) return;
-      if (hasTriggered30Ref.current || hasSubmittedRef.current || isOpenRef.current) {
-        return;
-      }
-
-      const scrollableHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollableHeight <= 0) return;
-
-      const progress = window.scrollY / scrollableHeight;
-      if (progress >= 0.3) {
-        hasTriggered30Ref.current = true;
-        isOpenRef.current = true;
-        setIsOpen(true);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.clearTimeout(readyTimer);
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
 
   return (
